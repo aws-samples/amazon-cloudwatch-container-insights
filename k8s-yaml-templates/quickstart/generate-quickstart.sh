@@ -8,10 +8,10 @@ cat ../cloudwatch-namespace.yaml > ${OUTPUT}
 echo -e "\n---\n" >> ${OUTPUT}
 cat ../cwagent-kubernetes-monitoring/cwagent-serviceaccount.yaml >> ${OUTPUT}
 echo -e "\n---\n" >> ${OUTPUT}
-cat ../cwagent-kubernetes-monitoring/cwagent-configmap.yaml | sed "s|\"structuredlogs|\"agent\": {\\
+cat ../cwagent-kubernetes-monitoring/cwagent-configmap.yaml | sed "s|\"logs|\"agent\": {\\
         \"region\": \"{{region_name}}\"\\
       },\\
-      \"structuredlogs|g" >> ${OUTPUT}
+      \"logs|g" >> ${OUTPUT}
 echo -e "\n---\n" >> ${OUTPUT}
 cat ../cwagent-kubernetes-monitoring/cwagent-daemonset.yaml >> ${OUTPUT}
 echo -e "\n---\n" >> ${OUTPUT}

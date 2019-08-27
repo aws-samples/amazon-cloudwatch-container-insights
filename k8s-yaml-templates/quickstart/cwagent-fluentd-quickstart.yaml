@@ -65,7 +65,7 @@ data:
       "agent": {
         "region": "{{region_name}}"
       },
-      "structuredlogs": {
+      "logs": {
         "metrics_collected": {
           "kubernetes": {
             "cluster_name": "{{cluster_name}}",
@@ -99,7 +99,7 @@ spec:
     spec:
       containers:
         - name: cloudwatch-agent
-          image: amazon/cloudwatch-agent:latest
+          image: amazon/cloudwatch-agent:1.226589.0
           imagePullPolicy: Always
           #ports:
           #  - containerPort: 8125
@@ -108,10 +108,10 @@ spec:
           resources:
             limits:
               cpu:  200m
-              memory: 100Mi
+              memory: 200Mi
             requests:
               cpu: 200m
-              memory: 100Mi
+              memory: 200Mi
           # Please don't change below envs
           env:
             - name: HOST_IP
@@ -126,16 +126,49 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            - name: CI_VERSION
+              value: "k8s/1.0.0"
           # Please don't change the mountPath
           volumeMounts:
             - name: cwagentconfig
               mountPath: /etc/cwagentconfig
+            - name: rootfs
+              mountPath: /rootfs
+              readOnly: true
+            - name: dockersock
+              mountPath: /var/run/docker.sock
+              readOnly: true
+            - name: varlibdocker
+              mountPath: /var/lib/docker
+              readOnly: true
+            - name: sys
+              mountPath: /sys
+              readOnly: true
+            - name: devdisk
+              mountPath: /dev/disk
+              readOnly: true
       volumes:
         - name: cwagentconfig
           configMap:
             name: cwagentconfig
+        - name: rootfs
+          hostPath:
+            path: /
+        - name: dockersock
+          hostPath:
+            path: /var/run/docker.sock
+        - name: varlibdocker
+          hostPath:
+            path: /var/lib/docker
+        - name: sys
+          hostPath:
+            path: /sys
+        - name: devdisk
+          hostPath:
+            path: /dev/disk/
       terminationGracePeriodSeconds: 60
       serviceAccountName: cloudwatch-agent
+
 ---
 
 # create configmap for cluster name and aws region for CloudWatch Logs
@@ -203,6 +236,7 @@ data:
       @id in_tail_container_logs
       @label @containers
       path /var/log/containers/*.log
+      exclude_path ["/var/log/containers/cloudwatch-agent*", "/var/log/containers/fluentd*"]
       pos_file /var/log/fluentd-containers.log.pos
       tag *
       read_from_head true
@@ -211,6 +245,54 @@ data:
         time_format %Y-%m-%dT%H:%M:%S.%NZ
       </parse>
     </source>
+
+    <source>
+      @type tail
+      @id in_tail_cwagent_logs
+      @label @cwagentlogs
+      path /var/log/containers/cloudwatch-agent*
+      pos_file /var/log/cloudwatch-agent.log.pos
+      tag *
+      read_from_head true
+      <parse>
+        @type json
+        time_format %Y-%m-%dT%H:%M:%S.%NZ
+      </parse>
+    </source>
+
+    <source>
+      @type tail
+      @id in_tail_fluentd_logs
+      @label @fluentdlogs
+      path /var/log/containers/fluentd*
+      pos_file /var/log/fluentd.log.pos
+      tag *
+      read_from_head true
+      <parse>
+        @type json
+        time_format %Y-%m-%dT%H:%M:%S.%NZ
+      </parse>
+    </source>
+
+    <label @fluentdlogs>
+      <filter **>
+        @type kubernetes_metadata
+        @id filter_kube_metadata_fluentd
+      </filter>
+
+      <filter **>
+        @type record_transformer
+        @id filter_fluentd_stream_transformer
+        <record>
+          stream_name ${tag_parts[3]}
+        </record>
+      </filter>
+
+      <match **>
+        @type relabel
+        @label @NORMAL
+      </match>
+    </label>
 
     <label @containers>
       <filter **>
@@ -226,6 +308,51 @@ data:
         </record>
       </filter>
 
+      <filter **>
+        @type concat
+        key log
+        multiline_start_regexp /^\S/
+        separator ""
+        flush_interval 5
+        timeout_label @NORMAL
+      </filter>
+
+      <match **>
+        @type relabel
+        @label @NORMAL
+      </match>
+    </label>
+
+    <label @cwagentlogs>
+      <filter **>
+        @type kubernetes_metadata
+        @id filter_kube_metadata_cwagent
+      </filter>
+
+      <filter **>
+        @type record_transformer
+        @id filter_cwagent_stream_transformer
+        <record>
+          stream_name ${tag_parts[3]}
+        </record>
+      </filter>
+
+      <filter **>
+        @type concat
+        key log
+        multiline_start_regexp /^\d{4}[-/]\d{1,2}[-/]\d{1,2}/
+        separator ""
+        flush_interval 5
+        timeout_label @NORMAL
+      </filter>
+
+      <match **>
+        @type relabel
+        @label @NORMAL
+      </match>
+    </label>
+
+    <label @NORMAL>
       <match **>
         @type cloudwatch_logs
         @id out_cloudwatch_logs_containers
@@ -253,7 +380,11 @@ data:
         field_map_strict true
       </entry>
       path /var/log/journal
-      pos_file /var/log/fluentd-journald-kubelet.pos
+      <storage>
+        @type local
+        persistent true
+        path /var/log/fluentd-journald-kubelet-pos.json
+      </storage>
       read_from_head true
       tag kubelet.service
     </source>
@@ -268,7 +399,11 @@ data:
         field_map_strict true
       </entry>
       path /var/log/journal
-      pos_file /var/log/fluentd-journald-kubeproxy.pos
+      <storage>
+        @type local
+        persistent true
+        path /var/log/fluentd-journald-kubeproxy-pos.json
+      </storage>
       read_from_head true
       tag kubeproxy.service
     </source>
@@ -283,7 +418,11 @@ data:
         field_map_strict true
       </entry>
       path /var/log/journal
-      pos_file /var/log/fluentd-journald-docker.pos
+      <storage>
+        @type local
+        persistent true
+        path /var/log/fluentd-journald-docker-pos.json
+      </storage>
       read_from_head true
       tag docker.service
     </source>
@@ -435,6 +574,8 @@ spec:
                 configMapKeyRef:
                   name: cluster-info
                   key: cluster.name
+            - name: CI_VERSION
+              value: "k8s/1.0.0"
           resources:
             limits:
               memory: 200Mi
