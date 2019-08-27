@@ -5,7 +5,7 @@ data:
   # please keep the Json blob valid.
   cwagentconfig.json: |
     {
-      "structuredlogs": {
+      "logs": {
         "metrics_collected": {
           "kubernetes": {
             "cluster_name": "{{cluster_name}}",

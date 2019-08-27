@@ -51,6 +51,7 @@ data:
       @id in_tail_container_logs
       @label @containers
       path /var/log/containers/*.log
+      exclude_path ["/var/log/containers/cloudwatch-agent*", "/var/log/containers/fluentd*"]
       pos_file /var/log/fluentd-containers.log.pos
       tag *
       read_from_head true
@@ -59,6 +60,54 @@ data:
         time_format %Y-%m-%dT%H:%M:%S.%NZ
       </parse>
     </source>
+
+    <source>
+      @type tail
+      @id in_tail_cwagent_logs
+      @label @cwagentlogs
+      path /var/log/containers/cloudwatch-agent*
+      pos_file /var/log/cloudwatch-agent.log.pos
+      tag *
+      read_from_head true
+      <parse>
+        @type json
+        time_format %Y-%m-%dT%H:%M:%S.%NZ
+      </parse>
+    </source>
+
+    <source>
+      @type tail
+      @id in_tail_fluentd_logs
+      @label @fluentdlogs
+      path /var/log/containers/fluentd*
+      pos_file /var/log/fluentd.log.pos
+      tag *
+      read_from_head true
+      <parse>
+        @type json
+        time_format %Y-%m-%dT%H:%M:%S.%NZ
+      </parse>
+    </source>
+
+    <label @fluentdlogs>
+      <filter **>
+        @type kubernetes_metadata
+        @id filter_kube_metadata_fluentd
+      </filter>
+
+      <filter **>
+        @type record_transformer
+        @id filter_fluentd_stream_transformer
+        <record>
+          stream_name ${tag_parts[3]}
+        </record>
+      </filter>
+
+      <match **>
+        @type relabel
+        @label @NORMAL
+      </match>
+    </label>
 
     <label @containers>
       <filter **>
@@ -74,6 +123,51 @@ data:
         </record>
       </filter>
 
+      <filter **>
+        @type concat
+        key log
+        multiline_start_regexp /^\S/
+        separator ""
+        flush_interval 5
+        timeout_label @NORMAL
+      </filter>
+
+      <match **>
+        @type relabel
+        @label @NORMAL
+      </match>
+    </label>
+
+    <label @cwagentlogs>
+      <filter **>
+        @type kubernetes_metadata
+        @id filter_kube_metadata_cwagent
+      </filter>
+
+      <filter **>
+        @type record_transformer
+        @id filter_cwagent_stream_transformer
+        <record>
+          stream_name ${tag_parts[3]}
+        </record>
+      </filter>
+
+      <filter **>
+        @type concat
+        key log
+        multiline_start_regexp /^\d{4}[-/]\d{1,2}[-/]\d{1,2}/
+        separator ""
+        flush_interval 5
+        timeout_label @NORMAL
+      </filter>
+
+      <match **>
+        @type relabel
+        @label @NORMAL
+      </match>
+    </label>
+
+    <label @NORMAL>
       <match **>
         @type cloudwatch_logs
         @id out_cloudwatch_logs_containers
@@ -101,7 +195,11 @@ data:
         field_map_strict true
       </entry>
       path /var/log/journal
-      pos_file /var/log/fluentd-journald-kubelet.pos
+      <storage>
+        @type local
+        persistent true
+        path /var/log/fluentd-journald-kubelet-pos.json
+      </storage>
       read_from_head true
       tag kubelet.service
     </source>
@@ -116,7 +214,11 @@ data:
         field_map_strict true
       </entry>
       path /var/log/journal
-      pos_file /var/log/fluentd-journald-kubeproxy.pos
+      <storage>
+        @type local
+        persistent true
+        path /var/log/fluentd-journald-kubeproxy-pos.json
+      </storage>
       read_from_head true
       tag kubeproxy.service
     </source>
@@ -131,7 +233,11 @@ data:
         field_map_strict true
       </entry>
       path /var/log/journal
-      pos_file /var/log/fluentd-journald-docker.pos
+      <storage>
+        @type local
+        persistent true
+        path /var/log/fluentd-journald-docker-pos.json
+      </storage>
       read_from_head true
       tag docker.service
     </source>
@@ -283,6 +389,8 @@ spec:
                 configMapKeyRef:
                   name: cluster-info
                   key: cluster.name
+            - name: CI_VERSION
+              value: "k8s/1.0.0"
           resources:
             limits:
               memory: 200Mi
