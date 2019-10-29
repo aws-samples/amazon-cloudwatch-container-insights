@@ -2,7 +2,7 @@
 
 cd "$(dirname "$0")"
 
-newversion="k8s\/1.0.0"
+newversion="k8s\/1.0.1"
 
 sed -i'.bak' "s/k8s\/[0-9]*\.[0-9]*\.[0-9]*/$newversion/g" ./cwagent-kubernetes-monitoring/cwagent-daemonset.yaml
 rm ./cwagent-kubernetes-monitoring/cwagent-daemonset.yaml.bak
