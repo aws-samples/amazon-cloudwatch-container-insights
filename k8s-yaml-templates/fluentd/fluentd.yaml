@@ -4,7 +4,7 @@ metadata:
   name: fluentd
   namespace: amazon-cloudwatch
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: fluentd-role
@@ -16,7 +16,7 @@ rules:
       - pods/logs
     verbs: ["get", "list", "watch"]
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: fluentd-role-binding
@@ -343,14 +343,15 @@ data:
       </match>
     </label>
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: fluentd-cloudwatch
   namespace: amazon-cloudwatch
-  labels:
-    k8s-app: fluentd-cloudwatch
 spec:
+  selector:
+    matchLabels:
+      k8s-app: fluentd-cloudwatch
   template:
     metadata:
       labels:
@@ -377,7 +378,7 @@ spec:
           command: ['sh','-c','']
       containers:
         - name: fluentd-cloudwatch
-          image: fluent/fluentd-kubernetes-daemonset:v1.3.3-debian-cloudwatch-1.4
+          image: fluent/fluentd-kubernetes-daemonset:v1.7.3-debian-cloudwatch-1.0
           env:
             - name: REGION
               valueFrom:
@@ -390,10 +391,10 @@ spec:
                   name: cluster-info
                   key: cluster.name
             - name: CI_VERSION
-              value: "k8s/1.0.0"
+              value: "k8s/1.0.1"
           resources:
             limits:
-              memory: 200Mi
+              memory: 400Mi
             requests:
               cpu: 100m
               memory: 200Mi
