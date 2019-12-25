@@ -84,7 +84,7 @@
             "CreateRoles",
             {
               "Fn::GetAtt": [
-                "ECSExcutionRole",
+                "ECSExecutionRole",
                 "Arn"
               ]
             },
@@ -228,7 +228,7 @@
         "RoleName": "CWAgentECSTaskRole"
       }
     },
-    "ECSExcutionRole": {
+    "ECSExecutionRole": {
       "Type": "AWS::IAM::Role",
       "Condition": "CreateRoles",
       "Properties": {
