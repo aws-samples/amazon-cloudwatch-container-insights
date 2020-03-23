@@ -1,3 +1,6 @@
+## k8s/1.1.2 / ECS/1.1.2
+- Upgrade fluentd image version to v1.9.3-debian-cloudwatch-1.0
+
 ## k8s/1.1.1 / ECS/1.1.1
 - Upgrade cloudwatch-agent image version to latest, matching all other configurations.
 - Upgrade fluentd image vesrion to v1.9.2-debian-cloudwatch-1.0

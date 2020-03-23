@@ -471,7 +471,7 @@ spec:
           command: ['sh','-c','']
       containers:
         - name: fluentd-cloudwatch
-          image: fluent/fluentd-kubernetes-daemonset:v1.9.2-debian-cloudwatch-1.0
+          image: fluent/fluentd-kubernetes-daemonset:v1.9.3-debian-cloudwatch-1.0
           env:
             - name: REGION
               valueFrom:
