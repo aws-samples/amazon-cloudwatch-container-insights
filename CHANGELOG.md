@@ -1,6 +1,5 @@
-## k8s/1.1.0
-- Upgrade cloudwatch-agent image version to 1.231221.0
-- Support some other features like AWS SDK Metrics, EMF, etc
+## k8s/1.1.0-prometheus-beta
+- Upgrade cloudwatch-agent image version to amazon/cloudwatch-agent:1.243835.0-prometheus-beta
 
 ## k8s/1.0.1
 - Upgrade cloudwatch-agent image version to 1.230621.0

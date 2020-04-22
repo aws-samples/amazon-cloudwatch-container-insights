@@ -1,0 +1,438 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{namespace}}
+  labels:
+    name: {{namespace}}
+    appmesh.k8s.aws/sidecarInjectorWebhook: enabled
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metal-v1
+  namespace: {{namespace}}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: metal
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: metal
+        version: v1
+    spec:
+      containers:
+        - name: metal
+          image: "672518094988.dkr.ecr.us-west-2.amazonaws.com/hello-world:v1.0"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9080
+          env:
+            - name: "HW_RESPONSE"
+              value: "[\"Megadeth\",\"Judas Priest\"]"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metal-v2
+  namespace: {{namespace}}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: metal
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: metal
+        version: v2
+    spec:
+      containers:
+        - name: metal
+          image: "672518094988.dkr.ecr.us-west-2.amazonaws.com/hello-world:v1.0"
+          ports:
+            - containerPort: 9080
+          env:
+            - name: "HW_RESPONSE"
+              value: "[\"Megadeth (Los Angeles, California)\",\"Judas Priest (West Bromwich, England)\"]"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jazz-v1
+  namespace: {{namespace}}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jazz
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: jazz
+        version: v1
+    spec:
+      containers:
+        - name: jazz
+          image: "672518094988.dkr.ecr.us-west-2.amazonaws.com/hello-world:v1.0"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9080
+          env:
+            - name: "HW_RESPONSE"
+              value: "[\"Astrud Gilberto\",\"Miles Davis\"]"
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jazz-v2
+  namespace: {{namespace}}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jazz
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: jazz
+        version: v2
+    spec:
+      containers:
+        - name: jazz
+          image: "672518094988.dkr.ecr.us-west-2.amazonaws.com/hello-world:v1.0"
+          ports:
+            - containerPort: 9080
+          env:
+            - name: "HW_RESPONSE"
+              value: "[\"Astrud Gilberto (Bahia, Brazil)\",\"Miles Davis (Alton, Illinois)\"]"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: metal-v1
+  namespace: {{namespace}}
+  labels:
+    app: metal
+    version: v1
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: metal
+    version: v1
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: metal-v2
+  namespace: {{namespace}}
+  labels:
+    app: metal
+    version: v2
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: metal
+    version: v2
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jazz-v1
+  namespace: {{namespace}}
+  labels:
+    app: jazz
+    version: v1
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: jazz
+    version: v1
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jazz-v2
+  namespace: {{namespace}}
+  labels:
+    app: jazz
+    version: v2
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: jazz
+    version: v2
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jazz-v3
+  namespace: {{namespace}}
+  labels:
+    app: jazz
+    version: v3
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: jazz
+    version: v3
+
+---
+# Create Mesh
+apiVersion: appmesh.k8s.aws/v1beta1
+kind: Mesh
+metadata:
+  name: {{appmeshname}}
+  namespace: {{namespace}}
+spec:
+  cloudMapNamespaceName: {{appmeshname}}
+  serviceDiscoveryType: dns
+
+
+---
+apiVersion: appmesh.k8s.aws/v1beta1
+kind: VirtualNode
+metadata:
+  name: jazz-v1
+  namespace: {{namespace}}
+spec:
+  meshName: {{appmeshname}}
+  listeners:
+    - portMapping:
+        port: 9080
+        protocol: http
+  serviceDiscovery:
+    dns:
+      hostName: jazz-v1.{{namespace}}.svc.cluster.local
+
+---
+apiVersion: appmesh.k8s.aws/v1beta1
+kind: VirtualNode
+metadata:
+  name: jazz-v2
+  namespace: {{namespace}}
+spec:
+  meshName: {{appmeshname}}
+  listeners:
+    - portMapping:
+        port: 9080
+        protocol: http
+  serviceDiscovery:
+    dns:
+      hostName: jazz-v2.{{namespace}}.svc.cluster.local
+
+---
+apiVersion: appmesh.k8s.aws/v1beta1
+kind: VirtualNode
+metadata:
+  name: jazz-v3
+  namespace: {{namespace}}
+spec:
+  meshName: {{appmeshname}}
+  listeners:
+    - portMapping:
+        port: 9080
+        protocol: http
+  serviceDiscovery:
+    dns:
+      hostName: jazz-v3.{{namespace}}.svc.cluster.local
+
+---
+apiVersion: appmesh.k8s.aws/v1beta1
+kind: VirtualNode
+metadata:
+  name: metal-v1
+  namespace: {{namespace}}
+spec:
+  meshName: {{appmeshname}}
+  listeners:
+    - portMapping:
+        port: 9080
+        protocol: http
+  serviceDiscovery:
+    dns:
+      hostName: metal-v1.{{namespace}}.svc.cluster.local
+
+---
+apiVersion: appmesh.k8s.aws/v1beta1
+kind: VirtualNode
+metadata:
+  name: metal-v2
+  namespace: {{namespace}}
+spec:
+  meshName: {{appmeshname}}
+  listeners:
+    - portMapping:
+        port: 9080
+        protocol: http
+  serviceDiscovery:
+    dns:
+      hostName: metal-v2.{{namespace}}.svc.cluster.local
+
+
+---
+# Create Virtual Service
+apiVersion: appmesh.k8s.aws/v1beta1
+kind: VirtualService
+metadata:
+  name: jazz.{{namespace}}.svc.cluster.local
+  namespace: {{namespace}}
+spec:
+  meshName: {{appmeshname}}
+  virtualRouter:
+    name: jazz-router
+  routes:
+    - name: jazz-route
+      http:
+        match:
+          prefix: /
+        action:
+          weightedTargets:
+            - virtualNodeName: jazz-v1
+              weight: 70
+            - virtualNodeName: jazz-v2
+              weight: 20
+            - virtualNodeName: jazz-v3
+              weight: 10
+
+---
+apiVersion: appmesh.k8s.aws/v1beta1
+kind: VirtualService
+metadata:
+  name: metal.{{namespace}}.svc.cluster.local
+  namespace: {{namespace}}
+spec:
+  meshName: {{appmeshname}}
+  virtualRouter:
+    name: metal-router
+  routes:
+    - name: metal-route
+      http:
+        match:
+          prefix: /
+        action:
+          weightedTargets:
+            - virtualNodeName: metal-v1
+              weight: 50
+            - virtualNodeName: metal-v2
+              weight: 50
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jazz
+  namespace: {{namespace}}
+  labels:
+    app: jazz
+spec:
+  ports:
+  - port: 9080
+    name: http
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: metal
+  namespace: {{namespace}}
+  labels:
+    app: metal
+spec:
+  ports:
+  - port: 9080
+    name: http
+
+
+---
+# create deployment for backend service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traffic-generator
+  namespace: {{namespace}}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: traffic-generator
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: traffic-generator
+        version: v1
+    spec:
+      containers:
+        - name: traffic-generator
+          image: ellerbrock/alpine-bash-curl-ssl
+          ports:
+            - containerPort: 9080
+          command: ["/bin/bash"]
+          args: ["-c", "while :; do curl http://metal.{{namespace}}.svc.cluster.local:9080/bad_404 > /dev/null 2>&1; curl http://metal.{{namespace}}.svc.cluster.local:9080 > /dev/null 2>&1; curl http://jazz.{{namespace}}.svc.cluster.local:9080 > /dev/null 2>&1; sleep .$[ ( $RANDOM % 30 ) + 1 ]s; done"]
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traffic-generator
+  namespace: {{namespace}}
+  labels:
+    app: traffic-generator
+    version: v1
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: traffic-generator
+    version: v1
+
+---
+#Create Virtual Nodes
+apiVersion: appmesh.k8s.aws/v1beta1
+kind: VirtualNode
+metadata:
+  name: traffic-generator
+  namespace: {{namespace}}
+spec:
+  meshName: {{appmeshname}}
+  listeners:
+    - portMapping:
+        port: 9080
+        protocol: http
+  serviceDiscovery:
+    dns:
+      hostName: traffic-generator.{{namespace}}.svc.cluster.local
+  backends:
+    - virtualService:
+        virtualServiceName: jazz.{{namespace}}.svc.cluster.local
+    - virtualService:
+        virtualServiceName: metal.{{namespace}}.svc.cluster.local
