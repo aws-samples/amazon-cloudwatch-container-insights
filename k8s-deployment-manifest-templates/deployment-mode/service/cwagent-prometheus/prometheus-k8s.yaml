@@ -21,7 +21,7 @@ data:
             "cluster_name": "{{cluster_name}}",
             "prometheus_config_path": "/etc/prometheusconfig/prometheus.yaml",
             "emf_processor": {
-              "metric_declaration_dedup": false,
+              "metric_declaration_dedup": true,
               "metric_declaration": [
                 {
                   "source_labels": ["Service"],
