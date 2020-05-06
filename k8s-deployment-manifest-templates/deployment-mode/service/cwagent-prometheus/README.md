@@ -1,7 +1,14 @@
 ## CloudWatch Agent with Prometheus Monitoring support deployment yaml files
 
-* [prometheus-eks.yaml](prometheus-eks.yaml) provides an example for deploying the CloudWatch Agent with Prometheus monitoring support for EKS.
-* [prometheus-k8s.yaml](prometheus-k8s.yaml) provides an example for deploying the CloudWatch agent with Prometheus monitoring support for K8S on EC2.
+* [prometheus-eks.yaml](prometheus-eks.yaml) provides an example for deploying the CloudWatch Agent with Prometheus monitoring support for EKS in one command line:
+```
+kubectl apply -f https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/prometheus-beta/k8s-deployment-manifest-templates/deployment-mode/service/cwagent-prometheus/prometheus-eks.yaml
+```
+* [prometheus-k8s.yaml](prometheus-k8s.yaml) provides an example for deploying the CloudWatch agent with Prometheus monitoring support for K8S on EC2 in one command line:
+```
+curl https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/prometheus-beta/k8s-deployment-manifest-templates/deployment-mode/service/cwagent-prometheus/prometheus-k8s.yaml | sed "s/{{cluster_name}}/MyCluster/;s/{{region_name}}/region/" | kubectl apply -f -
+```
+Replace ```MyCluster``` with your cluster name, and ```region``` with the AWS region (e.g. ```us-west-2```).
 
 ### IAM permissions required by CloudWatch Agent for all features:
 * CloudWatchAgentServerPolicy
@@ -10,7 +17,7 @@
 
 #### CloudWatch Agent Prometheus Configuration:
 CloudWatch Agent allows the customer to configure the Prometheus metrics setting in configuration map: `prometheus-cwagentconfig`.
-For more information, see [CloudWatch Agent Prometheus Configuration](TBD.html).
+For more information, see [Configuring the CloudWatch Agent for Prometheus Monitoring](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContainerInsights-Prometheus-Setup-configure.html).
 
 #### Prometheus Scrape Configuration:
 CloudWatch Agent allows the customer to specify a set of targets and parameters describing how to scrape them. The configuration is stored in configuration map: `prometheus-config`

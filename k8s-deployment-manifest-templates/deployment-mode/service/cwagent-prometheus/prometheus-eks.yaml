@@ -6,6 +6,7 @@ metadata:
   labels:
     name: amazon-cloudwatch
 
+---
 # create configmap for prometheus cwagent config
 apiVersion: v1
 data:
@@ -221,7 +222,6 @@ data:
   # prometheus config
   prometheus.yaml: |
     global:
-      evaluation_interval: 1m
       scrape_interval: 1m
       scrape_timeout: 10s
     scrape_configs:
