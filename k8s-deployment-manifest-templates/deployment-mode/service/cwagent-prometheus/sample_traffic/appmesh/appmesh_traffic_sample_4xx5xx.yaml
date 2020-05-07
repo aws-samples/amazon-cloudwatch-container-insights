@@ -28,6 +28,13 @@ spec:
         - name: metal
           image: "672518094988.dkr.ecr.us-west-2.amazonaws.com/hello-world:v1.0"
           imagePullPolicy: Always
+          resources:
+            limits:
+              cpu:  200m
+              memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
           ports:
             - containerPort: 9080
           env:
@@ -55,6 +62,14 @@ spec:
       containers:
         - name: metal
           image: "672518094988.dkr.ecr.us-west-2.amazonaws.com/hello-world:v1.0"
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu:  200m
+              memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
           ports:
             - containerPort: 9080
           env:
@@ -83,6 +98,13 @@ spec:
         - name: jazz
           image: "672518094988.dkr.ecr.us-west-2.amazonaws.com/hello-world:v1.0"
           imagePullPolicy: Always
+          resources:
+            limits:
+              cpu:  200m
+              memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
           ports:
             - containerPort: 9080
           env:
@@ -111,6 +133,14 @@ spec:
       containers:
         - name: jazz
           image: "672518094988.dkr.ecr.us-west-2.amazonaws.com/hello-world:v1.0"
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu:  200m
+              memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
           ports:
             - containerPort: 9080
           env:
@@ -393,6 +423,14 @@ spec:
       containers:
         - name: traffic-generator
           image: ellerbrock/alpine-bash-curl-ssl
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu:  200m
+              memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
           ports:
             - containerPort: 9080
           command: ["/bin/bash"]

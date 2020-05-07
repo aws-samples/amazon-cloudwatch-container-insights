@@ -20,7 +20,13 @@ spec:
       image: hashicorp/http-echo
       args:
         - "-text=banana"
-
+      resources:
+        limits:
+          cpu:  100m
+          memory: 100Mi
+        requests:
+          cpu: 50m
+          memory: 50Mi
 ---
 
 kind: Service
@@ -49,7 +55,13 @@ spec:
       image: hashicorp/http-echo
       args:
         - "-text=apple"
-
+      resources:
+        limits:
+          cpu:  100m
+          memory: 100Mi
+        requests:
+          cpu: 50m
+          memory: 50Mi
 ---
 
 kind: Service
@@ -89,11 +101,18 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-        name: traffic-generator
-        namespace: {{namespace}}
+  name: traffic-generator
+  namespace: {{namespace}}
 spec:
-        containers:
-                - name: traffic-generator
-                  image: ellerbrock/alpine-bash-curl-ssl
-                  command: ["/bin/bash"]
-                  args: ["-c", "while :; do curl http://{{external_ip}}/apple > /dev/null 2>&1; curl http://{{external_ip}}/banana > /dev/null 2>&1; sleep 1; done"]
+  containers:
+    - name: traffic-generator
+      image: ellerbrock/alpine-bash-curl-ssl
+      command: ["/bin/bash"]
+      args: ["-c", "while :; do curl http://{{external_ip}}/apple > /dev/null 2>&1; curl http://{{external_ip}}/banana > /dev/null 2>&1; sleep 1; done"]
+      resources:
+        limits:
+          cpu:  100m
+          memory: 100Mi
+        requests:
+          cpu: 50m
+          memory: 50Mi
