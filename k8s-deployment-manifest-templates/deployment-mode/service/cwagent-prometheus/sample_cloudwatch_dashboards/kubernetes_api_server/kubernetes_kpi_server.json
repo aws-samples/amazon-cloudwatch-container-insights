@@ -1,0 +1,109 @@
+{
+  "widgets": [
+    {
+      "type": "text",
+      "x": 0,
+      "y": 0,
+      "width": 18,
+      "height": 1,
+      "properties": {
+        "markdown": "\n# Kubernetes APIService\n"
+      }
+    },
+    {
+      "type": "metric",
+      "x": 0,
+      "y": 1,
+      "width": 6,
+      "height": 6,
+      "properties": {
+        "metrics": [
+          [ { "expression": "SUM(REMOVE_EMPTY(SEARCH('{ContainerInsights/Prometheus,ClusterName,Service,code} ClusterName=\"{{YOUR_CLUSTER_NAME}}\" Service=\"kubernetes\" MetricName=\"apiserver_request_count\"', 'Sum', 60)))", "id": "e1", "period": 60, "label": "[avg: ${AVG}, max: ${MAX}] apiserver_request_count (2XX)", "region": "{{YOUR_AWS_REGION}}" } ],
+          [ "ContainerInsights/Prometheus", "apiserver_request_count", "Service", "kubernetes", "ClusterName", "{{YOUR_CLUSTER_NAME}}", { "id": "m1", "label": "[avg: ${AVG}, max: ${MAX}] apiserver_request_count (Total)" } ]
+        ],
+        "view": "timeSeries",
+        "stacked": false,
+        "region": "{{YOUR_AWS_REGION}}",
+        "stat": "Sum",
+        "period": 60,
+        "title": "apiserver_request_count"
+      }
+    },
+    {
+      "type": "metric",
+      "x": 0,
+      "y": 7,
+      "width": 6,
+      "height": 6,
+      "properties": {
+        "metrics": [
+          [ { "expression": "SUM(REMOVE_EMPTY(SEARCH('{ContainerInsights/Prometheus,ClusterName,Service,code} ClusterName=\"{{YOUR_CLUSTER_NAME}}\" Service=\"kubernetes\" MetricName=\"apiserver_request_count\"', 'Sum', 60)))", "id": "e1", "period": 60, "label": "apiserver_request_count (2XX)", "visible": false, "region": "{{YOUR_AWS_REGION}}" } ],
+          [ { "expression": "e1/m3*100", "label": "[avg: ${AVG}, max: ${MAX}] apiserver_request_count Success Ratio", "id": "e2", "region": "{{YOUR_AWS_REGION}}" } ],
+          [ "ContainerInsights/Prometheus", "apiserver_request_count", "Service", "kubernetes", "ClusterName", "{{YOUR_CLUSTER_NAME}}", { "id": "m3", "visible": false } ]
+        ],
+        "view": "timeSeries",
+        "stacked": false,
+        "region": "{{YOUR_AWS_REGION}}",
+        "stat": "Sum",
+        "period": 60,
+        "title": "apiserver_request_count Success Ratio"
+      }
+    },
+    {
+      "type": "metric",
+      "x": 12,
+      "y": 1,
+      "width": 6,
+      "height": 12,
+      "properties": {
+        "view": "timeSeries",
+        "stacked": false,
+        "region": "{{YOUR_AWS_REGION}}",
+        "stat": "Sum",
+        "period": 60,
+        "title": " Etcd Helper Cache",
+        "metrics": [
+          [ "ContainerInsights/Prometheus", "etcd_helper_cache_entry_total", "Service", "kubernetes", "ClusterName", "{{YOUR_CLUSTER_NAME}}", { "label": "[avg: ${AVG}, max: ${MAX}] etcd_helper_cache_entry_total" } ],
+          [ ".", "etcd_helper_cache_miss_total", ".", ".", ".", ".", { "label": "[avg: ${AVG}, max: ${MAX}] etcd_helper_cache_miss_total" } ],
+          [ ".", "etcd_helper_cache_hit_total", ".", ".", ".", ".", { "label": "[avg: ${AVG}, max: ${MAX}] etcd_helper_cache_hit_total" } ]
+        ]
+      }
+    },
+    {
+      "type": "metric",
+      "x": 6,
+      "y": 1,
+      "width": 6,
+      "height": 6,
+      "properties": {
+        "view": "timeSeries",
+        "stacked": false,
+        "region": "{{YOUR_AWS_REGION}}",
+        "stat": "Sum",
+        "period": 60,
+        "title": "APIServiceRegistrationController Adds",
+        "metrics": [
+          [ "ContainerInsights/Prometheus", "APIServiceRegistrationController_adds", "Service", "kubernetes", "ClusterName", "{{YOUR_CLUSTER_NAME}}", { "label": "[avg: ${AVG}, max: ${MAX}] APIServiceRegistrationController_adds" } ]
+        ]
+      }
+    },
+    {
+      "type": "metric",
+      "x": 6,
+      "y": 7,
+      "width": 6,
+      "height": 6,
+      "properties": {
+        "view": "timeSeries",
+        "stacked": false,
+        "region": "{{YOUR_AWS_REGION}}",
+        "stat": "Sum",
+        "period": 60,
+        "title": "APIServiceRegistrationController Depth",
+        "metrics": [
+          [ "ContainerInsights/Prometheus", "APIServiceRegistrationController_depth", "Service", "kubernetes", "ClusterName", "{{YOUR_CLUSTER_NAME}}", { "label": "[avg: ${AVG}, max: ${MAX}] APIServiceRegistrationController_depth" } ]
+        ]
+      }
+    }
+  ]
+}

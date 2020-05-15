@@ -1,0 +1,2 @@
+## Sample CloudWatch Dashboard for Nginx-Igress Prometheus Metrics
+Please refer to [Tutorial for Adding a New Prometheus Scrape Target: Prometheus KPI Server Metrics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContainerInsights-Prometheus-Setup-configure.html) for the usage guide.
