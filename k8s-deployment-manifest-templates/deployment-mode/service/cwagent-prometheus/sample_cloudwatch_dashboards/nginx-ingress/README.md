@@ -1,2 +1,2 @@
 ## Sample CloudWatch Dashboard for Nginx-Igress Prometheus Metrics
-Please refer to [TBD](tbd.html) for the usage guide.
+Please refer to [Viewing Your Prometheus Metrics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContainerInsights-Prometheus-viewmetrics.html) for the usage guide.
