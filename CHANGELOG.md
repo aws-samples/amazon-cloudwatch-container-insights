@@ -1,3 +1,7 @@
+## k8s/1.1.1 / ECS/1.1.1
+- Upgrade cloudwatch-agent image version to 1.237768.0
+- Upgrade fluentd version to v1.10.4-debian-cloudwatch-1.0.
+
 ## k8s/1.1.0
 - Upgrade cloudwatch-agent image version to 1.231221.0
 - Support some other features like AWS SDK Metrics, EMF, etc

@@ -580,7 +580,7 @@ spec:
           command: ['sh','-c','']
       containers:
         - name: fluentd-cloudwatch
-          image: fluent/fluentd-kubernetes-daemonset:v1.7.3-debian-cloudwatch-1.0
+          image: fluent/fluentd-kubernetes-daemonset:v1.10.4-debian-cloudwatch-1.0
           env:
             - name: REGION
               valueFrom:
