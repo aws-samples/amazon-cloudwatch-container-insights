@@ -1,3 +1,6 @@
+## k8s/1.1.1
+- Upgrade cloudwatch-agent image version to 1.245315.0
+
 ## k8s/1.1.0
 - Upgrade cloudwatch-agent image version to 1.231221.0
 - Support some other features like AWS SDK Metrics, EMF, etc
