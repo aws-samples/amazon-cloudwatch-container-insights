@@ -309,15 +309,19 @@ data:
 
     - job_name: 'kubernetes-pod-jmx'
       sample_limit: 10000
+      scrape_interval: 10s
       metrics_path: /metrics
       kubernetes_sd_configs:
       - role: pod
       relabel_configs:
       - source_labels: [__address__]
+        action: replace
+        regex: ([^:]+)(?::\d+)?
+        replacement: ${1}:9404
+        target_label: __address__
+      - source_labels: [__meta_kubernetes_pod_label_cw_metrics_enabled]
         action: keep
-        regex: '.*:9404$'
-      - action: labelmap
-        regex: __meta_kubernetes_pod_label_(.+)
+        regex: true
       - action: replace
         source_labels:
         - __meta_kubernetes_namespace
