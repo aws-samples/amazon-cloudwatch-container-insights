@@ -1,0 +1,2 @@
+## Sample AWS App Mesh Application Yaml Files for Demo
+Please refer to [Set Up AWS App Mesh](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContainerInsights-Prometheus-Sample-Workloads-appmesh.html) for installation guide.
