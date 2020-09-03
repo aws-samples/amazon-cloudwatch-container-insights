@@ -66,8 +66,8 @@
             "height": 6,
             "properties": {
                 "metrics": [
-                    [ { "expression": "SUM(REMOVE_EMPTY(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_cx_rx_bytes_total', 'Sum', 60)))/60", "id": "e1", "label": "InBound (TX)", "region": "{{YOUR_AWS_REGION}}" } ],
-                    [ { "expression": "SUM(REMOVE_EMPTY(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_cx_tx_bytes_total', 'Sum', 60)))/60", "id": "e2", "label": "OutBound (RX)", "region": "{{YOUR_AWS_REGION}}" } ]
+                    [ { "expression": "SUM(REMOVE_EMPTY(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_cx_rx_bytes_total', 'Sum', 60)))/60", "id": "e1", "label": "[max: ${MAX}, avg: ${AVG}] InBound (TX)", "region": "{{YOUR_AWS_REGION}}" } ],
+                    [ { "expression": "SUM(REMOVE_EMPTY(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_cx_tx_bytes_total', 'Sum', 60)))/60", "id": "e2", "label": "[max: ${MAX}, avg: ${AVG}] OutBound (RX)", "region": "{{YOUR_AWS_REGION}}" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
@@ -221,11 +221,11 @@
             "height": 6,
             "properties": {
                 "metrics": [
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace,envoy_http_conn_manager_prefix,envoy_response_code_class} envoy_http_downstream_rq_xx envoy_http_conn_manager_prefix=\"ingress\" envoy_response_code_class=\"2\"', 'Sum', 60))/60", "id": "e3", "label": "[avg: ${AVG}] HTTP 2XX" } ],
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace,envoy_http_conn_manager_prefix,envoy_response_code_class} envoy_http_downstream_rq_xx envoy_http_conn_manager_prefix=\"ingress\" envoy_response_code_class=\"1\"', 'Sum', 60))/60", "id": "e2", "label": "[avg: ${AVG}] HTTP 1XX" } ],
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace,envoy_http_conn_manager_prefix,envoy_response_code_class} envoy_http_downstream_rq_xx envoy_http_conn_manager_prefix=\"ingress\" envoy_response_code_class=\"3\"', 'Sum', 60))/60", "id": "e4", "label": "[avg: ${AVG}] HTTP 3XX" } ],
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace,envoy_http_conn_manager_prefix,envoy_response_code_class} envoy_http_downstream_rq_xx envoy_http_conn_manager_prefix=\"ingress\" envoy_response_code_class=\"4\"', 'Sum', 60))/60", "id": "e5", "label": "[avg: ${AVG}] HTTP 4XX" } ],
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace,envoy_http_conn_manager_prefix,envoy_response_code_class} envoy_http_downstream_rq_xx envoy_http_conn_manager_prefix=\"ingress\" envoy_response_code_class=\"5\"', 'Sum', 60))/60", "id": "e1", "label": "[avg: ${AVG}] HTTP 5XX" } ]
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace,envoy_http_conn_manager_prefix,envoy_response_code_class} envoy_http_downstream_rq_xx envoy_http_conn_manager_prefix=\"ingress\" envoy_response_code_class=\"2\"', 'Sum', 60))/60", "id": "e3", "label": "[max: ${MAX}, avg: ${AVG}] HTTP 2XX" } ],
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace,envoy_http_conn_manager_prefix,envoy_response_code_class} envoy_http_downstream_rq_xx envoy_http_conn_manager_prefix=\"ingress\" envoy_response_code_class=\"1\"', 'Sum', 60))/60", "id": "e2", "label": "[max: ${MAX}, avg: ${AVG}] HTTP 1XX" } ],
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace,envoy_http_conn_manager_prefix,envoy_response_code_class} envoy_http_downstream_rq_xx envoy_http_conn_manager_prefix=\"ingress\" envoy_response_code_class=\"3\"', 'Sum', 60))/60", "id": "e4", "label": "[max: ${MAX}, avg: ${AVG}] HTTP 3XX" } ],
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace,envoy_http_conn_manager_prefix,envoy_response_code_class} envoy_http_downstream_rq_xx envoy_http_conn_manager_prefix=\"ingress\" envoy_response_code_class=\"4\"', 'Sum', 60))/60", "id": "e5", "label": "[max: ${MAX}, avg: ${AVG}] HTTP 4XX" } ],
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace,envoy_http_conn_manager_prefix,envoy_response_code_class} envoy_http_downstream_rq_xx envoy_http_conn_manager_prefix=\"ingress\" envoy_response_code_class=\"5\"', 'Sum', 60))/60", "id": "e1", "label": "[max: ${MAX}, avg: ${AVG}] HTTP 5XX" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
@@ -243,11 +243,11 @@
             "height": 6,
             "properties": {
                 "metrics": [
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace,envoy_http_conn_manager_prefix,envoy_response_code_class} envoy_http_downstream_rq_xx envoy_http_conn_manager_prefix=\"egress\" envoy_response_code_class=\"2\"', 'Sum', 60))/60", "id": "e3", "label": "[avg: ${AVG}] HTTP 2XX", "region": "{{YOUR_AWS_REGION}}" } ],
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace,envoy_http_conn_manager_prefix,envoy_response_code_class} envoy_http_downstream_rq_xx envoy_http_conn_manager_prefix=\"egress\" envoy_response_code_class=\"1\"', 'Sum', 60))/60", "id": "e2", "label": "[avg: ${AVG}] HTTP 1XX", "region": "{{YOUR_AWS_REGION}}" } ],
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace,envoy_http_conn_manager_prefix,envoy_response_code_class} envoy_http_downstream_rq_xx envoy_http_conn_manager_prefix=\"egress\" envoy_response_code_class=\"3\"', 'Sum', 60))/60", "id": "e4", "label": "[avg: ${AVG}] HTTP 3XX", "region": "{{YOUR_AWS_REGION}}" } ],
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace,envoy_http_conn_manager_prefix,envoy_response_code_class} envoy_http_downstream_rq_xx envoy_http_conn_manager_prefix=\"egress\" envoy_response_code_class=\"4\"', 'Sum', 60))/60", "id": "e5", "label": "[avg: ${AVG}] HTTP 4XX", "region": "{{YOUR_AWS_REGION}}" } ],
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace,envoy_http_conn_manager_prefix,envoy_response_code_class} envoy_http_downstream_rq_xx envoy_http_conn_manager_prefix=\"egress\" envoy_response_code_class=\"5\"', 'Sum', 60))/60", "id": "e1", "label": "[avg: ${AVG}] HTTP 5XX", "region": "{{YOUR_AWS_REGION}}" } ]
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace,envoy_http_conn_manager_prefix,envoy_response_code_class} envoy_http_downstream_rq_xx envoy_http_conn_manager_prefix=\"egress\" envoy_response_code_class=\"2\"', 'Sum', 60))/60", "id": "e3", "label": "[max: ${MAX}, avg: ${AVG}] HTTP 2XX", "region": "{{YOUR_AWS_REGION}}" } ],
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace,envoy_http_conn_manager_prefix,envoy_response_code_class} envoy_http_downstream_rq_xx envoy_http_conn_manager_prefix=\"egress\" envoy_response_code_class=\"1\"', 'Sum', 60))/60", "id": "e2", "label": "[max: ${MAX}, avg: ${AVG}] HTTP 1XX", "region": "{{YOUR_AWS_REGION}}" } ],
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace,envoy_http_conn_manager_prefix,envoy_response_code_class} envoy_http_downstream_rq_xx envoy_http_conn_manager_prefix=\"egress\" envoy_response_code_class=\"3\"', 'Sum', 60))/60", "id": "e4", "label": "[max: ${MAX}, avg: ${AVG}] HTTP 3XX", "region": "{{YOUR_AWS_REGION}}" } ],
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace,envoy_http_conn_manager_prefix,envoy_response_code_class} envoy_http_downstream_rq_xx envoy_http_conn_manager_prefix=\"egress\" envoy_response_code_class=\"4\"', 'Sum', 60))/60", "id": "e5", "label": "[max: ${MAX}, avg: ${AVG}] HTTP 4XX", "region": "{{YOUR_AWS_REGION}}" } ],
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace,envoy_http_conn_manager_prefix,envoy_response_code_class} envoy_http_downstream_rq_xx envoy_http_conn_manager_prefix=\"egress\" envoy_response_code_class=\"5\"', 'Sum', 60))/60", "id": "e1", "label": "[max: ${MAX}, avg: ${AVG}] HTTP 5XX", "region": "{{YOUR_AWS_REGION}}" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
@@ -265,15 +265,15 @@
             "height": 6,
             "properties": {
                 "metrics": [
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_rq_pending_failure_eject', 'Sum', 60))/60", "id": "e2", "label": "[min: ${MIN}, max: ${MAX}, avg: ${AVG}, last: ${LAST}] pending failure ejection" } ],
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_rq_pending_overflow', 'Sum', 60))/60", "id": "e3", "label": "[min: ${MIN}, max: ${MAX}, avg: ${AVG}, last: ${LAST}] pending overflow" } ],
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_cx_connect_timeout', 'Sum', 60))/60", "id": "e1", "label": "[min: ${MIN}, max: ${MAX}, avg: ${AVG}, last: ${LAST}] connect timeout" } ],
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_rq_timeout', 'Sum', 60))/60", "id": "e4", "label": "[min: ${MIN}, max: ${MAX}, avg: ${AVG}, last: ${LAST}] request timeout" } ],
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_rq_per_try_timeout', 'Sum', 60))/60", "id": "e5", "label": "[min: ${MIN}, max: ${MAX}, avg: ${AVG}, last: ${LAST}] per try request timeout" } ],
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_rq_rx_reset', 'Sum', 60))/60", "id": "e6", "label": "[min: ${MIN}, max: ${MAX}, avg: ${AVG}, last: ${LAST}] request reset" } ],
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_cx_destroy_local_with_active_rq', 'Sum', 60))/60", "id": "e7", "label": "[min: ${MIN}, max: ${MAX}, avg: ${AVG}, last: ${LAST}] destroy initialized from originating service" } ],
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_http_downstream_cx_destroy_remote_active_rq', 'Sum', 60))/60", "id": "e8", "label": "[min: ${MIN}, max: ${MAX}, avg: ${AVG}, last: ${LAST}] destroy initialized from remote service" } ],
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_rq_maintenance_mode', 'Sum', 60))/60", "id": "e9", "label": "[min: ${MIN}, max: ${MAX}, avg: ${AVG}, last: ${LAST}] request failed maintenance mode" } ]
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_rq_pending_failure_eject', 'Sum', 60))/60", "id": "e2", "label": "[max: ${MAX}, avg: ${AVG}] pending failure ejection" } ],
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_rq_pending_overflow', 'Sum', 60))/60", "id": "e3", "label": "[max: ${MAX}, avg: ${AVG}] pending overflow" } ],
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_cx_connect_timeout', 'Sum', 60))/60", "id": "e1", "label": "[max: ${MAX}, avg: ${AVG}] connect timeout" } ],
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_rq_timeout', 'Sum', 60))/60", "id": "e4", "label": "[max: ${MAX}, avg: ${AVG}] request timeout" } ],
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_rq_per_try_timeout', 'Sum', 60))/60", "id": "e5", "label": "[max: ${MAX}, avg: ${AVG}] per try request timeout" } ],
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_rq_rx_reset', 'Sum', 60))/60", "id": "e6", "label": "[max: ${MAX}, avg: ${AVG}] request reset" } ],
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_cx_destroy_local_with_active_rq', 'Sum', 60))/60", "id": "e7", "label": "[max: ${MAX}, avg: ${AVG}] destroy initialized from originating service" } ],
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_http_downstream_cx_destroy_remote_active_rq', 'Sum', 60))/60", "id": "e8", "label": "[max: ${MAX}, avg: ${AVG}] destroy initialized from remote service" } ],
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_rq_maintenance_mode', 'Sum', 60))/60", "id": "e9", "label": "[max: ${MAX}, avg: ${AVG}] request failed maintenance mode" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
@@ -291,10 +291,10 @@
             "height": 6,
             "properties": {
                 "metrics": [
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_flow_control_paused_reading_total', 'Sum', 60))/60", "id": "e1", "label": "[avg: ${AVG}] paused reading from destination service", "region": "{{YOUR_AWS_REGION}}" } ],
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_flow_control_resumed_reading_total', 'Sum', 60))/60", "id": "e2", "label": "[avg: ${AVG}] resumed reading from destination service", "region": "{{YOUR_AWS_REGION}}" } ],
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_flow_control_backed_up_total', 'Sum', 60))/60", "id": "e3", "label": "[avg: ${AVG}] paused reading from originating service", "region": "{{YOUR_AWS_REGION}}" } ],
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_flow_control_drained_total', 'Sum', 60))/60", "id": "e4", "label": "[avg: ${AVG}] resumed reading from originating service", "region": "{{YOUR_AWS_REGION}}" } ]
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_flow_control_paused_reading_total', 'Sum', 60))/60", "id": "e1", "label": "[max: ${MAX}, avg: ${AVG}] paused reading from destination service", "region": "{{YOUR_AWS_REGION}}" } ],
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_flow_control_resumed_reading_total', 'Sum', 60))/60", "id": "e2", "label": "[max: ${MAX}, avg: ${AVG}] resumed reading from destination service", "region": "{{YOUR_AWS_REGION}}" } ],
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_flow_control_backed_up_total', 'Sum', 60))/60", "id": "e3", "label": "[max: ${MAX}, avg: ${AVG}] paused reading from originating service", "region": "{{YOUR_AWS_REGION}}" } ],
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_flow_control_drained_total', 'Sum', 60))/60", "id": "e4", "label": "[max: ${MAX}, avg: ${AVG}] resumed reading from originating service", "region": "{{YOUR_AWS_REGION}}" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
@@ -312,9 +312,9 @@
             "height": 6,
             "properties": {
                 "metrics": [
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_flow_control_resumed_reading_total', 'Sum', 60))/60", "id": "e2", "label": "[avg: ${AVG}] request retry", "region": "{{YOUR_AWS_REGION}}" } ],
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_rq_retry_success', 'Sum', 60))/60", "id": "e1", "label": "[avg: ${AVG}] request retry success", "region": "{{YOUR_AWS_REGION}}" } ],
-                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_rq_retry_overflow', 'Sum', 60))/60", "id": "e3", "label": "[avg: ${AVG}] request retry overflow", "region": "{{YOUR_AWS_REGION}}" } ]
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_flow_control_resumed_reading_total', 'Sum', 60))/60", "id": "e2", "label": "[max: ${MAX}, avg: ${AVG}] request retry", "region": "{{YOUR_AWS_REGION}}" } ],
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_rq_retry_success', 'Sum', 60))/60", "id": "e1", "label": "[max: ${MAX}, avg: ${AVG}] request retry success", "region": "{{YOUR_AWS_REGION}}" } ],
+                    [ { "expression": "SUM(SEARCH('{ContainerInsights/Prometheus,ClusterName,Namespace} envoy_cluster_upstream_rq_retry_overflow', 'Sum', 60))/60", "id": "e3", "label": "[max: ${MAX}, avg: ${AVG}] request retry overflow", "region": "{{YOUR_AWS_REGION}}" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
@@ -331,7 +331,7 @@
             "width": 18,
             "height": 1,
             "properties": {
-                "markdown": "\n# AWS App Mesh\n"
+                "markdown": "\n# K8S AWS App Mesh\n"
             }
         },
         {
