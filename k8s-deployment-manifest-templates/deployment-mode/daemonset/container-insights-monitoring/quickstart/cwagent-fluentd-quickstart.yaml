@@ -146,6 +146,8 @@ spec:
             - name: devdisk
               mountPath: /dev/disk
               readOnly: true
+      nodeSelector:
+        kubernetes.io/os: linux
       volumes:
         - name: cwagentconfig
           configMap:
@@ -598,6 +600,8 @@ spec:
             - name: dmesg
               mountPath: /var/log/dmesg
               readOnly: true
+      nodeSelector:
+        kubernetes.io/os: linux
       volumes:
         - name: config-volume
           configMap:
