@@ -1,3 +1,6 @@
+## k8s/1.2.0-prometheus
+- Upgrade cloudwatch-agent image version to amazon/cloudwatch-agent:1.248913.0-prometheus
+
 ## k8s/1.1.0-prometheus-beta
 - Upgrade cloudwatch-agent image version to amazon/cloudwatch-agent:1.243835.0-prometheus-beta
 

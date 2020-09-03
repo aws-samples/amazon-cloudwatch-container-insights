@@ -3,6 +3,12 @@ Please refer to [Viewing Your Prometheus Metrics](https://docs.aws.amazon.com/Am
 
 ### Usage Guide
 
+#### Required Permission
+You need the following permission to create a dashboard or update an existing dashboard.
+```
+cloudwatch:PutDashboard
+```
+
 #### Setup Dashboard Variables
 Replace the values below to match your setup
 
