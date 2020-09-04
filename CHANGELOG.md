@@ -1,5 +1,5 @@
-## k8s/1.2.0-prometheus
-- Upgrade cloudwatch-agent image version to amazon/cloudwatch-agent:1.248913.0-prometheus
+## k8s/1.2.0
+- Support cloudwatch-agent with Prometheus monitoring for ECS and K8S
 
 ## k8s/1.1.1
 - Upgrade cloudwatch-agent image version to 1.245315.0
