@@ -1,3 +1,6 @@
+## k8s/1.2.1
+- Update cloudwatch-agent with Prometheus monitoring ECS CloudFormation Template
+
 ## k8s/1.2.0
 - Support cloudwatch-agent with Prometheus monitoring for ECS and K8S
 

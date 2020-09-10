@@ -389,7 +389,7 @@ spec:
           # Please don't change below envs
           env:
             - name: CI_VERSION
-              value: "k8s/1.2.0-prometheus"
+              value: "k8s/1.2.1-prometheus"
           # Please don't change the mountPath
           volumeMounts:
             - name: prometheus-cwagentconfig
