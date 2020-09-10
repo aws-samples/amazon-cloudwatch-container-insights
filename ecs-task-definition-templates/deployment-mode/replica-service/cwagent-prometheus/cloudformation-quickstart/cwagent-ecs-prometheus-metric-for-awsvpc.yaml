@@ -86,7 +86,6 @@ Resources:
                   ]
                 },
                 "emf_processor": {
-                  "metric_declaration_dedup": true,
                   "metric_declaration": [
                     {
                       "source_labels": ["container_name"],
@@ -217,33 +216,33 @@ Resources:
       - PrometheusConfigSSMParameter
       - CWAgentConfigSSMParameter
     Properties:
-      family: !Sub 'cwagent-prometheus-${ECSClusterName}-${ECSLaunchType}-awsvpc'
-      taskRoleArn: !If [CreateRoles, !Ref CWAgentECSTaskRole, !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/${TaskRoleName}']
-      executionRoleArn: !If [CreateRoles, !Ref CWAgentECSExecutionRole, !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/${ExecutionRoleName}']
-      networkMode: awsvpc
-      containerDefinitions:
-        - name: cloudwatch-agent-prometheus
-          image: amazon/cloudwatch-agent:1.248913.0-prometheus
-          essential: true
-          mountPoints: []
-          portMappings: []
-          environment: []
-          secrets:
-            - name: PROMETHEUS_CONFIG_CONTENT
-              valueFrom: !Sub 'AmazonCloudWatch-PrometheusConfigName-${ECSClusterName}-${ECSLaunchType}-awsvpc'
-            - name: CW_CONFIG_CONTENT
-              valueFrom: !Sub 'AmazonCloudWatch-CWAgentConfig-${ECSClusterName}-${ECSLaunchType}-awsvpc'
-          logConfiguration:
-            logDriver: awslogs
-            options:
+      Family: !Sub 'cwagent-prometheus-${ECSClusterName}-${ECSLaunchType}-awsvpc'
+      TaskRoleArn: !If [CreateRoles, !Ref CWAgentECSTaskRole, !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/${TaskRoleName}']
+      ExecutionRoleArn: !If [CreateRoles, !Ref CWAgentECSExecutionRole, !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/${ExecutionRoleName}']
+      NetworkMode: awsvpc
+      ContainerDefinitions:
+        - Name: cloudwatch-agent-prometheus
+          Image: amazon/cloudwatch-agent:1.248913.0-prometheus
+          Essential: true
+          MountPoints: []
+          PortMappings: []
+          Environment: []
+          Secrets:
+            - Name: PROMETHEUS_CONFIG_CONTENT
+              ValueFrom: !Sub 'AmazonCloudWatch-PrometheusConfigName-${ECSClusterName}-${ECSLaunchType}-awsvpc'
+            - Name: CW_CONFIG_CONTENT
+              ValueFrom: !Sub 'AmazonCloudWatch-CWAgentConfig-${ECSClusterName}-${ECSLaunchType}-awsvpc'
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
               awslogs-create-group: 'True'
               awslogs-group: "/ecs/ecs-cwagent-prometheus"
               awslogs-region: !Ref AWS::Region
               awslogs-stream-prefix: !Sub 'ecs-${ECSLaunchType}-awsvpc'
-      requiresCompatibilities:
+      RequiresCompatibilities:
         - !Ref ECSLaunchType
-      cpu: '512'
-      memory: '1024'
+      Cpu: '512'
+      Memory: '1024'
   ECSCWAgentService:
     Type: AWS::ECS::Service
     DependsOn: ECSCWAgentTaskDefinition

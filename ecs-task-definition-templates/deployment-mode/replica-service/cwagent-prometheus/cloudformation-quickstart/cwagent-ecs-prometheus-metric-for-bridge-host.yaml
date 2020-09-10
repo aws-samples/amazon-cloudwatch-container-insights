@@ -211,33 +211,33 @@ Resources:
       - PrometheusConfigSSMParameter
       - CWAgentConfigSSMParameter
     Properties:
-      family: !Sub 'cwagent-prometheus-${ECSClusterName}-EC2-${ECSNetworkMode}'
-      taskRoleArn: !If [CreateRoles, !Ref CWAgentECSTaskRole, !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/${TaskRoleName}']
-      executionRoleArn: !If [CreateRoles, !Ref CWAgentECSExecutionRole, !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/${ExecutionRoleName}']
-      networkMode: !Ref ECSNetworkMode
-      containerDefinitions:
-        - name: cloudwatch-agent-prometheus
-          image: amazon/cloudwatch-agent:1.248913.0-prometheus
-          essential: true
-          mountPoints: []
-          portMappings: []
-          environment: []
-          secrets:
-            - name: PROMETHEUS_CONFIG_CONTENT
-              valueFrom: !Sub 'AmazonCloudWatch-PrometheusConfigName-${ECSClusterName}-EC2-${ECSNetworkMode}'
-            - name: CW_CONFIG_CONTENT
-              valueFrom: !Sub 'AmazonCloudWatch-CWAgentConfig-${ECSClusterName}-EC2-${ECSNetworkMode}'
-          logConfiguration:
-            logDriver: awslogs
-            options:
+      Family: !Sub 'cwagent-prometheus-${ECSClusterName}-EC2-${ECSNetworkMode}'
+      TaskRoleArn: !If [CreateRoles, !Ref CWAgentECSTaskRole, !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/${TaskRoleName}']
+      ExecutionRoleArn: !If [CreateRoles, !Ref CWAgentECSExecutionRole, !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/${ExecutionRoleName}']
+      NetworkMode: !Ref ECSNetworkMode
+      ContainerDefinitions:
+        - Name: cloudwatch-agent-prometheus
+          Image: amazon/cloudwatch-agent:1.248913.0-prometheus
+          Essential: true
+          MountPoints: []
+          PortMappings: []
+          Environment: []
+          Secrets:
+            - Name: PROMETHEUS_CONFIG_CONTENT
+              ValueFrom: !Sub 'AmazonCloudWatch-PrometheusConfigName-${ECSClusterName}-EC2-${ECSNetworkMode}'
+            - Name: CW_CONFIG_CONTENT
+              ValueFrom: !Sub 'AmazonCloudWatch-CWAgentConfig-${ECSClusterName}-EC2-${ECSNetworkMode}'
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
               awslogs-create-group: 'True'
               awslogs-group: "/ecs/ecs-cwagent-prometheus"
               awslogs-region: !Ref AWS::Region
               awslogs-stream-prefix: !Sub 'ecs-EC2-${ECSNetworkMode}'
-      requiresCompatibilities:
+      RequiresCompatibilities:
         - EC2
-      cpu: '512'
-      memory: '1024'
+      Cpu: '512'
+      Memory: '1024'
 
   ECSCWAgentService:
     Type: AWS::ECS::Service
