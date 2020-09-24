@@ -100,7 +100,7 @@ Resources:
         - FARGATE
       Cpu: '256'
       Memory: '512'
-  ECSRedistService:
+  ECSRedisService:
     Type: AWS::ECS::Service
     DependsOn: ECSRedisTaskDefinition
     Properties:
