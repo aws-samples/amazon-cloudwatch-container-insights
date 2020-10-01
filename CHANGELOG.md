@@ -1,3 +1,6 @@
+## k8s/1.2.2
+- Upgrade cloudwatch-agent image version to 1.247345.36b249270
+
 ## k8s/1.2.1
 - Update cloudwatch-agent with Prometheus monitoring ECS CloudFormation Template
 
