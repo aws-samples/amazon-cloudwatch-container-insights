@@ -1,6 +1,6 @@
 ## CloudWatch Agent for ECS Prometheus Monitoring
 
-The sample ECS task definitions in this folder deploy the CloudWatch Agent as a Replica Service. For more information, see [Container Insights Prometheus Metrics Monitoring](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContainerInsights-Prometheus.html).
+This folder contains a sample ECS task definition for CloudWatch agent. The CloudWatch agent is supposed to be deployed as a [Replica service](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs_services.html#service_scheduler). For more information, see [Set Up and Configure on Amazon ECS clusters](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContainerInsights-Prometheus-Setup-ECS.html).
 
 * [cwagent-prometheus-task-definition.json](cwagent-prometheus-task-definition.json): sample ECS task definition
 
@@ -37,12 +37,10 @@ You can also adjust the resource limit (e.g. cpu and memory) based on your parti
 ## Supported Matrix
 CloudWatch Agent with Prometheus Monitoring can be deployed in the following modes
 
-|ECS Launch Type         | ECS Network Mode    |
-|------------------------|---------------------|
-|FARGATE                 | awsvpc              |
-|EC2 (Linux)             | awsvpc              |
-|EC2 (Linux)             | bridge              |
-|EC2 (Linux)             | host                |
+|ECS Launch Type         | ECS Network Mode         |
+|------------------------|--------------------------|
+|EC2 (Linux)             | bridge, host and awsvpc  |
+|FARGATE                 | awsvpc                   |
 
 
 ## Examples
@@ -63,7 +61,7 @@ scrape_configs:
 
 **Sample CWAgent Config**
 
-For more information, see [CWAgent Prometheus Monitoring Config for ECS](TBD)
+For more information, see [CloudWatch Agent Prometheus Monitoring Config for Amazon ECS](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContainerInsights-Prometheus-Setup-configure-ECS.html#ContainerInsights-Prometheus-Setup-cw-agent-config)
 ```
 {
   "agent": {
@@ -121,9 +119,9 @@ For more information, see [CWAgent Prometheus Monitoring Config for ECS](TBD)
 
 ```
 
-**Creating CWAgent ECS Task Definition**
+**Creating CloudWatch Agent ECS Task Definition**
 
-Create the CWAgent ECS Task definition for the ECS `EC2` Cluster with `bridge` network mode in region `ca-central-1`. 
+Create the CloudWatch agent ECS Task definition for the ECS `EC2` Cluster with `bridge` network mode in region `ca-central-1`. 
 ```
 ECSTaskRoleName=CWAgentPrometheusECSTaskRole
 ECSExecutionRoleName=CWAgentPrometheusECSExecutionRole
@@ -146,7 +144,7 @@ cat cwagent-prometheus-task-definition.json \
 
 **Creating CWAgent ECS Replica Service**
 
-Run the CWAgent with Prometheus Monitoring as replica service (with replica=1).
+Run the CloudWatch agent with Prometheus Monitoring as a replica service (with replica=1).
 
 ```
 ECSClusterName=sample-ecs-ec2-cluster
