@@ -377,7 +377,7 @@ spec:
     spec:
       containers:
         - name: cloudwatch-agent
-          image: amazon/cloudwatch-agent:1.248913.0-prometheus
+          image: amazon/cloudwatch-agent:1.247346.0b249609
           imagePullPolicy: Always
           resources:
             limits:
@@ -389,7 +389,7 @@ spec:
           # Please don't change below envs
           env:
             - name: CI_VERSION
-              value: "k8s/1.2.1-prometheus"
+              value: "k8s/1.2.3"
           # Please don't change the mountPath
           volumeMounts:
             - name: prometheus-cwagentconfig
