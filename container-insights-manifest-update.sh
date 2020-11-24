@@ -5,7 +5,7 @@ k8sDirPrefix="./k8s-deployment-manifest-templates/deployment-mode/daemonset/cont
 ecsDirPrefix="./ecs-task-definition-templates/deployment-mode/daemon-service/cwagent-ecs-instance-metric"
 
 newK8sVersion="k8s/1.2.4"
-agentVersion="amazon/cloudwatch-agent:1.247347.0b249609"
+agentVersion="amazon/cloudwatch-agent:1.247346.0b249609"
 fluentdVersion="fluent/fluentd-kubernetes-daemonset:v1.7.3-debian-cloudwatch-1.0"
 
 k8sPrometheusDirPrefix="./k8s-deployment-manifest-templates/deployment-mode/service/cwagent-prometheus"
