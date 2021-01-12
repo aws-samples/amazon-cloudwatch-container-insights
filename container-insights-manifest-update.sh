@@ -4,7 +4,7 @@ cd "$(dirname "$0")"
 k8sDirPrefix="./k8s-deployment-manifest-templates/deployment-mode/daemonset/container-insights-monitoring"
 ecsDirPrefix="./ecs-task-definition-templates/deployment-mode/daemon-service/cwagent-ecs-instance-metric"
 
-newK8sVersion="k8s/1.3.1"
+newK8sVersion="k8s/1.3.2"
 agentVersion="amazon/cloudwatch-agent:1.247347.0b250208"
 fluentdVersion="fluent/fluentd-kubernetes-daemonset:v1.7.3-debian-cloudwatch-1.0"
 fluentBitVersion="amazon/aws-for-fluent-bit:2.10.0"
@@ -23,8 +23,11 @@ rm ${ecsPrometheusDirPrefix}/cloudformation-quickstart/cwagent-ecs-prometheus-me
 # replace agent and k8s version for K8s Prometheus
 sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*\(-prometheus\)\?|${newK8sVersion}|g;s|amazon/cloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*\(-prometheus\)\?|${agentVersion}|g" ${k8sPrometheusDirPrefix}/prometheus-eks.yaml
 rm ${k8sPrometheusDirPrefix}/prometheus-eks.yaml.bak
+sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*\(-prometheus\)\?|${newK8sVersion}|g;s|amazon/cloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*\(-prometheus\)\?|${agentVersion}|g" ${k8sPrometheusDirPrefix}/prometheus-eks-fargate.yaml
+rm ${k8sPrometheusDirPrefix}/prometheus-eks-fargate.yaml.bak
 sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*\(-prometheus\)\?|${newK8sVersion}|g;s|amazon/cloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*\(-prometheus\)\?|${agentVersion}|g" ${k8sPrometheusDirPrefix}/prometheus-k8s.yaml
 rm ${k8sPrometheusDirPrefix}/prometheus-k8s.yaml.bak
+
 
 # replace agent version for ECS
 sed -i'.bak' "s|amazon/cloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*|${agentVersion}|g" ${ecsDirPrefix}/cwagent-ecs-instance-metric.json
