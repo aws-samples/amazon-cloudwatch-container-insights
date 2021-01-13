@@ -200,6 +200,8 @@ Resources:
                   - ecs:DescribeTasks
                   - ecs:ListTasks
                   - ecs:DescribeContainerInstances
+                  - ecs:DescribeServices
+                  - ecs:ListServices
                 Resource: "*"
                 Condition:
                   ArnEquals:
