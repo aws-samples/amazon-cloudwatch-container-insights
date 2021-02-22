@@ -1,3 +1,6 @@
+## k8s/1.3.4
+- Upgrade cloudwatch-agent image version to cloudwatch-agent:1.247347.4b250525
+- Fix container insight pod metric missing when using docker systemd cgroup driver
 ## k8s/1.3.0
 - Release Fluent-Bit for ContainerInsights log collection
 ## k8s/1.2.4
