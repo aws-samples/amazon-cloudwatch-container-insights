@@ -79,7 +79,6 @@ kind: ConfigMap
 metadata:
   name: cwagentconfig
   namespace: amazon-cloudwatch
-
 ---
 
 # deploy cwagent as daemonset
