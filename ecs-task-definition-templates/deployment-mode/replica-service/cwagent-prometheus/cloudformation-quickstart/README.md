@@ -73,7 +73,7 @@ export AWS_DEFAULT_REGION=your_aws_region_eg_ap-southeast-1
 export ECS_CLUSTER_NAME=your_ec2_ecs_cluster_name
 export ECS_LAUNCH_TYPE=EC2
 export CREATE_IAM_ROLES=True
-export ECS_CLASTER_SECURITY_GROUP=your_security_group_eg_sg-xxxxxxxxxx
+export ECS_CLUSTER_SECURITY_GROUP=your_security_group_eg_sg-xxxxxxxxxx
 export ECS_CLUSTER_SUBNET=your_subnet_eg_subnet-xxxxxxxxxx
 
 aws cloudformation create-stack --stack-name CWAgent-Prometheus-ECS-${ECS_CLUSTER_NAME}-${ECS_LAUNCH_TYPE}-awsvpc \
@@ -81,7 +81,7 @@ aws cloudformation create-stack --stack-name CWAgent-Prometheus-ECS-${ECS_CLUSTE
     --parameters ParameterKey=ECSClusterName,ParameterValue=${ECS_CLUSTER_NAME} \
                  ParameterKey=CreateIAMRoles,ParameterValue=${CREATE_IAM_ROLES} \
                  ParameterKey=ECSLaunchType,ParameterValue=${ECS_LAUNCH_TYPE} \
-                 ParameterKey=SecurityGroupID,ParameterValue=${ECS_CLASTER_SECURITY_GROUP} \
+                 ParameterKey=SecurityGroupID,ParameterValue=${ECS_CLUSTER_SECURITY_GROUP} \
                  ParameterKey=SubnetID,ParameterValue=${ECS_CLUSTER_SUBNET} \
                  ParameterKey=TaskRoleName,ParameterValue=CWAgent-Prometheus-TaskRole-${ECS_CLUSTER_NAME} \
                  ParameterKey=ExecutionRoleName,ParameterValue=CWAgent-Prometheus-ExecutionRole-${ECS_CLUSTER_NAME} \
@@ -98,7 +98,7 @@ export AWS_DEFAULT_REGION=your_aws_region_eg_ap-southeast-1
 export ECS_CLUSTER_NAME=your_ec2_ecs_cluster_name
 export ECS_LAUNCH_TYPE=FARGATE
 export CREATE_IAM_ROLES=True
-export ECS_CLASTER_SECURITY_GROUP=your_security_group_eg_sg-xxxxxxxxxx
+export ECS_CLUSTER_SECURITY_GROUP=your_security_group_eg_sg-xxxxxxxxxx
 export ECS_CLUSTER_SUBNET=your_subnet_eg_subnet-xxxxxxxxxx
 
 aws cloudformation create-stack --stack-name CWAgent-Prometheus-ECS-${ECS_CLUSTER_NAME}-${ECS_LAUNCH_TYPE}-awsvpc \
@@ -106,7 +106,7 @@ aws cloudformation create-stack --stack-name CWAgent-Prometheus-ECS-${ECS_CLUSTE
     --parameters ParameterKey=ECSClusterName,ParameterValue=${ECS_CLUSTER_NAME} \
                  ParameterKey=CreateIAMRoles,ParameterValue=${CREATE_IAM_ROLES} \
                  ParameterKey=ECSLaunchType,ParameterValue=${ECS_LAUNCH_TYPE} \
-                 ParameterKey=SecurityGroupID,ParameterValue=${ECS_CLASTER_SECURITY_GROUP} \
+                 ParameterKey=SecurityGroupID,ParameterValue=${ECS_CLUSTER_SECURITY_GROUP} \
                  ParameterKey=SubnetID,ParameterValue=${ECS_CLUSTER_SUBNET} \
                  ParameterKey=TaskRoleName,ParameterValue=CWAgent-Prometheus-TaskRole-${ECS_CLUSTER_NAME} \
                  ParameterKey=ExecutionRoleName,ParameterValue=CWAgent-Prometheus-ExecutionRole-${ECS_CLUSTER_NAME} \
