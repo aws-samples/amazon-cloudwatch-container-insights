@@ -155,6 +155,7 @@ data:
         Name                systemd
         Tag                 dataplane.systemd.*
         Systemd_Filter      _SYSTEMD_UNIT=docker.service
+        Systemd_Filter      _SYSTEMD_UNIT=kubelet.service
         DB                  /var/fluent-bit/state/systemd.db
         Path                /var/log/journal
         Read_From_Tail      ${READ_FROM_TAIL}
@@ -204,11 +205,6 @@ data:
         Refresh_Interval    10
         Read_from_Head      ${READ_FROM_HEAD}
 
-    [FILTER]
-        Name                aws
-        Match               host.*
-        imds_version        v1
-
     [INPUT]
         Name                tail
         Tag                 host.secure
@@ -219,6 +215,11 @@ data:
         Skip_Long_Lines     On
         Refresh_Interval    10
         Read_from_Head      ${READ_FROM_HEAD}
+
+    [FILTER]
+        Name                aws
+        Match               host.*
+        imds_version        v1
 
     [OUTPUT]
         Name                cloudwatch
