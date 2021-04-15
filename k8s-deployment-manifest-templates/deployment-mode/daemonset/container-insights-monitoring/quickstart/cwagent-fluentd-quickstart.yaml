@@ -561,7 +561,7 @@ spec:
           command: ['sh','-c','']
       containers:
         - name: fluentd-cloudwatch
-          image: fluent/fluentd-kubernetes-daemonset:v1.7.3-debian-cloudwatch-1.0
+          image: fluent/fluentd-kubernetes-daemonset:v1.12.2-debian-cloudwatch-1.3
           env:
             - name: AWS_REGION
               valueFrom:
@@ -575,6 +575,11 @@ spec:
                   key: cluster.name
             - name: CI_VERSION
               value: "k8s/1.3.5"
+            - name: K8S_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
           resources:
             limits:
               memory: 400Mi
