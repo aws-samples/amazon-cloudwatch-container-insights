@@ -1,3 +1,6 @@
+## k8s/1.3.6
+- Upgrade cloduwatch-agent image version to cloudwatch-agent:1.247347.6b250880
+- Fix container insight pod metric missing when using containerd runtime
 ## k8s/1.3.4
 - Upgrade cloudwatch-agent image version to cloudwatch-agent:1.247347.4b250525
 - Fix container insight pod metric missing when using docker systemd cgroup driver

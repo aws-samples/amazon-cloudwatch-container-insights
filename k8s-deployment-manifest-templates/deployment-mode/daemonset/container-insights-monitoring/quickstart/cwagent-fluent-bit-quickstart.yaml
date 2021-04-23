@@ -98,7 +98,7 @@ spec:
     spec:
       containers:
         - name: cloudwatch-agent
-          image: amazon/cloudwatch-agent:1.247347.5b250583
+          image: amazon/cloudwatch-agent:1.247347.6b250880
           #ports:
           #  - containerPort: 8125
           #    hostPort: 8125
@@ -125,7 +125,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: CI_VERSION
-              value: "k8s/1.3.5"
+              value: "k8s/1.3.6"
           # Please don't change the mountPath
           volumeMounts:
             - name: cwagentconfig
@@ -323,6 +323,7 @@ data:
         Name                systemd
         Tag                 dataplane.systemd.*
         Systemd_Filter      _SYSTEMD_UNIT=docker.service
+        Systemd_Filter      _SYSTEMD_UNIT=kubelet.service
         DB                  /var/fluent-bit/state/systemd.db
         Path                /var/log/journal
         Read_From_Tail      ${READ_FROM_TAIL}
@@ -501,7 +502,7 @@ spec:
                 fieldRef:
                   fieldPath: spec.nodeName
             - name: CI_VERSION
-              value: "k8s/1.3.5"
+              value: "k8s/1.3.6"
         resources:
             limits:
               memory: 200Mi
