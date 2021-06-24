@@ -1,3 +1,6 @@
+## k8s/1.3.7
+- Upgrade cloduwatch-agent image version to cloudwatch-agent:1.247348.0b251302
+- Remove logging all the metrics introduced in #193 [commit](https://github.com/aws/amazon-cloudwatch-agent/commit/2067daa44eab56fb28223861a710bb45283c8f8e)
 ## k8s/1.3.6
 - Upgrade cloduwatch-agent image version to cloudwatch-agent:1.247347.6b250880
 - Fix container insight pod metric missing when using containerd runtime
