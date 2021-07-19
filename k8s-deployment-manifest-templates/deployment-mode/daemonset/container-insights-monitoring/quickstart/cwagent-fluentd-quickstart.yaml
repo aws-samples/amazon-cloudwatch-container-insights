@@ -125,7 +125,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: CI_VERSION
-              value: "k8s/1.3.7"
+              value: "k8s/1.3.8"
           # Please don't change the mountPath
           volumeMounts:
             - name: cwagentconfig
@@ -282,6 +282,7 @@ data:
       <filter **>
         @type kubernetes_metadata
         @id filter_kube_metadata_fluentd
+        watch false
       </filter>
 
       <filter **>
@@ -302,6 +303,7 @@ data:
       <filter **>
         @type kubernetes_metadata
         @id filter_kube_metadata
+        watch false
       </filter>
 
       <filter **>
@@ -331,6 +333,7 @@ data:
       <filter **>
         @type kubernetes_metadata
         @id filter_kube_metadata_cwagent
+        watch false
       </filter>
 
       <filter **>
@@ -435,6 +438,7 @@ data:
       <filter **>
         @type kubernetes_metadata
         @id filter_kube_metadata_systemd
+        watch false
       </filter>
 
       <filter **>
@@ -505,6 +509,7 @@ data:
       <filter **>
         @type kubernetes_metadata
         @id filter_kube_metadata_host
+        watch false
       </filter>
 
       <filter **>
@@ -580,7 +585,7 @@ spec:
                   name: cluster-info
                   key: cluster.name
             - name: CI_VERSION
-              value: "k8s/1.3.7"
+              value: "k8s/1.3.8"
           resources:
             limits:
               memory: 400Mi
