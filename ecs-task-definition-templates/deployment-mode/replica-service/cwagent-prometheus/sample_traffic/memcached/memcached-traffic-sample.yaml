@@ -17,6 +17,8 @@ Parameters:
   ExecutionRoleName:
     Type: String
     Description: Enter the ECS execution role name to be created for Memcached ECS task definition
+Conditions:
+  IsBridgeNetworking: !Equals [ !Ref ECSNetworkMode, 'bridge' ]
 Resources:
   MemcachedECSExecutionRole:
     Type: AWS::IAM::Role
@@ -79,12 +81,21 @@ Resources:
               awslogs-stream-prefix: "memcached-tutorial"
         - Name: memcached-exporter-0
           Image: prom/memcached-exporter:v0.7.0
+          Command: !If
+            - IsBridgeNetworking
+            - ["--memcached.address=memcached-0:11211"]
+            - !Ref 'AWS::NoValue'
           Essential: false
           MountPoints: []
           PortMappings:
             - Protocol: tcp
               ContainerPort: 9150
               HostPort: 9150
+          Links:
+            - !If
+              - IsBridgeNetworking
+              - "memcached-0"
+              - !Ref 'AWS::NoValue'
           DockerLabels:
             job: prometheus-memcached
             app_x: memcached_exporter
