@@ -65,6 +65,7 @@ Resources:
           PortMappings:
             - Protocol: tcp
               ContainerPort: 11211
+              HostPort: 11211
           DockerLabels:
             app: memcached
           Environment: []
@@ -83,6 +84,7 @@ Resources:
           PortMappings:
             - Protocol: tcp
               ContainerPort: 9150
+              HostPort: 9150
           DockerLabels:
             job: prometheus-memcached
             app_x: memcached_exporter
