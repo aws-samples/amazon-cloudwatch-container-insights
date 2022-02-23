@@ -1,3 +1,6 @@
+## k8s/1.3.9
+- Upgrade cloudwatch-agent image version to cloudwatch-agent:1.247350.0b251780
+- Fixes K8s performance issue in CloudWatch agent in [commit](https://github.com/aws/amazon-cloudwatch-agent/commit/b49543ba62206613c3bb67c52a861b29e26c51a3)
 ## k8s/1.3.8
 - Disable fluentd watch on kubernetes metadata
 ## k8s/1.3.7

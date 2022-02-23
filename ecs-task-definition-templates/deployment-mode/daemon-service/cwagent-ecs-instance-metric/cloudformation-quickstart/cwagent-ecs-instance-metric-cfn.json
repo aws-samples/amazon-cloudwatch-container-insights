@@ -105,7 +105,7 @@
         "ContainerDefinitions": [
           {
             "Name": "cloudwatch-agent",
-            "Image": "amazon/cloudwatch-agent:1.247348.0b251302",
+            "Image": "amazon/cloudwatch-agent:1.247350.0b251780",
             "MountPoints": [
               {
                 "ReadOnly": true,
