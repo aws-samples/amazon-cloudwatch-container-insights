@@ -17,6 +17,8 @@ Parameters:
   ExecutionRoleName:
     Type: String
     Description: Enter the ECS execution role name to be created for Memcached ECS task definition
+Conditions:
+  IsBridgeNetworking: !Equals [ !Ref ECSNetworkMode, 'bridge' ]
 Resources:
   MemcachedECSExecutionRole:
     Type: AWS::IAM::Role
@@ -62,40 +64,51 @@ Resources:
           Image: memcached:1.6.7
           Essential: true
           MountPoints: []
-          portMappings:
-            - protocol: tcp
-              containerPort: 11211
-          dockerLabels:
+          PortMappings:
+            - Protocol: tcp
+              ContainerPort: 11211
+              HostPort: 11211
+          DockerLabels:
             app: memcached
           Environment: []
           Secrets: []
           LogConfiguration:
-            logDriver: awslogs
-            options:
+            LogDriver: awslogs
+            Options:
               awslogs-create-group: 'True'
               awslogs-group: "/ecs/ecs-memcached-prometheus-demo"
               awslogs-region: !Ref AWS::Region
               awslogs-stream-prefix: "memcached-tutorial"
         - Name: memcached-exporter-0
           Image: prom/memcached-exporter:v0.7.0
+          Command: !If
+            - IsBridgeNetworking
+            - ["--memcached.address=memcached-0:11211"]
+            - !Ref 'AWS::NoValue'
           Essential: false
           MountPoints: []
-          portMappings:
-            - protocol: tcp
-              containerPort: 9150
-          dockerLabels:
+          PortMappings:
+            - Protocol: tcp
+              ContainerPort: 9150
+              HostPort: 9150
+          Links:
+            - !If
+              - IsBridgeNetworking
+              - "memcached-0"
+              - !Ref 'AWS::NoValue'
+          DockerLabels:
             job: prometheus-memcached
             app_x: memcached_exporter
           Environment: []
           Secrets: []
           LogConfiguration:
-            logDriver: awslogs
-            options:
+            LogDriver: awslogs
+            Options:
               awslogs-create-group: 'True'
               awslogs-group: "/ecs/ecs-memcached-prometheus-demo"
               awslogs-region: !Ref AWS::Region
               awslogs-stream-prefix: "memcached-exporter-tutorial"
-      requiresCompatibilities:
+      RequiresCompatibilities:
         - EC2
       Cpu: '256'
       Memory: '512'
