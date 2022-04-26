@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- cwagent-fluentd-quickstart.yaml
+
+configMapGenerator:
+  - name: cwagentconfig
+    namespace: amazon-cloudwatch
+    behavior: replace
+    literals:
+      - |
+        cwagentconfig.json={
+            "agent": {
+                "region": "REGION_NAME"
+            },
+            "logs": {
+                "metrics_collected": {
+                    "kubernetes": {
+                        "cluster_name": "CLUSTER_NAME",
+                        "metrics_collection_interval": 60
+                    }
+                },
+                "force_flush_interval": 5
+            }
+        }

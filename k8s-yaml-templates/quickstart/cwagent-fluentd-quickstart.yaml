@@ -63,12 +63,12 @@ data:
   cwagentconfig.json: |
     {
       "agent": {
-        "region": "{{region_name}}"
+        "region": "REGION_NAME"
       },
       "logs": {
         "metrics_collected": {
           "kubernetes": {
-            "cluster_name": "{{cluster_name}}",
+            "cluster_name": "CLUSTER_NAME",
             "metrics_collection_interval": 60
           }
         },
@@ -171,11 +171,11 @@ spec:
 ---
 
 # create configmap for cluster name and aws region for CloudWatch Logs
-# need to replace the placeholders {{cluster_name}} and {{region_name}}
+# need to replace the placeholders CLUSTER_NAME and REGION_NAME
 apiVersion: v1
 data:
-  cluster.name: {{cluster_name}}
-  logs.region: {{region_name}}
+  cluster.name: CLUSTER_NAME
+  logs.region: REGION_NAME
 kind: ConfigMap
 metadata:
   name: cluster-info
