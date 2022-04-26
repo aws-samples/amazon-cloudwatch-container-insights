@@ -4,23 +4,30 @@ kind: Kustomization
 resources:
 - cwagent-fluentd-quickstart.yaml
 
+# need to replace the placeholders CLUSTER_NAME and REGION_NAME
 configMapGenerator:
-  - name: cwagentconfig
-    namespace: amazon-cloudwatch
-    behavior: replace
-    literals:
-      - |
-        cwagentconfig.json={
-            "agent": {
-                "region": "REGION_NAME"
+- name: cwagentconfig
+  namespace: amazon-cloudwatch
+  behavior: replace
+  literals:
+  - |
+    cwagentconfig.json={
+        "agent": {
+            "region": "REGION_NAME"
+        },
+        "logs": {
+            "metrics_collected": {
+                "kubernetes": {
+                    "cluster_name": "CLUSTER_NAME",
+                    "metrics_collection_interval": 60
+                }
             },
-            "logs": {
-                "metrics_collected": {
-                    "kubernetes": {
-                        "cluster_name": "CLUSTER_NAME",
-                        "metrics_collection_interval": 60
-                    }
-                },
-                "force_flush_interval": 5
-            }
+            "force_flush_interval": 5
         }
+    }
+- name: cluster-info
+  namespace: amazon-cloudwatch
+  behavior: replace
+  literals:
+  - cluster.name=CLUSTER_NAME
+  - region.name=REGION_NAME
