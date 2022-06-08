@@ -464,7 +464,7 @@ spec:
     spec:
       containers:
       - name: fluent-bit
-        image: amazon/aws-for-fluent-bit:2.10.0
+        image: public.ecr.aws/aws-observability/aws-for-fluent-bit:stable
         imagePullPolicy: Always
         env:
             - name: AWS_REGION

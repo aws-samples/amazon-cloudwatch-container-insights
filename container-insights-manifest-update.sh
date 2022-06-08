@@ -7,7 +7,7 @@ ecsDirPrefix="./ecs-task-definition-templates/deployment-mode/daemon-service/cwa
 newK8sVersion="k8s/1.3.9"
 agentVersion="amazon/cloudwatch-agent:1.247350.0b251780"
 fluentdVersion="fluent/fluentd-kubernetes-daemonset:v1.7.3-debian-cloudwatch-1.0"
-fluentBitVersion="amazon/aws-for-fluent-bit:2.10.0"
+fluentBitVersion="public.ecr.aws/aws-observability/aws-for-fluent-bit:stable"
 
 k8sPrometheusDirPrefix="./k8s-deployment-manifest-templates/deployment-mode/service/cwagent-prometheus"
 ecsPrometheusDirPrefix="./ecs-task-definition-templates/deployment-mode/replica-service/cwagent-prometheus"
@@ -43,10 +43,10 @@ rm ${k8sDirPrefix}/cwagent/cwagent-daemonset.yaml.bak
 sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*|${newK8sVersion}|g;s|fluent/fluentd-kubernetes-daemonset:.*|${fluentdVersion}|g" ${k8sDirPrefix}/fluentd/fluentd.yaml
 rm ${k8sDirPrefix}/fluentd/fluentd.yaml.bak
 
-sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*|${newK8sVersion}|g;s|amazon/aws-for-fluent-bit.*|${fluentBitVersion}|g" ${k8sDirPrefix}/fluent-bit/fluent-bit.yaml
+sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*|${newK8sVersion}|g;s|public.ecr.aws/aws-observability/aws-for-fluent-bit.*|${fluentBitVersion}|g" ${k8sDirPrefix}/fluent-bit/fluent-bit.yaml
 rm ${k8sDirPrefix}/fluent-bit/fluent-bit.yaml.bak
 
-sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*|${newK8sVersion}|g;s|amazon/aws-for-fluent-bit.*|${fluentBitVersion}|g" ${k8sDirPrefix}/fluent-bit/fluent-bit-compatible.yaml
+sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*|${newK8sVersion}|g;s|public.ecr.aws/aws-observability/aws-for-fluent-bit.*|${fluentBitVersion}|g" ${k8sDirPrefix}/fluent-bit/fluent-bit-compatible.yaml
 rm ${k8sDirPrefix}/fluent-bit/fluent-bit-compatible.yaml.bak
 
 # generate quickstart manifest for K8s
