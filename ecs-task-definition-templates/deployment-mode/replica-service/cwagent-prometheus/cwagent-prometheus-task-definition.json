@@ -6,7 +6,7 @@
   "containerDefinitions": [
     {
       "name": "cloudwatch-agent-prometheus",
-      "image": "amazon/cloudwatch-agent:1.247350.0b251780",
+      "image": "amazon/cloudwatch-agent:1.247352.0b251908",
       "essential": true,
       "mountPoints": [
       ],
