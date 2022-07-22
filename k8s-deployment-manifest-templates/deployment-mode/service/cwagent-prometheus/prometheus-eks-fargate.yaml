@@ -398,7 +398,7 @@ spec:
     spec:
       containers:
         - name: cloudwatch-agent
-          image: amazon/cloudwatch-agent:1.247352.0b251908
+          image: amazon/cloudwatch-agent:1.247354.0b251981
           imagePullPolicy: Always
           resources:
             limits:
@@ -410,7 +410,7 @@ spec:
           # Please don't change below envs
           env:
             - name: CI_VERSION
-              value: "k8s/1.3.10"
+              value: "k8s/1.3.11"
             - name: RUN_IN_AWS
               value: "True"
           # Please don't change the mountPath
