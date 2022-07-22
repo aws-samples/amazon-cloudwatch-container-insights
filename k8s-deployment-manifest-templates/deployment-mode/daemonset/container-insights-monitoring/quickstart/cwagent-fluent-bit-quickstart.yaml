@@ -98,7 +98,7 @@ spec:
     spec:
       containers:
         - name: cloudwatch-agent
-          image: amazon/cloudwatch-agent:1.247352.0b251908
+          image: amazon/cloudwatch-agent:1.247354.0b251981
           #ports:
           #  - containerPort: 8125
           #    hostPort: 8125
@@ -125,7 +125,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: CI_VERSION
-              value: "k8s/1.3.10"
+              value: "k8s/1.3.11"
           # Please don't change the mountPath
           volumeMounts:
             - name: cwagentconfig
@@ -512,7 +512,7 @@ spec:
                   apiVersion: v1
                   fieldPath: metadata.name
             - name: CI_VERSION
-              value: "k8s/1.3.10"
+              value: "k8s/1.3.11"
         resources:
             limits:
               memory: 200Mi
