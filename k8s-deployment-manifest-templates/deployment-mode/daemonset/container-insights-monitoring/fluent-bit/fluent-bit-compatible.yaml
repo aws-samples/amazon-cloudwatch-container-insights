@@ -186,7 +186,7 @@ data:
     [INPUT]
         Name                tail
         Tag                 host.dmesg
-        Path                /var/log/dmesg
+        Path                /var/log/dmesg*
         Parser              syslog
         DB                  /var/fluent-bit/state/flb_dmesg.db
         Mem_Buf_Limit       5MB
@@ -197,7 +197,7 @@ data:
     [INPUT]
         Name                tail
         Tag                 host.messages
-        Path                /var/log/messages
+        Path                /var/log/messages*
         Parser              syslog
         DB                  /var/fluent-bit/state/flb_messages.db
         Mem_Buf_Limit       5MB
@@ -208,7 +208,7 @@ data:
     [INPUT]
         Name                tail
         Tag                 host.secure
-        Path                /var/log/secure
+        Path                /var/log/secure*
         Parser              syslog
         DB                  /var/fluent-bit/state/flb_secure.db
         Mem_Buf_Limit       5MB
