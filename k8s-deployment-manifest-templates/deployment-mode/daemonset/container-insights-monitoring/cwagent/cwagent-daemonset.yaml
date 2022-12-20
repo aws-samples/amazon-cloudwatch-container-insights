@@ -65,6 +65,8 @@ spec:
             - name: devdisk
               mountPath: /dev/disk
               readOnly: true
+      nodeSelector:
+        kubernetes.io/os: linux
       volumes:
         - name: cwagentconfig
           configMap:

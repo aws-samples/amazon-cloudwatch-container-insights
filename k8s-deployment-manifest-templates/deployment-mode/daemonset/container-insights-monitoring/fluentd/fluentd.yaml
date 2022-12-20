@@ -419,6 +419,8 @@ spec:
             - name: dmesg
               mountPath: /var/log/dmesg
               readOnly: true
+      nodeSelector:
+        kubernetes.io/os: linux
       volumes:
         - name: config-volume
           configMap:
