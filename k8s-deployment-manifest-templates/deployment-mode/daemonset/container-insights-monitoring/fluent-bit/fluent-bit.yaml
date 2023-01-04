@@ -71,7 +71,7 @@ data:
         Docker_Mode         On
         Docker_Mode_Flush   5
         Docker_Mode_Parser  container_firstline
-        Parser              docker
+        Parser              docker, cri
         DB                  /var/fluent-bit/state/flb_container.db
         Mem_Buf_Limit       50MB
         Skip_Long_Lines     On
@@ -84,7 +84,7 @@ data:
         Name                tail
         Tag                 application.*
         Path                /var/log/containers/fluent-bit*
-        Parser              docker
+        Parser              docker, cri
         DB                  /var/fluent-bit/state/flb_log.db
         Mem_Buf_Limit       5MB
         Skip_Long_Lines     On
@@ -98,7 +98,7 @@ data:
         Docker_Mode         On
         Docker_Mode_Flush   5
         Docker_Mode_Parser  cwagent_firstline
-        Parser              docker
+        Parser              docker, cri
         DB                  /var/fluent-bit/state/flb_cwagent.db
         Mem_Buf_Limit       5MB
         Skip_Long_Lines     On
