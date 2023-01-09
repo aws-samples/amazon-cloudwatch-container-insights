@@ -68,10 +68,7 @@ data:
         Tag                 application.*
         Exclude_Path        /var/log/containers/cloudwatch-agent*, /var/log/containers/fluent-bit*, /var/log/containers/aws-node*, /var/log/containers/kube-proxy*
         Path                /var/log/containers/*.log
-        Docker_Mode         On
-        Docker_Mode_Flush   5
-        Docker_Mode_Parser  container_firstline
-        Parser              docker, cri
+        multiline.parser    docker, cri
         DB                  /var/fluent-bit/state/flb_container.db
         Mem_Buf_Limit       50MB
         Skip_Long_Lines     On
@@ -84,7 +81,7 @@ data:
         Name                tail
         Tag                 application.*
         Path                /var/log/containers/fluent-bit*
-        Parser              docker, cri
+        multiline.parser    docker, cri
         DB                  /var/fluent-bit/state/flb_log.db
         Mem_Buf_Limit       5MB
         Skip_Long_Lines     On
@@ -95,10 +92,7 @@ data:
         Name                tail
         Tag                 application.*
         Path                /var/log/containers/cloudwatch-agent*
-        Docker_Mode         On
-        Docker_Mode_Flush   5
-        Docker_Mode_Parser  cwagent_firstline
-        Parser              docker, cri
+        multiline.parser    docker, cri
         DB                  /var/fluent-bit/state/flb_cwagent.db
         Mem_Buf_Limit       5MB
         Skip_Long_Lines     On
@@ -143,10 +137,7 @@ data:
         Name                tail
         Tag                 dataplane.tail.*
         Path                /var/log/containers/aws-node*, /var/log/containers/kube-proxy*
-        Docker_Mode         On
-        Docker_Mode_Flush   5
-        Docker_Mode_Parser  container_firstline
-        Parser              docker
+        multiline.parser    docker, cri
         DB                  /var/fluent-bit/state/flb_dataplane_tail.db
         Mem_Buf_Limit       50MB
         Skip_Long_Lines     On
@@ -176,7 +167,7 @@ data:
         log_stream_prefix   ${HOST_NAME}-
         auto_create_group   true
         extra_user_agent    container-insights
-    
+
   host-log.conf: |
     [INPUT]
         Name                tail
@@ -231,6 +222,14 @@ data:
         Format              json
         Time_Key            time
         Time_Format         %Y-%m-%dT%H:%M:%S.%LZ
+    
+    [PARSER]
+        Name                cri
+        Format              regex
+        Regex               ^(?<time>[^ ]+) (?<stream>stdout|stderr) (?<logtag>[^ ]*) (?<message>.*)$
+        Time_Key            time
+        Time_Format         %Y-%m-%dT%H:%M:%S.%L%z
+        Time_Keep           On
 
     [PARSER]
         Name                syslog
