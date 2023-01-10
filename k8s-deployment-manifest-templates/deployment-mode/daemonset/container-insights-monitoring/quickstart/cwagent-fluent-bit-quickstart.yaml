@@ -412,12 +412,6 @@ data:
 
   parsers.conf: |
     [PARSER]
-        Name                docker
-        Format              json
-        Time_Key            time
-        Time_Format         %Y-%m-%dT%H:%M:%S.%LZ
-
-    [PARSER]
         Name                syslog
         Format              regex
         Regex               ^(?<time>[^ ]* {1,2}[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?(?:[^\:]*\:)? *(?<message>.*)$
