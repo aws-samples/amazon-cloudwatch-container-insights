@@ -56,8 +56,8 @@ data:
       tag *
       read_from_head true
       <parse>
-        @type json
-        time_format %Y-%m-%dT%H:%M:%S.%NZ
+        @type "#{ENV['FLUENT_CONTAINER_TAIL_PARSER_TYPE'] || 'json'}"
+        time_format %Y-%m-%dT%H:%M:%S.%N%:z
       </parse>
     </source>
 
@@ -397,6 +397,8 @@ spec:
                   key: cluster.name
             - name: CI_VERSION
               value: "k8s/1.3.11"
+            - - name: FLUENT_CONTAINER_TAIL_PARSER_TYPE
+              value: /^(?<time>.+) (?<stream>stdout|stderr) (?<logtag>[FP]) (?<log>.*)$/
           resources:
             limits:
               memory: 400Mi
