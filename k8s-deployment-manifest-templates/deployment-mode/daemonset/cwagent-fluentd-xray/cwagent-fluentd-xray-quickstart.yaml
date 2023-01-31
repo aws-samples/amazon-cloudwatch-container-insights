@@ -49,7 +49,7 @@ spec:
     spec:
       containers:
         - name: cloudwatch-agent
-          image: amazon/cloudwatch-agent:latest
+          image: public.ecr.public/cloudwatch-agent/cloudwatch-agent:latest
           ports:
             - containerPort: 25888
               hostPort: 25888
@@ -579,7 +579,7 @@ spec:
     spec:
       containers:
         - name: xray-daemon
-          image: amazon/aws-xray-daemon:latest
+          image: public.ecr.public/xray/aws-xray-daemon:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 2000

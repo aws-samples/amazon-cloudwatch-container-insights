@@ -22,7 +22,7 @@
         },
         {
             "name": "cloudwatch-agent",
-            "image": "amazon/cloudwatch-agent:latest",
+            "image": "public.ecr.public/cloudwatch-agent/cloudwatch-agent:latest",
             "secrets": [
                 {
                     "name": "CW_CONFIG_CONTENT",
