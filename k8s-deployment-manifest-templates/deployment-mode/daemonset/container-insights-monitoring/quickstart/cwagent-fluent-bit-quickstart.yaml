@@ -98,7 +98,7 @@ spec:
     spec:
       containers:
         - name: cloudwatch-agent
-          image: amazon/cloudwatch-agent:1.247355.0b252062
+          image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.247357.0b252275
           #ports:
           #  - containerPort: 8125
           #    hostPort: 8125
@@ -148,6 +148,8 @@ spec:
             - name: devdisk
               mountPath: /dev/disk
               readOnly: true
+      nodeSelector:
+        kubernetes.io/os: linux
       volumes:
         - name: cwagentconfig
           configMap:
@@ -241,6 +243,7 @@ data:
   fluent-bit.conf: |
     [SERVICE]
         Flush                     5
+        Grace                     30
         Log_Level                 info
         Daemon                    off
         Parsers_File              parsers.conf
@@ -361,7 +364,7 @@ data:
         log_stream_prefix   ${HOST_NAME}-
         auto_create_group   true
         extra_user_agent    container-insights
-    
+
   host-log.conf: |
     [INPUT]
         Name                tail

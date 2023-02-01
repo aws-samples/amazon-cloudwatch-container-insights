@@ -5,7 +5,7 @@ k8sDirPrefix="./k8s-deployment-manifest-templates/deployment-mode/daemonset/cont
 ecsDirPrefix="./ecs-task-definition-templates/deployment-mode/daemon-service/cwagent-ecs-instance-metric"
 
 newK8sVersion="k8s/1.3.11"
-agentVersion="amazon/cloudwatch-agent:1.247355.0b252062"
+agentVersion="public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.247357.0b252275"
 fluentdVersion="fluent/fluentd-kubernetes-daemonset:v1.7.3-debian-cloudwatch-1.0"
 fluentBitVersion="public.ecr.aws/aws-observability/aws-for-fluent-bit:stable"
 
@@ -13,31 +13,31 @@ k8sPrometheusDirPrefix="./k8s-deployment-manifest-templates/deployment-mode/serv
 ecsPrometheusDirPrefix="./ecs-task-definition-templates/deployment-mode/replica-service/cwagent-prometheus"
 
 # replace agent version for ECS Prometheus
-sed -i'.bak' "s|amazon/cloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*\(-prometheus\)\?|${agentVersion}|g" ${ecsPrometheusDirPrefix}/cwagent-prometheus-task-definition.json
+sed -i'.bak' "s|public\.ecr\.aws/cloudwatch-agent/cloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*\(-prometheus\)\?|${agentVersion}|g" ${ecsPrometheusDirPrefix}/cwagent-prometheus-task-definition.json
 rm ${ecsPrometheusDirPrefix}/cwagent-prometheus-task-definition.json.bak
-sed -i'.bak' "s|amazon/cloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*\(-prometheus\)\?|${agentVersion}|g" ${ecsPrometheusDirPrefix}/cloudformation-quickstart/cwagent-ecs-prometheus-metric-for-awsvpc.yaml
+sed -i'.bak' "s|public\.ecr\.aws/cloudwatch-agent/cloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*\(-prometheus\)\?|${agentVersion}|g" ${ecsPrometheusDirPrefix}/cloudformation-quickstart/cwagent-ecs-prometheus-metric-for-awsvpc.yaml
 rm ${ecsPrometheusDirPrefix}/cloudformation-quickstart/cwagent-ecs-prometheus-metric-for-awsvpc.yaml.bak
-sed -i'.bak' "s|amazon/cloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*\(-prometheus\)\?|${agentVersion}|g" ${ecsPrometheusDirPrefix}/cloudformation-quickstart/cwagent-ecs-prometheus-metric-for-bridge-host.yaml
+sed -i'.bak' "s|public.ecr.aws/cloudwatch-agentcloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*\(-prometheus\)\?|${agentVersion}|g" ${ecsPrometheusDirPrefix}/cloudformation-quickstart/cwagent-ecs-prometheus-metric-for-bridge-host.yaml
 rm ${ecsPrometheusDirPrefix}/cloudformation-quickstart/cwagent-ecs-prometheus-metric-for-bridge-host.yaml.bak
 
 # replace agent and k8s version for K8s Prometheus
-sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*\(-prometheus\)\?|${newK8sVersion}|g;s|amazon/cloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*\(-prometheus\)\?|${agentVersion}|g" ${k8sPrometheusDirPrefix}/prometheus-eks.yaml
+sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*\(-prometheus\)\?|${newK8sVersion}|g;s|public.ecr.aws/cloudwatch-agentcloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*\(-prometheus\)\?|${agentVersion}|g" ${k8sPrometheusDirPrefix}/prometheus-eks.yaml
 rm ${k8sPrometheusDirPrefix}/prometheus-eks.yaml.bak
-sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*\(-prometheus\)\?|${newK8sVersion}|g;s|amazon/cloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*\(-prometheus\)\?|${agentVersion}|g" ${k8sPrometheusDirPrefix}/prometheus-eks-fargate.yaml
+sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*\(-prometheus\)\?|${newK8sVersion}|g;s|public.ecr.aws/cloudwatch-agentcloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*\(-prometheus\)\?|${agentVersion}|g" ${k8sPrometheusDirPrefix}/prometheus-eks-fargate.yaml
 rm ${k8sPrometheusDirPrefix}/prometheus-eks-fargate.yaml.bak
-sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*\(-prometheus\)\?|${newK8sVersion}|g;s|amazon/cloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*\(-prometheus\)\?|${agentVersion}|g" ${k8sPrometheusDirPrefix}/prometheus-k8s.yaml
+sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*\(-prometheus\)\?|${newK8sVersion}|g;s|public.ecr.aws/cloudwatch-agentcloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*\(-prometheus\)\?|${agentVersion}|g" ${k8sPrometheusDirPrefix}/prometheus-k8s.yaml
 rm ${k8sPrometheusDirPrefix}/prometheus-k8s.yaml.bak
 
 
 # replace agent version for ECS
-sed -i'.bak' "s|amazon/cloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*|${agentVersion}|g" ${ecsDirPrefix}/cwagent-ecs-instance-metric.json
+sed -i'.bak' "s|public.ecr.aws/cloudwatch-agentcloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*|${agentVersion}|g" ${ecsDirPrefix}/cwagent-ecs-instance-metric.json
 rm ${ecsDirPrefix}/cwagent-ecs-instance-metric.json.bak
 
-sed -i'.bak' "s|amazon/cloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*|${agentVersion}|g" ${ecsDirPrefix}/cloudformation-quickstart/cwagent-ecs-instance-metric-cfn.json
+sed -i'.bak' "s|public.ecr.aws/cloudwatch-agentcloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*|${agentVersion}|g" ${ecsDirPrefix}/cloudformation-quickstart/cwagent-ecs-instance-metric-cfn.json
 rm ${ecsDirPrefix}/cloudformation-quickstart/cwagent-ecs-instance-metric-cfn.json.bak
 
 # replace agent, fluentD and fluent-bit version for K8s
-sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*|${newK8sVersion}|g;s|amazon/cloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*|${agentVersion}|g" ${k8sDirPrefix}/cwagent/cwagent-daemonset.yaml
+sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*|${newK8sVersion}|g;s|public.ecr.aws/cloudwatch-agentcloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*|${agentVersion}|g" ${k8sDirPrefix}/cwagent/cwagent-daemonset.yaml
 rm ${k8sDirPrefix}/cwagent/cwagent-daemonset.yaml.bak
 
 sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*|${newK8sVersion}|g;s|fluent/fluentd-kubernetes-daemonset:.*|${fluentdVersion}|g" ${k8sDirPrefix}/fluentd/fluentd.yaml
