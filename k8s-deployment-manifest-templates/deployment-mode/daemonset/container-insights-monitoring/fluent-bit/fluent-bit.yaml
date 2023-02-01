@@ -181,7 +181,7 @@ data:
         Name                tail
         Tag                 host.dmesg
         Path                /var/log/dmesg
-        Parser              dmesg
+        Key                 message
         DB                  /var/fluent-bit/state/flb_dmesg.db
         Mem_Buf_Limit       5MB
         Skip_Long_Lines     On
@@ -251,10 +251,6 @@ data:
         Regex               (?<log>(?<="log":")\d{4}[\/-]\d{1,2}[\/-]\d{1,2}[ T]\d{2}:\d{2}:\d{2}(?!\.).*?)(?<!\\)".*(?<stream>(?<="stream":").*?)".*(?<time>\d{4}-\d{1,2}-\d{1,2}T\d{2}:\d{2}:\d{2}\.\w*).*(?=})
         Time_Key            time
         Time_Format         %Y-%m-%dT%H:%M:%S.%LZ
-    [PARSER]
-        Name                dmesg
-        Format              regex
-        Regex               ^(?<message>.*)$
 ---
 apiVersion: apps/v1
 kind: DaemonSet
