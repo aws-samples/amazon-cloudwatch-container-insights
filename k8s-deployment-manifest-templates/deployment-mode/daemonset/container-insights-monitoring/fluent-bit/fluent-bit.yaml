@@ -173,7 +173,7 @@ data:
         Name                tail
         Tag                 host.dmesg
         Path                /var/log/dmesg
-        Parser              syslog
+        Key                 message
         DB                  /var/fluent-bit/state/flb_dmesg.db
         Mem_Buf_Limit       5MB
         Skip_Long_Lines     On
