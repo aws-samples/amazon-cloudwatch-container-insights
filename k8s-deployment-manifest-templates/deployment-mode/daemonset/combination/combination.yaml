@@ -113,7 +113,7 @@ spec:
     spec:
       containers:
         - name: cloudwatch-agent
-          image: public.ecr.public/cloudwatch-agent/cloudwatch-agent:latest
+          image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:latest
           ports:
             - containerPort: 8125
               hostPort: 8125
@@ -694,7 +694,7 @@ spec:
     spec:
       containers:
         - name: xray-daemon
-          image: public.ecr.public/xray/aws-xray-daemon:latest
+          image: public.ecr.aws/xray/aws-xray-daemon:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 2000
