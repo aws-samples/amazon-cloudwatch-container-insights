@@ -6,7 +6,7 @@
   "containerDefinitions": [
     {
       "name": "cloudwatch-agent",
-      "image": "public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.247358.0b252413",
+      "image": "public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.247359.0b252558",
       "mountPoints": [
         {
           "readOnly": true,
