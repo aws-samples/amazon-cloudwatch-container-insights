@@ -207,7 +207,7 @@ data:
                     "^karpenter_interruption_actions_performed$"
                   ]
                 },
-								{
+		{
                   "source_labels": ["job"],
                   "label_matcher": "^karpenter$",
                   "dimensions": [
@@ -219,6 +219,18 @@ data:
                     "^karpenter_nodes_terminated$"
                   ]
                 }
+		{								
+                  "source_labels": ["job"],
+                  "label_matcher": "^karpenter$",
+                  "dimensions": [
+                    ["ClusterName","provisioner","resource_type"]
+                  ],
+                  "metric_selectors": [
+                    "^karpenter_provisioner_limit$",
+                    "^karpenter_provisioner_usage$",
+                    "^karpenter_provisioner_usage_pct$"
+                  ]
+                },
               ]
             }
           }
