@@ -33,3 +33,4 @@ Both yaml files contain the default settings for the following containerized app
 |HAPROXY_INGRESS |Exposed by Helm Chart:   [incubator/haproxy-ingress](https://github.com/helm/charts/tree/master/incubator/haproxy-ingress) |
 |AWS APP MESH    |Exposed by Helm Chart:   [EKS Charts](https://github.com/aws/eks-charts/blob/master/README.md)                             |
 |JAVA/JMX        |Exposed by JMX_Exporter: [JMX_Exporter](https://github.com/prometheus/jmx_exporter)                                        |
+|KARPENTER       |Exposed by Karpenter controller: [Karpenter metrics](https://karpenter.sh/v0.27.3/concepts/metrics/)                       |
