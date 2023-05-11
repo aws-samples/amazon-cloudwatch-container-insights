@@ -207,7 +207,7 @@ data:
                     "^karpenter_interruption_actions_performed$"
                   ]
                 },
-		{
+                {
                   "source_labels": ["job"],
                   "label_matcher": "^karpenter$",
                   "dimensions": [
@@ -218,8 +218,8 @@ data:
                     "^karpenter_nodes_created$",
                     "^karpenter_nodes_terminated$"
                   ]
-                }
-		{								
+                },
+                {								
                   "source_labels": ["job"],
                   "label_matcher": "^karpenter$",
                   "dimensions": [
