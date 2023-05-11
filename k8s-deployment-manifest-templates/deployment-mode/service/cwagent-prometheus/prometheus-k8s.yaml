@@ -328,6 +328,17 @@ data:
         regex: 'jvm_gc_collection_seconds.*'
         action: drop
 
+    - job_name: karpenter
+      kubernetes_sd_configs:
+      - role: endpoints
+        namespaces:
+          names:
+          - karpenter
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_endpoint_port_name]
+        regex: http-metrics
+        action: keep
+
 kind: ConfigMap
 metadata:
   name: prometheus-config
