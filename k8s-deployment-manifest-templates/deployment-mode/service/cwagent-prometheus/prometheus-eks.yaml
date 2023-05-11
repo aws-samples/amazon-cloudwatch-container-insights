@@ -230,7 +230,7 @@ data:
                     "^karpenter_provisioner_usage$",
                     "^karpenter_provisioner_usage_pct$"
                   ]
-                },
+                }
               ]
             }
           }
