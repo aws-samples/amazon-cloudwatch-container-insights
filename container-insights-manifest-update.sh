@@ -4,8 +4,8 @@ cd "$(dirname "$0")"
 k8sDirPrefix="./k8s-deployment-manifest-templates/deployment-mode/daemonset/container-insights-monitoring"
 ecsDirPrefix="./ecs-task-definition-templates/deployment-mode/daemon-service/cwagent-ecs-instance-metric"
 
-newK8sVersion="k8s/1.3.14"
-agentVersion="public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.247359.0b252558"
+newK8sVersion="k8s/1.3.15"
+agentVersion="public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.247359.1b252618"
 fluentdVersion="fluent/fluentd-kubernetes-daemonset:v1.7.3-debian-cloudwatch-1.0"
 fluentBitVersion="public.ecr.aws/aws-observability/aws-for-fluent-bit:stable"
 
