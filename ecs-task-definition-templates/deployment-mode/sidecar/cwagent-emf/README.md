@@ -19,7 +19,7 @@ You must replace all the placeholders (with ```{{ }}```) in the above task defin
 
 * ```{{awslogs-region}}```: The AWS region where the container logs should be published: e.g. ```us-west-2```
 
-* ```{{aws-emf-agent-endpoint}}```: This should point to the endpoint that the agent is listening on.
+* ```{{aws-emf-agent-endpoint}}```: This should point to the endpoint that the agent is listening on. e.g ```tcp://cloudwatch-agent:25888```
   * Refer to https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Embedded_Metric_Format_Generation_CloudWatch_Agent.html.
 
 You can also adjust the resource limit (e.g. cpu and memory) based on your particular use cases.
