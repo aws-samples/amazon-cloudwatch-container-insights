@@ -19,6 +19,9 @@ You must replace all the placeholders (with ```{{ }}```) in the above task defin
 
 * ```{{awslogs-region}}```: The AWS region where the container logs should be published: e.g. ```us-west-2```
 
+* ```{{aws-emf-agent-endpoint}}```: This should point to the endpoint that the agent is listening on.
+  * Refer to https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Embedded_Metric_Format_Generation_CloudWatch_Agent.html.
+
 You can also adjust the resource limit (e.g. cpu and memory) based on your particular use cases.
 
 Configure the CloudWatch agent through [SSM parameter](https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-su-create.html). Please create a SSM parameter (```ecs-cwagent-sidecar-ec2``` or ```ecs-cwagent-sidecar-fargate```) in the region where your cluster is located, with the following text:
