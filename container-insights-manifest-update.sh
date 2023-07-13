@@ -6,7 +6,7 @@ ecsDirPrefix="./ecs-task-definition-templates/deployment-mode/daemon-service/cwa
 
 newK8sVersion="k8s/1.3.16"
 agentVersion="public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.247360.0b252689"
-fluentdVersion="fluent/fluentd-kubernetes-daemonset:v1.7.3-debian-cloudwatch-1.0"
+fluentdVersion="fluent/fluentd-kubernetes-daemonset:v1.10.3-debian-cloudwatch-1.0"
 fluentBitVersion="public.ecr.aws/aws-observability/aws-for-fluent-bit:stable"
 
 k8sPrometheusDirPrefix="./k8s-deployment-manifest-templates/deployment-mode/service/cwagent-prometheus"
