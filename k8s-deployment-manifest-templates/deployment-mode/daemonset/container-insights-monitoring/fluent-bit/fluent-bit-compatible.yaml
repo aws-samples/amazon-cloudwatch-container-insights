@@ -55,11 +55,11 @@ data:
         storage.sync              normal
         storage.checksum          off
         storage.backlog.mem_limit 5M
-        
+
     @INCLUDE application-log.conf
     @INCLUDE dataplane-log.conf
     @INCLUDE host-log.conf
-  
+
   application-log.conf: |
     [INPUT]
         Name                tail
@@ -125,7 +125,7 @@ data:
         Name                modify
         Match               application.*
         Rename              Nested.docker_id            Docker.container_id
-    
+
     [FILTER]
         Name                nest
         Match               application.*
@@ -133,7 +133,7 @@ data:
         Wildcard            Nested.*
         Nested_under        kubernetes
         Remove_prefix       Nested.
-    
+
     [FILTER]
         Name                nest
         Match               application.*
@@ -183,7 +183,7 @@ data:
         log_stream_name     $(tag[2]).$(tag[3])-$(hostname)
         auto_create_group   true
         extra_user_agent    container-insight
-    
+
   host-log.conf: |
     [INPUT]
         Name                tail
@@ -366,11 +366,3 @@ spec:
         hostPath:
           path: /var/log/dmesg
       serviceAccountName: fluent-bit
-      tolerations:
-      - key: node-role.kubernetes.io/master
-        operator: Exists
-        effect: NoSchedule
-      - operator: "Exists"
-        effect: "NoExecute"
-      - operator: "Exists"
-        effect: "NoSchedule"
