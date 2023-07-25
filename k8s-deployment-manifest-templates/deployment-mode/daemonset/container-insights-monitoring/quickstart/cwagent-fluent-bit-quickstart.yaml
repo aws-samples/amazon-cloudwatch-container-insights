@@ -254,11 +254,11 @@ data:
         storage.sync              normal
         storage.checksum          off
         storage.backlog.mem_limit 5M
-        
+
     @INCLUDE application-log.conf
     @INCLUDE dataplane-log.conf
     @INCLUDE host-log.conf
-  
+
   application-log.conf: |
     [INPUT]
         Name                tail
@@ -355,7 +355,7 @@ data:
     [FILTER]
         Name                aws
         Match               dataplane.*
-        imds_version        v1
+        imds_version        v2
 
     [OUTPUT]
         Name                cloudwatch_logs
@@ -403,7 +403,7 @@ data:
     [FILTER]
         Name                aws
         Match               host.*
-        imds_version        v1
+        imds_version        v2
 
     [OUTPUT]
         Name                cloudwatch_logs
