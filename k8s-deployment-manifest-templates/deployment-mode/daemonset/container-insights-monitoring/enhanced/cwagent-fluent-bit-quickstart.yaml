@@ -112,7 +112,7 @@ spec:
               memory: 400Mi
             requests:
               cpu: 200m
-              memory: 200Mi
+              memory: 400Mi
           # Please don't change below envs
           env:
             - name: HOST_IP
