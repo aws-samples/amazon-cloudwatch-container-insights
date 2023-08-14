@@ -72,7 +72,7 @@ data:
           "kubernetes": {
             "cluster_name": "{{cluster_name}}",
             "metrics_collection_interval": 60,
-            "metric_granularity": 3,
+            "metric_granularity": 3
           }
         },
         "force_flush_interval": 5
