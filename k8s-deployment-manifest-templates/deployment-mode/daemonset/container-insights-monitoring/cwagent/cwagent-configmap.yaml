@@ -9,7 +9,8 @@ data:
         "metrics_collected": {
           "kubernetes": {
             "cluster_name": "{{cluster_name}}",
-            "metrics_collection_interval": 60
+            "metrics_collection_interval": 60,
+            "enhanced_container_insights": true
           }
         },
         "force_flush_interval": 5

@@ -24,7 +24,7 @@ rules:
     resources: ["pods", "nodes", "endpoints"]
     verbs: ["list", "watch"]
   - apiGroups: ["apps"]
-    resources: ["replicasets"]
+    resources: ["replicasets", "daemonsets", "deployments"]
     verbs: ["list", "watch"]
   - apiGroups: ["batch"]
     resources: ["jobs"]
@@ -39,6 +39,8 @@ rules:
     resources: ["configmaps"]
     resourceNames: ["cwagent-clusterleader"]
     verbs: ["get","update"]
+  - nonResourceURLs: ["/metrics"]
+    verbs: ["get", "list", "watch"]
 
 ---
 kind: ClusterRoleBinding
@@ -69,7 +71,8 @@ data:
         "metrics_collected": {
           "kubernetes": {
             "cluster_name": "{{cluster_name}}",
-            "metrics_collection_interval": 60
+            "metrics_collection_interval": 60,
+            "enhanced_container_insights": true
           }
         },
         "force_flush_interval": 5
@@ -98,18 +101,18 @@ spec:
     spec:
       containers:
         - name: cloudwatch-agent
-          image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.247360.0b252689
+          image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300028.1b210
           #ports:
           #  - containerPort: 8125
           #    hostPort: 8125
           #    protocol: UDP
           resources:
             limits:
-              cpu:  200m
-              memory: 200Mi
+              cpu:  400m
+              memory: 400Mi
             requests:
-              cpu: 200m
-              memory: 200Mi
+              cpu: 400m
+              memory: 400Mi
           # Please don't change below envs
           env:
             - name: HOST_IP
@@ -125,7 +128,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: CI_VERSION
-              value: "k8s/1.3.16"
+              value: "k8s/1.3.17"
           # Please don't change the mountPath
           volumeMounts:
             - name: cwagentconfig
@@ -576,7 +579,7 @@ spec:
           command: ['sh','-c','']
       containers:
         - name: fluentd-cloudwatch
-          image: fluent/fluentd-kubernetes-daemonset:v1.7.3-debian-cloudwatch-1.0
+          image: fluent/fluentd-kubernetes-daemonset:v1.10.3-debian-cloudwatch-1.0
           env:
             - name: AWS_REGION
               valueFrom:
@@ -589,7 +592,7 @@ spec:
                   name: cluster-info
                   key: cluster.name
             - name: CI_VERSION
-              value: "k8s/1.3.16"
+              value: "k8s/1.3.17"
             - name: FLUENT_CONTAINER_TAIL_PARSER_TYPE
               value: /^(?<time>.+) (?<stream>stdout|stderr) (?<logtag>[FP]) (?<log>.*)$/
           resources:
