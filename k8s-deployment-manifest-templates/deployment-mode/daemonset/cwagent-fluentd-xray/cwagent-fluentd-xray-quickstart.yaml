@@ -49,7 +49,7 @@ spec:
     spec:
       containers:
         - name: cloudwatch-agent
-          image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300028.1b210
+          image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300030.1b305
           ports:
             - containerPort: 25888
               hostPort: 25888
