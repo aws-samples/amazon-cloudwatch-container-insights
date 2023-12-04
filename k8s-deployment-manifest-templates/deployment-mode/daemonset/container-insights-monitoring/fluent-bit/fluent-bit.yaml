@@ -352,3 +352,5 @@ spec:
         hostPath:
           path: /var/log/dmesg
       serviceAccountName: fluent-bit
+      nodeSelector:
+        kubernetes.io/os: linux
