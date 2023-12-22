@@ -247,7 +247,7 @@ data:
     [SERVICE]
         Flush                     5
         Grace                     30
-        Log_Level                 error
+        Log_Level                 info
         Daemon                    off
         Parsers_File              parsers.conf
         HTTP_Server               ${HTTP_SERVER}
