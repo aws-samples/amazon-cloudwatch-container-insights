@@ -24,7 +24,7 @@ spec:
           - name: AWS_CSM_HOST
             value: "127.0.0.1"
         - name: cloudwatch-agent
-          image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300030.2b309
+          image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300032.3b392
           imagePullPolicy: Always
           env:
             - name: POD_NAME
