@@ -39,7 +39,7 @@ spec:
     spec:
       containers:
         - name: cloudwatch-agent
-          image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300030.2b309
+          image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300032.3b392
           imagePullPolicy: Always
           ports:
             - containerPort: 31000
