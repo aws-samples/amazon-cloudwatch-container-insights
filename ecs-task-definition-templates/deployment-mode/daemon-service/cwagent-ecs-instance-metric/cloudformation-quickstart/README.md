@@ -11,11 +11,23 @@ Run following aws cloudformation command with the cloudformation template file t
 ClusterName=<your-ecs-cluster-name>
 Region=<your-ecs-cluster-region>
 aws cloudformation create-stack --stack-name CWAgentECS-${ClusterName}-${Region} \
-    --template-body file://cwagent-ecs-instance-metric-cfn.json \
+    --template-body file://cwagent-ecs-instance-metric-cfn.yaml \
     --parameters ParameterKey=ClusterName,ParameterValue=${ClusterName} \
                  ParameterKey=CreateIAMRoles,ParameterValue=True \
     --capabilities CAPABILITY_NAMED_IAM \
     --region ${Region}
 ```
 
+If you would like to enable the CloudWatch agent to collect the ECS agent and system logs, use the below command instead:
 
+```
+ClusterName=<your-ecs-cluster-name>
+Region=<your-ecs-cluster-region>
+aws cloudformation create-stack --stack-name CWAgentECS-${ClusterName}-${Region} \
+    --template-body file://cwagent-ecs-instance-metric-cfn.yaml \
+    --parameters ParameterKey=ClusterName,ParameterValue=${ClusterName} \
+                 ParameterKey=CreateIAMRoles,ParameterValue=True \
+                 ParameterKey=EnableLogCollection,ParameterValue=True \
+    --capabilities CAPABILITY_NAMED_IAM \
+    --region ${Region}
+```
