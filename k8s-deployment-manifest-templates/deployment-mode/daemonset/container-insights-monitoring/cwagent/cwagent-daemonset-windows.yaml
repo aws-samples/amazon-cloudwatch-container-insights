@@ -20,8 +20,7 @@ spec:
       hostNetwork: true
       containers:
       - name: cloudwatch-agent
-        #todo: replace during release
-        image: 506463145083.dkr.ecr.us-west-2.amazonaws.com/windows-container-internal:2022
+        image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300036.0b573
         volumeMounts:
         - name: cwagentconfig
           mountPath: C:\Program Files\Amazon\AmazonCloudWatchAgent\cwagentconfig
