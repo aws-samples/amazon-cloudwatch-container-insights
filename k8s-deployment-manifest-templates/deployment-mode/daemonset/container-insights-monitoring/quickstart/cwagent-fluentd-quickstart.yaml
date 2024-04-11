@@ -34,7 +34,7 @@ rules:
     verbs: ["get"]
   - apiGroups: [""]
     resources: ["nodes/stats", "configmaps", "events"]
-    verbs: ["create"]
+    verbs: ["create", "get"]
   - apiGroups: [""]
     resources: ["configmaps"]
     resourceNames: ["cwagent-clusterleader"]
