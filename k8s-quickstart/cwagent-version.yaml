@@ -1,0 +1,88 @@
+apiVersion: cloudwatch.aws.amazon.com/v1alpha1
+kind: AmazonCloudWatchAgent
+metadata:
+  name: cloudwatch-agent
+  namespace: amazon-cloudwatch
+spec:
+  image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300037.0b583
+  mode: daemonset
+  nodeSelector:
+    kubernetes.io/os: linux
+  serviceAccount: cloudwatch-agent
+  config: "{\"logs\":{\"metrics_collected\":{\"kubernetes\":{\"enhanced_container_insights\":true}}}}"
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "250m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+  volumeMounts:
+  - mountPath: /rootfs
+    name: rootfs
+    readOnly: true
+  - mountPath: /var/run/docker.sock
+    name: dockersock
+    readOnly: true
+  - mountPath: /run/containerd/containerd.sock
+    name: containerdsock
+  - mountPath: /var/lib/docker
+    name: varlibdocker
+    readOnly: true
+  - mountPath: /sys
+    name: sys
+    readOnly: true
+  - mountPath: /dev/disk
+    name: devdisk
+    readOnly: true
+  - mountPath: /etc/amazon-cloudwatch-observability-agent-cert
+    name: agenttls
+    readOnly: true
+  - mountPath: /var/lib/kubelet/pod-resources
+    name: kubelet-podresources
+  volumes:
+  - name: kubelet-podresources
+    hostPath:
+      path: /var/lib/kubelet/pod-resources
+      type: Directory
+  - name: rootfs
+    hostPath:
+      path: /
+  - hostPath:
+      path: /var/run/docker.sock
+    name: dockersock
+  - hostPath:
+      path: /var/lib/docker
+    name: varlibdocker
+  - hostPath:
+      path: /run/containerd/containerd.sock
+    name: containerdsock
+  - hostPath:
+      path: /sys
+    name: sys
+  - hostPath:
+      path: /dev/disk/
+    name: devdisk
+  - name: agenttls
+    secret:
+      secretName: amazon-cloudwatch-observability-agent-cert
+      items:
+        - key: ca.crt
+          path: tls-ca.crt
+  env:
+  - name: K8S_NODE_NAME
+    valueFrom:
+      fieldRef:
+        fieldPath: spec.nodeName
+  - name: HOST_IP
+    valueFrom:
+      fieldRef:
+        fieldPath: status.hostIP
+  - name: HOST_NAME
+    valueFrom:
+      fieldRef:
+        fieldPath: spec.nodeName
+  - name: K8S_NAMESPACE
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.namespace
