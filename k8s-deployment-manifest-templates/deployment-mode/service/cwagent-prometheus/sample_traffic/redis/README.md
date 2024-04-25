@@ -1,13 +1,2 @@
-## Sample Redis Application Installation Yaml
-
-Set the namespace for the Redis sample workload
-```shell script
-REDIS_NAMESPACE=redis-sample
-```
-
-Run the following command to install the Sample Redis Application on Amazon EKS or Kubernetes
-```shell script
-curl https://cwagent-prometheus-yamls-justin.s3-us-west-2.amazonaws.com/redis-traffic-sample.yaml \
-| sed "s/{{namespace}}/$REDIS_NAMESPACE/g" \
-| kubectl apply -f -
-```
+## Sample Redis Application Yaml File for Demo
+Please refer to [Set Up Redis with Sample Traffic](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContainerInsights-Prometheus-Setup-redis-eks.html) for installation guide.
