@@ -2,10 +2,11 @@
 
 cd "$(dirname "$0")"
 k8sDirPrefix="./k8s-deployment-manifest-templates/deployment-mode/daemonset/container-insights-monitoring"
+k8sQSDirPrefix="./k8s-quickstart"
 ecsDirPrefix="./ecs-task-definition-templates/deployment-mode/daemon-service/cwagent-ecs-instance-metric"
 
-newK8sVersion="k8s/1.3.20"
-agentVersion="public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300036.0b573"
+newK8sVersion="k8s/1.3.22"
+agentVersion="public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300037.1b602"
 fluentdVersion="fluent/fluentd-kubernetes-daemonset:v1.10.3-debian-cloudwatch-1.0"
 fluentBitVersion="public.ecr.aws/aws-observability/aws-for-fluent-bit:stable"
 
@@ -39,6 +40,12 @@ rm ${ecsDirPrefix}/cloudformation-quickstart/cwagent-ecs-instance-metric-cfn.jso
 # replace agent, fluentD and fluent-bit version for K8s
 sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*|${newK8sVersion}|g;s|public\.ecr\.aws/cloudwatch-agent/cloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*|${agentVersion}|g" ${k8sDirPrefix}/cwagent/cwagent-daemonset.yaml
 rm ${k8sDirPrefix}/cwagent/cwagent-daemonset.yaml.bak
+
+sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*|${newK8sVersion}|g;s|public\.ecr\.aws/cloudwatch-agent/cloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*|${agentVersion}|g" ${k8sQSDirPrefix}/cwagent-operator-rendered.yaml
+rm ${k8sQSDirPrefix}/cwagent-operator-rendered.yaml.bak
+
+sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*|${newK8sVersion}|g;s|public\.ecr\.aws/cloudwatch-agent/cloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*|${agentVersion}|g" ${k8sQSDirPrefix}/cwagent-version.yaml
+rm ${k8sQSDirPrefix}/cwagent-version.yaml.bak
 
 sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*|${newK8sVersion}|g;s|fluent/fluentd-kubernetes-daemonset:.*|${fluentdVersion}|g" ${k8sDirPrefix}/fluentd/fluentd.yaml
 rm ${k8sDirPrefix}/fluentd/fluentd.yaml.bak
