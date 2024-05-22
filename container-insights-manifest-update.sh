@@ -9,6 +9,7 @@ newK8sVersion="k8s/1.3.23"
 agentVersion="public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300039.0b612"
 fluentdVersion="fluent/fluentd-kubernetes-daemonset:v1.10.3-debian-cloudwatch-1.0"
 fluentBitVersion="public.ecr.aws/aws-observability/aws-for-fluent-bit:stable"
+fluentBitWindowsVersion="public.ecr.aws/aws-observability/aws-for-fluent-bit:windowsservercore-stable"
 
 k8sPrometheusDirPrefix="./k8s-deployment-manifest-templates/deployment-mode/service/cwagent-prometheus"
 ecsPrometheusDirPrefix="./ecs-task-definition-templates/deployment-mode/replica-service/cwagent-prometheus"
@@ -41,6 +42,9 @@ rm ${ecsDirPrefix}/cloudformation-quickstart/cwagent-ecs-instance-metric-cfn.jso
 sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*|${newK8sVersion}|g;s|public\.ecr\.aws/cloudwatch-agent/cloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*|${agentVersion}|g" ${k8sDirPrefix}/cwagent/cwagent-daemonset.yaml
 rm ${k8sDirPrefix}/cwagent/cwagent-daemonset.yaml.bak
 
+sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*|${newK8sVersion}|g;s|public\.ecr\.aws/cloudwatch-agent/cloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*|${agentVersion}|g" ${k8sDirPrefix}/cwagent/cwagent-daemonset-windows.yaml
+rm ${k8sDirPrefix}/cwagent/cwagent-daemonset-windows.yaml.bak
+
 sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*|${newK8sVersion}|g;s|public\.ecr\.aws/cloudwatch-agent/cloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*|${agentVersion}|g" ${k8sQSDirPrefix}/cwagent-operator-rendered.yaml
 rm ${k8sQSDirPrefix}/cwagent-operator-rendered.yaml.bak
 
@@ -53,12 +57,16 @@ rm ${k8sDirPrefix}/fluentd/fluentd.yaml.bak
 sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*|${newK8sVersion}|g;s|public\.ecr\.aws/aws-observability/aws-for-fluent-bit.*|${fluentBitVersion}|g" ${k8sDirPrefix}/fluent-bit/fluent-bit.yaml
 rm ${k8sDirPrefix}/fluent-bit/fluent-bit.yaml.bak
 
+sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*|${newK8sVersion}|g;s|public\.ecr\.aws/aws-observability/aws-for-fluent-bit.*|${fluentBitWindowsVersion}|g" ${k8sDirPrefix}/fluent-bit/fluent-bit-windows.yaml
+rm ${k8sDirPrefix}/fluent-bit/fluent-bit-windows.yaml.bak
+
 sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*|${newK8sVersion}|g;s|public\.ecr\.aws/aws-observability/aws-for-fluent-bit.*|${fluentBitVersion}|g" ${k8sDirPrefix}/fluent-bit/fluent-bit-compatible.yaml
 rm ${k8sDirPrefix}/fluent-bit/fluent-bit-compatible.yaml.bak
 
 # generate quickstart manifest for K8s
 OUTPUT=${k8sDirPrefix}/quickstart/cwagent-fluentd-quickstart.yaml
 OUTPUT_FLUENT_BIT=${k8sDirPrefix}/quickstart/cwagent-fluent-bit-quickstart.yaml
+OUTPUT_FLUENT_BIT_WINDOWS=${k8sDirPrefix}/quickstart/cwagent-fluent-bit-quickstart-windows.yaml
 
 cat ${k8sDirPrefix}/cloudwatch-namespace.yaml > ${OUTPUT}
 echo -e "\n---\n" >> ${OUTPUT}
@@ -90,3 +98,7 @@ echo -e "\n---\n" >> ${OUTPUT_FLUENT_BIT}
 cat ${k8sDirPrefix}/fluent-bit/fluent-bit-configmap.yaml >> ${OUTPUT_FLUENT_BIT}
 echo -e "\n---\n" >> ${OUTPUT_FLUENT_BIT}
 cat ${k8sDirPrefix}/fluent-bit/fluent-bit.yaml >> ${OUTPUT_FLUENT_BIT}
+
+cat ${k8sDirPrefix}/cwagent/cwagent-daemonset-windows.yaml > ${OUTPUT_FLUENT_BIT_WINDOWS}
+echo -e "\n---\n" >> ${OUTPUT_FLUENT_BIT_WINDOWS}
+cat ${k8sDirPrefix}/fluent-bit/fluent-bit-windows.yaml >> ${OUTPUT_FLUENT_BIT_WINDOWS}
