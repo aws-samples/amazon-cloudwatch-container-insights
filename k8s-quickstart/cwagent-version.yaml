@@ -4,7 +4,7 @@ metadata:
   name: cloudwatch-agent
   namespace: amazon-cloudwatch
 spec:
-  image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300040.0b650
+  image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300041.0b681
   mode: daemonset
   nodeSelector:
     kubernetes.io/os: linux
