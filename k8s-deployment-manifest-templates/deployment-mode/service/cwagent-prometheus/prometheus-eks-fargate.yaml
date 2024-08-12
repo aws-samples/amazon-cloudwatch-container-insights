@@ -170,6 +170,68 @@ data:
                   "metric_selectors": [
                     "^jvm_memory_pool_bytes_used$"
                   ]
+                },
+                {
+                  "source_labels": ["job"],
+                  "label_matcher": "^karpenter$",
+                  "dimensions": [
+                    ["ClusterName"]
+                  ],
+                  "metric_selectors": [
+                    "^karpenter_consistency_errors$",
+                    "^karpenter_deprovisioning_evaluation_duration_seconds$",
+                    "^karpenter_deprovisioning_replacement_node_initialized_seconds$",
+                    "^karpenter_interruption_deleted_messages$",
+                    "^karpenter_interruption_message_latency_time_seconds$",
+                    "^karpenter_interruption_received_messages$",
+                    "^karpenter_nodes_allocatable$",
+                    "^karpenter_nodes_system_overhead$",
+                    "^karpenter_nodes_termination_time_seconds$",
+                    "^karpenter_nodes_total_daemon_limits$",
+                    "^karpenter_nodes_total_daemon_requests$",
+                    "^karpenter_nodes_total_pod_limits$",
+                    "^karpenter_nodes_total_pod_requests$",
+                    "^karpenter_pods_startup_time_seconds$",
+                    "^karpenter_cloudprovider_batcher_batch_size$",
+                    "^karpenter_cloudprovider_batcher_batch_time_seconds$",
+                    "^karpenter_cloudprovider_duration_seconds$",
+                    "^karpenter_pods_state$"
+                  ]
+                },
+                {
+                  "source_labels": ["job"],
+                  "label_matcher": "^karpenter$",
+                  "dimensions": [
+                    ["ClusterName","action"]
+                  ],
+                  "metric_selectors": [
+                    "^karpenter_deprovisioning_actions_performed$",
+                    "^karpenter_interruption_actions_performed$"
+                  ]
+                },
+                {
+                  "source_labels": ["job"],
+                  "label_matcher": "^karpenter$",
+                  "dimensions": [
+                    ["ClusterName","provisioner"]
+                  ],
+                  "metric_selectors": [
+                    "^karpenter_provisioner_scheduling_duration_seconds$",
+                    "^karpenter_nodes_created$",
+                    "^karpenter_nodes_terminated$"
+                  ]
+                },
+                {								
+                  "source_labels": ["job"],
+                  "label_matcher": "^karpenter$",
+                  "dimensions": [
+                    ["ClusterName","provisioner","resource_type"]
+                  ],
+                  "metric_selectors": [
+                    "^karpenter_provisioner_limit$",
+                    "^karpenter_provisioner_usage$",
+                    "^karpenter_provisioner_usage_pct$"
+                  ]
                 }
               ]
             }
@@ -337,6 +399,17 @@ data:
       - source_labels: [__name__]
         regex: 'jvm_gc_collection_seconds.*'
         action: drop
+
+    - job_name: karpenter
+      kubernetes_sd_configs:
+      - role: endpoints
+        namespaces:
+          names:
+          - karpenter
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_endpoint_port_name]
+        regex: http-metrics
+        action: keep
 
 kind: ConfigMap
 metadata:
