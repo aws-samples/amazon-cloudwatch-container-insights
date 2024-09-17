@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-net
+  labels:
+    app: sample-net
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample-net
+  template:
+    metadata:
+      labels:
+        app: sample-net
+    spec:
+      containers:
+      - name: sample-net
+        image: mcr.microsoft.com/dotnet/samples:aspnetapp
+        imagePullPolicy: Always
+      nodeSelector:
+        kubernetes.io/os: windows
