@@ -8,6 +8,11 @@ kubectl apply -f https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch
 ```
 curl https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/prometheus-beta/k8s-deployment-manifest-templates/deployment-mode/service/cwagent-prometheus/prometheus-k8s.yaml | sed "s/{{cluster_name}}/MyCluster/;s/{{region_name}}/region/" | kubectl apply -f -
 ```
+
+* [prometheus-eks-windows-exporter.yaml](prometheus-k8s.yaml) provides an example for deploying the CloudWatch agent with Prometheus monitoring support for K8S on EC2 in one command line:
+```
+curl https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/prometheus-beta/k8s-deployment-manifest-templates/deployment-mode/service/cwagent-prometheus/prometheus-eks-windows-exporter.yaml | sed "s/{{cluster_name}}/MyCluster/;s/{{region_name}}/region/" | kubectl apply -f -
+```
 Replace ```MyCluster``` with your cluster name, and ```region``` with the AWS region (e.g. ```us-west-2```).
 
 ### IAM permissions required by CloudWatch Agent for all features:
@@ -33,3 +38,8 @@ Both yaml files contain the default settings for the following containerized app
 |HAPROXY_INGRESS |Exposed by Helm Chart:   [incubator/haproxy-ingress](https://github.com/helm/charts/tree/master/incubator/haproxy-ingress) |
 |AWS APP MESH    |Exposed by Helm Chart:   [EKS Charts](https://github.com/aws/eks-charts/blob/master/README.md)                             |
 |JAVA/JMX        |Exposed by JMX_Exporter: [JMX_Exporter](https://github.com/prometheus/jmx_exporter)                                        |
+
+### Installing Windows Exporter and Sample .NET Application
+To install the Windows Exporter and a test .NET application, run the following command:
+- `kubectl apply -f ./sample_windows_exporter`
+- Also make sure to install the CloudWatch agent using the "prometheus-eks-windows-exporter.yaml"

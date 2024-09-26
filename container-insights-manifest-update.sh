@@ -29,6 +29,8 @@ sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*|${newK8sVersion}|g;s|public\.ecr\.
 rm ${k8sPrometheusDirPrefix}/prometheus-eks-fargate.yaml.bak
 sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*|${newK8sVersion}|g;s|public\.ecr\.aws/cloudwatch-agent/cloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*|${agentVersion}|g" ${k8sPrometheusDirPrefix}/prometheus-k8s.yaml
 rm ${k8sPrometheusDirPrefix}/prometheus-k8s.yaml.bak
+sed -i'.bak' "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*|${newK8sVersion}|g;s|public\.ecr\.aws/cloudwatch-agent/cloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*|${agentVersion}|g" ${k8sPrometheusDirPrefix}/prometheus-eks-windows-exporter.yaml
+rm ${k8sPrometheusDirPrefix}/prometheus-eks-windows-exporter.yaml.bak
 
 
 # replace agent version for ECS
