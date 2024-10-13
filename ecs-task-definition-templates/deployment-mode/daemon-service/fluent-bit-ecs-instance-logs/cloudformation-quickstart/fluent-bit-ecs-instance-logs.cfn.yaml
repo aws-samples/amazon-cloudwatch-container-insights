@@ -1,0 +1,326 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  ClusterName:
+    Type: String
+    Description: Enter the name of your ECS cluster from which you want to collect metrics and/or logs
+  CreateIAMRoles:
+    Type: String
+    Default: 'False'
+    AllowedValues:
+      - 'True'
+      - 'False'
+    Description: Whether to create default IAM roles
+    ConstraintDescription: must specify True or False.
+  FluentBitTaskRoleArn:
+    Type: String
+    Default: Default
+    Description: Enter the role arn you want to use for the CloudWatch Agent ecs task role
+  FluentBitExecutionRoleArn:
+    Type: String
+    Default: Default
+    Description: Enter the role arn you want to use for the CloudWatch Agent execution role
+Conditions:
+  CreateRoles: !Equals
+    - !Ref CreateIAMRoles
+    - 'True'
+  DefaultFluentBitTaskRole: !Equals
+    - !Ref FluentBitTaskRoleArn
+    - Default
+  DefaultFluentBitExecutionRole: !Equals
+    - !Ref FluentBitExecutionRoleArn
+    - Default
+Resources:
+  FluentBitTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      TaskRoleArn: !If
+        - CreateRoles
+        - !GetAtt FluentBitTaskRole.Arn
+        - !If
+          - DefaultFluentBitTaskRole
+          - !Sub arn:aws:iam::${AWS::AccountId}:role/FluentBitECSTaskRole
+          - !Ref FluentBitTaskRoleArn
+      ExecutionRoleArn: !If
+        - CreateRoles
+        - !GetAtt FluentBitExecutionRole.Arn
+        - !If
+          - DefaultFluentBitExecutionRole
+          - !Sub arn:aws:iam::${AWS::AccountId}:role/FluentBitECSExecutionRole
+          - !Ref FluentBitExecutionRoleArn
+      NetworkMode: bridge
+      ContainerDefinitions:
+        - Name: fluent-bit
+          Image: fluent/fluent-bit:3.1.4
+          MountPoints:
+            - ContainerPath: /fluent-bit/etc/
+              SourceVolume: fluent-bit-config
+            - ContainerPath: /var/fluent-bit/state
+              SourceVolume: fluent-bit-state
+            - ReadOnly: true
+              ContainerPath: /var/log
+              SourceVolume: instance-logs
+            - ReadOnly: true
+              ContainerPath: /run/log/journal
+              SourceVolume: systemd-journal
+            - ReadOnly: true
+              ContainerPath: /etc/machine-id
+              SourceVolume: machine-id
+          Environment:
+            - Name: AWS_REGION
+              Value: !Ref AWS::Region
+            - Name: CLUSTER_NAME
+              Value: !Ref ClusterName
+          DependsOn:
+            - ContainerName: fluent-bit-config-init
+              Condition: COMPLETE
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-create-group: 'True'
+              awslogs-group: /ecs/ecs-fluent-bit-daemon-service
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: ecs
+        - Name: fluent-bit-config-init
+          Image: amazon/aws-cli:2.17.24
+          Essential: False
+          EntryPoint:
+            - '/bin/sh'
+            - '-c'
+          Command:
+            - |
+              set -ex && if [ -z $( ls -A '/run/log/journal' ) ]; then echo @SET SYSTEMD_PATH=/var/log/journal >> /fluent-bit/etc/fluent-bit.conf; else echo @SET SYSTEMD_PATH=/run/log/journal >> /fluent-bit/etc/fluent-bit.conf; fi && echo @SET INSTANCE_ID=$(cat /var/lib/cloud/data/instance-id) >> /fluent-bit/etc/fluent-bit.conf && aws ssm get-parameter --name $FB_CONFIG_SSM_PARAM --query Parameter.Value --output text >> /fluent-bit/etc/fluent-bit.conf && aws ssm get-parameter --name $FB_PARSER_SSM_PARAM --query Parameter.Value --output text >> /fluent-bit/etc/parsers.conf && cat /fluent-bit/etc/fluent-bit.conf
+          Environment:
+            - Name: FB_CONFIG_SSM_PARAM
+              Value: !Ref FluentBitConfigParam
+            - Name: FB_PARSER_SSM_PARAM
+              Value: !Ref FluentBitParserParam
+          MountPoints:
+            - ContainerPath: /fluent-bit/etc/
+              SourceVolume: fluent-bit-config
+            - ReadOnly: true
+              ContainerPath: /var/lib/cloud/data/instance-id
+              SourceVolume: instance-id
+            - ReadOnly: true
+              ContainerPath: /run/log/journal
+              SourceVolume: systemd-journal
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-create-group: 'True'
+              awslogs-group: /ecs/ecs-fluent-bit-daemon-service
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: ecs
+      RequiresCompatibilities:
+        - EC2
+      Volumes:
+        - Name: fluent-bit-config
+          DockerVolumeConfiguration:
+            Scope: 'task'
+        - Name: instance-id
+          Host:
+            SourcePath: /var/lib/cloud/data/instance-id
+        - Name: fluent-bit-state
+          Host:
+            SourcePath: /var/fluent-bit/state
+        - Name: instance-logs
+          Host:
+            SourcePath: /var/log
+        - Name: systemd-journal
+          Host:
+            SourcePath: /run/log/journal
+        - Name: machine-id
+          Host:
+            SourcePath: /etc/machine-id
+      Cpu: '512'
+      Memory: '256'
+  FluentBitECSDaemonService:
+    Type: AWS::ECS::Service
+    Properties:
+      TaskDefinition: !Ref FluentBitTaskDefinition
+      Cluster: !Ref ClusterName
+      LaunchType: EC2
+      SchedulingStrategy: DAEMON
+      ServiceName: fluent-bit-daemon-service
+  FluentBitTaskRole:
+    Type: AWS::IAM::Role
+    Condition: CreateRoles
+    Properties:
+      Description: Allows ECS tasks to call AWS services on your behalf.
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: ''
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: fluent-bit-task-role-policy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+                - Sid: FluentBitLogs
+                  Effect: Allow
+                  Action:
+                    - 'logs:CreateLogStream'
+                    - 'logs:CreateLogGroup'
+                    - 'logs:PutLogEvents'
+                  Resource: '*'
+                - Sid: FluentBitSSMParameterAccess
+                  Effect: Allow
+                  Action:
+                    - 'ssm:GetParameters'
+                    - 'ssm:GetParameter'
+                  Resource: 
+                    - !Sub
+                      - 'arn:${Partition}:ssm:${Region}:${AccountID}:parameter/*'
+                      - Partition: !Ref AWS::Partition
+                        Region: !Ref AWS::Region
+                        AccountID: !Ref AWS::AccountId
+      RoleName: FluentBitECSTaskRole
+  FluentBitExecutionRole:
+    Type: AWS::IAM::Role
+    Condition: CreateRoles
+    Properties:
+      Description: Allows ECS container agent makes calls to the Amazon ECS API on your behalf.
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: ''
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+        - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+      RoleName: FluentBitECSExecutionRole
+  FluentBitConfigParam:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Join
+        - '-'
+        - - 'fluent-bit-config'
+          - !Ref ClusterName
+      Type: String
+      Value: |
+        [SERVICE]
+            Flush                     5
+            Grace                     30
+            Log_Level                 error
+            Daemon                    off
+            Parsers_File              parsers.conf
+            storage.path              /var/fluent-bit/state/flb-storage/
+            storage.sync              normal
+            storage.checksum          off
+            storage.backlog.mem_limit 5M
+
+        [INPUT]
+            Name                systemd
+            Tag                 systemd-*
+            Systemd_Filter      _SYSTEMD_UNIT=docker.service
+            Systemd_Filter      _SYSTEMD_UNIT=containerd.service
+            DB                  /var/fluent-bit/state/systemd.db
+            Path                ${SYSTEMD_PATH}
+
+        [INPUT]
+            Name                systemd
+            Tag                 systemd-syslog
+            DB                  /var/fluent-bit/state/systemd-syslog.db
+            Path                ${SYSTEMD_PATH}
+            
+        [INPUT]
+            Name                systemd
+            Tag                 systemd-dmesg.*
+            Systemd_Filter      _TRANSPORT=kernel
+            DB                  /var/fluent-bit/state/dmesg.db
+            Path                ${SYSTEMD_PATH}
+
+        [INPUT]
+            Name                tail
+            Tag                 secure
+            Path                /var/log/secure
+            Parser              syslog
+            DB                  /var/fluent-bit/state/flb_secure.db
+            Mem_Buf_Limit       5MB
+            Skip_Long_Lines     On
+            Refresh_Interval    10
+            Read_from_Head      On
+
+        [INPUT]
+            Name                tail
+            Tag                 ecs-agent.log
+            Path                /var/log/ecs/ecs-agent.log
+            DB                  /var/fluent-bit/state/flb_ecs_agent.db
+            Mem_Buf_Limit       5MB
+            Skip_Long_Lines     On
+            Refresh_Interval    10
+            Read_from_Head      On
+
+        [INPUT]
+            Name                tail
+            Tag                 ecs-init.log
+            Path                /var/log/ecs/ecs-init.log
+            DB                  /var/fluent-bit/state/flb_ecs_init.db
+            Mem_Buf_Limit       5MB
+            Skip_Long_Lines     On
+            Refresh_Interval    10
+            Read_from_Head      On
+
+        [INPUT]
+            Name                tail
+            Tag                 ecs-audit.log
+            Path                /var/log/ecs/audit.log
+            DB                  /var/fluent-bit/state/flb_ecs_audit.db
+            Mem_Buf_Limit       5MB
+            Skip_Long_Lines     On
+            Refresh_Interval    10
+            Read_from_Head      On
+
+        [INPUT]
+            Name                tail
+            Tag                 ecs-volume-plugin.log
+            Path                /var/log/ecs/ecs-volume-plugin.log
+            DB                  /var/fluent-bit/state/flb_ecs_volume_plugin.db
+            Mem_Buf_Limit       5MB
+            Skip_Long_Lines     On
+            Refresh_Interval    10
+            Read_from_Head      On 
+
+        [FILTER]
+            Name                modify
+            Match               systemd-*
+            Rename              _HOSTNAME                   hostname
+            Rename              _SYSTEMD_UNIT               systemd_unit
+            Rename              MESSAGE                     message
+            Remove_regex        ^((?!hostname|systemd_unit|message).)*$
+
+        [FILTER]
+            Name                aws
+            Match               *
+            imds_version        v2
+
+        [OUTPUT]
+            Name                cloudwatch_logs
+            Match               *
+            region              ${AWS_REGION}
+            log_group_name      /aws/ecs/containerinsights/${CLUSTER_NAME}/instance-logs
+            log_stream_prefix   ${INSTANCE_ID}-
+            auto_create_group   true
+      Description: SSM Parameter for Fluent Bit configuration in ECS
+  FluentBitParserParam:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Join
+        - '-'
+        - - 'fluent-bit-parser'
+          - !Ref ClusterName
+      Type: String
+      Value: !Sub |
+        [PARSER]
+            Name                syslog
+            Format              regex
+            Regex               ^(?<time>[^ ]* {1,2}[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?(?:[^\:]*\:)? *(?<message>.*)$
+            Time_Key            time
+            Time_Format         %b %d %H:%M:%S
+      Description: SSM Parameter for Fluent Bit parser in ECS
