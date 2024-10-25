@@ -10,7 +10,7 @@ Run following aws cloudformation command with the cloudformation template file t
 ```
 ClusterName=<your-ecs-cluster-name>
 Region=<your-ecs-cluster-region>
-aws cloudformation create-stack --stack-name Fluent-Bit-${ClusterName}-${Region} \
+aws cloudformation create-stack --stack-name CloudWatch-Fluent-Bit-${ClusterName}-${Region} \
     --template-body file://fluent-bit-cwagent-combined-cfn.yaml \
     --parameters ParameterKey=ClusterName,ParameterValue=${ClusterName} \
                  ParameterKey=CreateIAMRoles,ParameterValue=True \
