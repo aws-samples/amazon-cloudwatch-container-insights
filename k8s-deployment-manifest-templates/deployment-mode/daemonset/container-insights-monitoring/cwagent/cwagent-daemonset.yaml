@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: cloudwatch-agent
-          image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300047.0b872
+          image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300048.1b904
           #ports:
           #  - containerPort: 8125
           #    hostPort: 8125
@@ -42,7 +42,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: CI_VERSION
-              value: "k8s/1.3.27"
+              value: "k8s/1.3.28"
           # Please don't change the mountPath
           volumeMounts:
             - name: cwagentconfig
