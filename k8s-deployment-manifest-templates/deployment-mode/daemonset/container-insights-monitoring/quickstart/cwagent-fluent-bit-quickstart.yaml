@@ -103,7 +103,7 @@ spec:
     spec:
       containers:
         - name: cloudwatch-agent
-          image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300048.1b904
+          image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300049.1b929
           #ports:
           #  - containerPort: 8125
           #    hostPort: 8125
@@ -130,7 +130,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: CI_VERSION
-              value: "k8s/1.3.28"
+              value: "k8s/1.3.29"
           # Please don't change the mountPath
           volumeMounts:
             - name: cwagentconfig
@@ -463,7 +463,7 @@ spec:
     spec:
       containers:
       - name: fluent-bit
-        image: public.ecr.aws/aws-observability/aws-for-fluent-bit:stable
+        image: public.ecr.aws/aws-observability/aws-for-fluent-bit:2.32.4
         imagePullPolicy: Always
         env:
             - name: AWS_REGION
@@ -506,7 +506,7 @@ spec:
                   apiVersion: v1
                   fieldPath: metadata.name
             - name: CI_VERSION
-              value: "k8s/1.3.28"
+              value: "k8s/1.3.29"
         resources:
             limits:
               memory: 200Mi
