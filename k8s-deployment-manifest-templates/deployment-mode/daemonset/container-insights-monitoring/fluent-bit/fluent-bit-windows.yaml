@@ -22,7 +22,7 @@ data:
     [INPUT]
         Name                tail
         Tag                 application.*
-        Exclude_Path        C:\\var\\log\\containers\\fluent-bit*, C:\\var\\log\\containers\\cloudwatch-agent*
+        Exclude_Path        C:\\var\\log\\containers\\fluent-bit*, C:\\var\\log\\containers\\cloudwatch-agent*, C:\\var\\log\\containers\\fluentd*
         Path                C:\\var\\log\\containers\\*.log
         Parser              docker
         DB                  C:\\var\\fluent-bit\\state\\flb_container.db

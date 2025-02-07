@@ -64,7 +64,7 @@ data:
     [INPUT]
         Name                tail
         Tag                 application.*
-        Exclude_Path        /var/log/containers/cloudwatch-agent*, /var/log/containers/fluent-bit*
+        Exclude_Path        /var/log/containers/cloudwatch-agent*, /var/log/containers/fluent-bit*, /var/log/containers/fluentd*
         Path                /var/log/containers/*.log
         Docker_Mode         On
         Docker_Mode_Flush   5

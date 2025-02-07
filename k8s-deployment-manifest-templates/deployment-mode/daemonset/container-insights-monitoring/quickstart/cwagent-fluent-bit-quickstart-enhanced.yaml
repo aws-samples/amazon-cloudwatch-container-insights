@@ -269,7 +269,7 @@ data:
     [INPUT]
         Name                tail
         Tag                 application.*
-        Exclude_Path        /var/log/containers/cloudwatch-agent*, /var/log/containers/fluent-bit*, /var/log/containers/aws-node*, /var/log/containers/kube-proxy*
+        Exclude_Path        /var/log/containers/cloudwatch-agent*, /var/log/containers/fluent-bit*, /var/log/containers/aws-node*, /var/log/containers/kube-proxy*, /var/log/containers/fluentd*
         Path                /var/log/containers/*.log
         multiline.parser    docker, cri
         DB                  /var/fluent-bit/state/flb_container.db
