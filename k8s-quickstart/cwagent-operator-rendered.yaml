@@ -420,6 +420,9 @@ rules:
   verbs: [ "update" ]
 - nonResourceURLs: [ "/metrics" ]
   verbs: [ "get", "list", "watch" ]
+- apiGroups: ["discovery.k8s.io"]
+  resources: ["endpointslices"]
+  verbs: ["list", "watch", "get"]
 ---
 
 apiVersion: rbac.authorization.k8s.io/v1
