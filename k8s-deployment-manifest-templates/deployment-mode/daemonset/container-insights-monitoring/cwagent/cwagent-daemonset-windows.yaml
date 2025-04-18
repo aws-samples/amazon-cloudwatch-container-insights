@@ -20,7 +20,7 @@ spec:
       hostNetwork: true
       containers:
       - name: cloudwatch-agent
-        image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300054.0
+        image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300054.0b1074
         workingDir: "%CONTAINER_SANDBOX_MOUNT_POINT%\\Program Files\\Amazon\\AmazonCloudWatchAgent"
         volumeMounts:
         - name: cwagentconfig

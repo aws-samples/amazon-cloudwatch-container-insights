@@ -6,7 +6,7 @@ k8sQSDirPrefix="./k8s-quickstart"
 ecsDirPrefix="./ecs-task-definition-templates/deployment-mode/daemon-service/cwagent-ecs-instance-metric"
 
 newK8sVersion="k8s/1.3.33"
-agentVersion="public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300054.0"
+agentVersion="public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300054.0b1074"
 fluentdVersion="fluent/fluentd-kubernetes-daemonset:v1.10.3-debian-cloudwatch-1.0"
 fluentBitVersion="public.ecr.aws/aws-observability/aws-for-fluent-bit:2.32.4"
 fluentBitWindowsVersion="public.ecr.aws/aws-observability/aws-for-fluent-bit:windowsservercore-stable"
