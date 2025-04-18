@@ -20,7 +20,7 @@ spec:
       hostNetwork: true
       containers:
       - name: cloudwatch-agent
-        image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300053.0b1046
+        image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300054.0b1074
         workingDir: "%CONTAINER_SANDBOX_MOUNT_POINT%\\Program Files\\Amazon\\AmazonCloudWatchAgent"
         volumeMounts:
         - name: cwagentconfig
@@ -47,7 +47,7 @@ spec:
               fieldRef:
                 fieldPath: metadata.namespace
           - name: CI_VERSION
-            value: "k8s/1.3.32"
+            value: "k8s/1.3.33"
           - name: CWAGENT_LOG_LEVEL
             value: DEBUG
           - name: RUN_IN_CONTAINER
@@ -271,7 +271,7 @@ spec:
               apiVersion: v1
               fieldPath: metadata.name
         - name: CI_VERSION
-          value: "k8s/1.3.32"
+          value: "k8s/1.3.33"
         resources:
             limits:
               cpu: 500m
