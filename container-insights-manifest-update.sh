@@ -3,8 +3,8 @@
 cd "$(dirname "$0")"
 
 # Version definitions
-newK8sVersion="k8s/1.3.34"
-agentVersion="public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300056.0b1123"
+newK8sVersion="k8s/1.3.33"
+agentVersion="public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300054.0b1074"
 fluentdVersion="fluent/fluentd-kubernetes-daemonset:v1.10.3-debian-cloudwatch-1.0"
 fluentBitVersion="public.ecr.aws/aws-observability/aws-for-fluent-bit:2.32.4"
 fluentBitWindowsVersion="public.ecr.aws/aws-observability/aws-for-fluent-bit:windowsservercore-stable"
@@ -13,7 +13,6 @@ fluentBitWindowsVersion="public.ecr.aws/aws-observability/aws-for-fluent-bit:win
 find . -type f \( -name "*.yaml" -o -name "*.json" \) -exec bash -c '
     file="$1"
     echo "Processing $file"
-    # Update agent and k8s versions
     sed -i".bak" "s|k8s/[0-9]*\.[0-9]*\.[0-9a-z]*|'"$newK8sVersion"'|g;s|public\.ecr\.aws/cloudwatch-agent/cloudwatch-agent:[0-9]*\.[0-9]*\.[0-9a-z]*|'"$agentVersion"'|g" "$file"
     rm -f "$file.bak"
 ' bash {} \;
