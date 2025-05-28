@@ -42,7 +42,7 @@ spec:
     - name: AWS_CSM_HOST
       value: "127.0.0.1"
   - name: cloudwatch-agent
-    image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300032.3b392
+    image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300057.0b1161
     imagePullPolicy: Always
     resources:
       limits:
