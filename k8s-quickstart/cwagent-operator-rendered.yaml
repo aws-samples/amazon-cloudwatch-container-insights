@@ -847,7 +847,7 @@ spec:
   nodeSelector:
     kubernetes.io/os: linux
   serviceAccount: cloudwatch-agent
-  config: "{\"agent\":{\"region\":\"{{region_name}}\"},\"logs\":{\"metrics_collected\":{\"kubernetes\":{\"cluster_name\":\"{{cluster_name}}\",\"enhanced_container_insights\":true}}}}"
+  config: "{\"agent\":{\"region\":\"{{region_name}}\"},\"logs\":{\"metrics_collected\":{\"emf\":{},\"kubernetes\":{\"cluster_name\":\"{{cluster_name}}\",\"enhanced_container_insights\":true}}}}"
   resources:
     requests:
       memory: "128Mi"
