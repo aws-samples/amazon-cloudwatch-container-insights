@@ -27,7 +27,7 @@
         },
         {
             "name": "cloudwatch-agent",
-            "image": "public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300032.3b392",
+            "image": "public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300057.0b1161",
             "secrets": [
                 {
                     "name": "CW_CONFIG_CONTENT",
