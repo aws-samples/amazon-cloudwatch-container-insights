@@ -224,7 +224,7 @@ Resources:
       NetworkMode: awsvpc
       ContainerDefinitions:
         - Name: cloudwatch-agent-prometheus
-          Image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300057.0b1161
+          Image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300057.1b1167
           Essential: true
           MountPoints: []
           PortMappings: []

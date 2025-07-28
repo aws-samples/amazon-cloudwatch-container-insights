@@ -17,7 +17,7 @@ spec:
           image: <demo-app-docker-image> # this is the your demo app docker image
           imagePullPolicy: Always
         - name: cloudwatch-agent
-          image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300057.0b1161
+          image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300057.1b1167
           imagePullPolicy: Always
           env:
             - name: POD_NAME
