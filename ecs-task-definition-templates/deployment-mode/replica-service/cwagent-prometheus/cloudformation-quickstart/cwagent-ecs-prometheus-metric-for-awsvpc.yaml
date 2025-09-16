@@ -224,7 +224,7 @@ Resources:
       NetworkMode: awsvpc
       ContainerDefinitions:
         - Name: cloudwatch-agent-prometheus
-          Image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300057.1b1167
+          Image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300059.0b1207
           Essential: true # Set to false if you want the task to continue to run even when the agent fails
           MountPoints: []
           PortMappings: []

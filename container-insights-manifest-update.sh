@@ -3,8 +3,8 @@
 cd "$(dirname "$0")"
 
 # Version definitions
-newK8sVersion="k8s/1.3.36"
-agentVersion="public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300057.1b1167"
+newK8sVersion="k8s/1.3.37"
+agentVersion="public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300059.0b1207"
 fluentdVersion="fluent/fluentd-kubernetes-daemonset:v1.10.3-debian-cloudwatch-1.0"
 fluentBitVersion="public.ecr.aws/aws-observability/aws-for-fluent-bit:2.32.4"
 fluentBitWindowsVersion="public.ecr.aws/aws-observability/aws-for-fluent-bit:windowsservercore-stable"
