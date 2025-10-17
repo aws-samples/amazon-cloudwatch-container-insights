@@ -751,7 +751,7 @@ spec:
                   apiVersion: v1
                   fieldPath: metadata.name
             - name: CI_VERSION
-              value: "k8s/1.3.37"
+              value: "k8s/1.3.38"
           resources:
             limits:
               cpu: 500m
@@ -867,7 +867,7 @@ spec:
                   apiVersion: v1
                   fieldPath: metadata.name
             - name: CI_VERSION
-              value: "k8s/1.3.37"
+              value: "k8s/1.3.38"
           resources:
             limits:
               cpu: 500m
@@ -960,7 +960,7 @@ spec:
     rollingUpdate:
       maxUnavailable: 1
       maxSurge: 0
-  image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300059.0b1207
+  image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300060.0b1248
   mode: daemonset
   replicas: 1
   nodeSelector:
@@ -1088,7 +1088,7 @@ spec:
       hostProcess: true
       runAsUserName: "NT AUTHORITY\\System"
   hostNetwork: true
-  image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300059.0b1207
+  image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300060.0b1248
   workingDir: "%CONTAINER_SANDBOX_MOUNT_POINT%\\Program Files\\Amazon\\AmazonCloudWatchAgent"
   mode: daemonset
   serviceAccount: cloudwatch-agent
@@ -1135,7 +1135,7 @@ spec:
   podSecurityContext:
     windowsOptions:
       runAsUserName: "NT AUTHORITY\\System"
-  image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300059.0b1207
+  image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300060.0b1248
   mode: daemonset
   serviceAccount: cloudwatch-agent
   priorityClassName: system-node-critical
