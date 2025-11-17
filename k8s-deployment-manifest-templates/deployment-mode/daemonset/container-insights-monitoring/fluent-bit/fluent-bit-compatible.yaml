@@ -282,7 +282,7 @@ spec:
     spec:
       containers:
       - name: fluent-bit-compatible
-        image: public.ecr.aws/aws-observability/aws-for-fluent-bit:2.32.4
+        image: public.ecr.aws/aws-observability/aws-for-fluent-bit:2.34.1
         imagePullPolicy: Always
         env:
             - name: AWS_REGION
