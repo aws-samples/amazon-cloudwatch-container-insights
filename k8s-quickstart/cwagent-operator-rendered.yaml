@@ -275,53 +275,53 @@ data:
       extra_user_agent    container-insights
   host-log.conf: |
     [INPUT]
-        Name                systemd
-        Tag                 host.dmesg
-        Systemd_Filter      _TRANSPORT=kernel
-        DB                  /var/fluent-bit/state/flb_dmesg.db
-        Path                /var/log/journal
-        Read_From_Tail      ${READ_FROM_TAIL}
+      Name                systemd
+      Tag                 host.dmesg
+      Systemd_Filter      _TRANSPORT=kernel
+      DB                  /var/fluent-bit/state/flb_dmesg.db
+      Path                /var/log/journal
+      Read_From_Tail      ${READ_FROM_TAIL}
 
     [INPUT]
-        Name                systemd
-        Tag                 host.messages
-        Systemd_Filter      PRIORITY=0
-        Systemd_Filter      PRIORITY=1
-        Systemd_Filter      PRIORITY=2
-        Systemd_Filter      PRIORITY=3
-        Systemd_Filter      PRIORITY=4
-        Systemd_Filter      PRIORITY=5
-        Systemd_Filter      PRIORITY=6
-        DB                  /var/fluent-bit/state/flb_messages.db
-        Path                /var/log/journal
-        Read_From_Tail      ${READ_FROM_TAIL}
+      Name                systemd
+      Tag                 host.messages
+      Systemd_Filter      PRIORITY=0
+      Systemd_Filter      PRIORITY=1
+      Systemd_Filter      PRIORITY=2
+      Systemd_Filter      PRIORITY=3
+      Systemd_Filter      PRIORITY=4
+      Systemd_Filter      PRIORITY=5
+      Systemd_Filter      PRIORITY=6
+      DB                  /var/fluent-bit/state/flb_messages.db
+      Path                /var/log/journal
+      Read_From_Tail      ${READ_FROM_TAIL}
 
     [INPUT]
-        Name                systemd
-        Tag                 host.secure
-        Systemd_Filter      SYSLOG_FACILITY=10
-        DB                  /var/fluent-bit/state/flb_secure.db
-        Path                /var/log/journal
-        Read_From_Tail      ${READ_FROM_TAIL}
+      Name                systemd
+      Tag                 host.secure
+      Systemd_Filter      SYSLOG_FACILITY=10
+      DB                  /var/fluent-bit/state/flb_secure.db
+      Path                /var/log/journal
+      Read_From_Tail      ${READ_FROM_TAIL}
 
     [FILTER]
-        Name                aws
-        Match               host.*
-        imds_version        v2
+      Name                aws
+      Match               host.*
+      imds_version        v2
 
     [FILTER]
-        Name                grep
-        Match               host.messages
-        Exclude             SYSLOG_FACILITY /^(2|9|10)$/
+      Name                grep
+      Match               host.messages
+      Exclude             SYSLOG_FACILITY /^(2|9|10)$/
 
     [FILTER]
-        Name                modify
-        Match               host.*
-        Rename             _HOSTNAME host
-        Rename             MESSAGE message
-        Rename             SYSLOG_IDENTIFIER ident
-        Rename             SYSLOG_PID pid
-        Remove_regex       [A-Z]
+      Name                modify
+      Match               host.*
+      Rename             _HOSTNAME host
+      Rename             MESSAGE message
+      Rename             SYSLOG_IDENTIFIER ident
+      Rename             SYSLOG_PID pid
+      Remove_regex       [A-Z]
 
     [OUTPUT]
       Name                cloudwatch_logs
