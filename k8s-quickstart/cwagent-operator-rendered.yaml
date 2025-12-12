@@ -275,42 +275,53 @@ data:
       extra_user_agent    container-insights
   host-log.conf: |
     [INPUT]
-      Name                tail
+      Name                systemd
       Tag                 host.dmesg
-      Path                /var/log/dmesg
-      Key                 message
+      Systemd_Filter      _TRANSPORT=kernel
       DB                  /var/fluent-bit/state/flb_dmesg.db
-      Mem_Buf_Limit       5MB
-      Skip_Long_Lines     On
-      Refresh_Interval    10
-      Read_from_Head      ${READ_FROM_HEAD}
+      Path                /var/log/journal
+      Read_From_Tail      ${READ_FROM_TAIL}
 
     [INPUT]
-      Name                tail
+      Name                systemd
       Tag                 host.messages
-      Path                /var/log/messages
-      Parser              syslog
+      Systemd_Filter      PRIORITY=0
+      Systemd_Filter      PRIORITY=1
+      Systemd_Filter      PRIORITY=2
+      Systemd_Filter      PRIORITY=3
+      Systemd_Filter      PRIORITY=4
+      Systemd_Filter      PRIORITY=5
+      Systemd_Filter      PRIORITY=6
       DB                  /var/fluent-bit/state/flb_messages.db
-      Mem_Buf_Limit       5MB
-      Skip_Long_Lines     On
-      Refresh_Interval    10
-      Read_from_Head      ${READ_FROM_HEAD}
+      Path                /var/log/journal
+      Read_From_Tail      ${READ_FROM_TAIL}
 
     [INPUT]
-      Name                tail
+      Name                systemd
       Tag                 host.secure
-      Path                /var/log/secure
-      Parser              syslog
+      Systemd_Filter      SYSLOG_FACILITY=10
       DB                  /var/fluent-bit/state/flb_secure.db
-      Mem_Buf_Limit       5MB
-      Skip_Long_Lines     On
-      Refresh_Interval    10
-      Read_from_Head      ${READ_FROM_HEAD}
+      Path                /var/log/journal
+      Read_From_Tail      ${READ_FROM_TAIL}
 
     [FILTER]
       Name                aws
       Match               host.*
       imds_version        v2
+
+    [FILTER]
+      Name                grep
+      Match               host.messages
+      Exclude             SYSLOG_FACILITY /^(2|9|10)$/
+
+    [FILTER]
+      Name                modify
+      Match               host.*
+      Rename             _HOSTNAME host
+      Rename             MESSAGE message
+      Rename             SYSLOG_IDENTIFIER ident
+      Rename             SYSLOG_PID pid
+      Remove_regex       [A-Z]
 
     [OUTPUT]
       Name                cloudwatch_logs
@@ -730,7 +741,7 @@ spec:
     spec:
       containers:
         - name: fluent-bit
-          image: public.ecr.aws/aws-observability/aws-for-fluent-bit:2.32.5.20250327
+          image: public.ecr.aws/aws-observability/aws-for-fluent-bit:3.0.1
           imagePullPolicy: Always
           env:
             - name: AWS_REGION
