@@ -6,7 +6,7 @@
   "containerDefinitions": [
     {
       "name": "cloudwatch-agent-prometheus",
-      "image": "public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300064.0b1337",
+      "image": "public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300064.1b1344",
       "mountPoints": [
       ],
       "portMappings": [
