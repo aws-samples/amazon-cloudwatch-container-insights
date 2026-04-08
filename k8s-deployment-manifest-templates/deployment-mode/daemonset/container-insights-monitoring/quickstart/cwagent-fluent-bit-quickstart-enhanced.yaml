@@ -15,6 +15,7 @@ metadata:
   namespace: amazon-cloudwatch
 
 ---
+# ClusterRole (cluster-scoped permissions)
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -23,12 +24,12 @@ rules:
   - apiGroups: [""]
     resources: ["pods", "nodes", "endpoints"]
     verbs: ["list", "watch"]
+  - apiGroups: [""]
+    resources: ["services"]
+    verbs: ["list", "watch"]
   - apiGroups: ["apps"]
     resources: ["replicasets", "daemonsets", "deployments", "statefulsets"]
     verbs: ["list", "watch"]
-  - apiGroups: [ "" ]
-    resources: [ "services" ]
-    verbs: [ "list", "watch" ]
   - apiGroups: ["batch"]
     resources: ["jobs"]
     verbs: ["list", "watch"]
@@ -36,17 +37,16 @@ rules:
     resources: ["nodes/proxy"]
     verbs: ["get"]
   - apiGroups: [""]
-    resources: ["nodes/stats", "configmaps", "events"]
+    resources: ["nodes/stats", "events"]
     verbs: ["create", "get"]
   - apiGroups: [""]
     resources: ["configmaps"]
-    resourceNames: ["cwagent-clusterleader"]
-    verbs: ["get","update"]
+    verbs: ["get"]
   - nonResourceURLs: ["/metrics"]
     verbs: ["get", "list", "watch"]
-  - apiGroups: [ "discovery.k8s.io" ]
-    resources: [ "endpointslices" ]
-    verbs: [ "list", "watch", "get" ]
+  - apiGroups: ["discovery.k8s.io"]
+    resources: ["endpointslices"]
+    verbs: ["list", "watch", "get"]
 
 ---
 kind: ClusterRoleBinding
@@ -61,6 +61,33 @@ roleRef:
   kind: ClusterRole
   name: cloudwatch-agent-role
   apiGroup: rbac.authorization.k8s.io
+
+---
+# Role (namespace-scoped permissions for ConfigMap write operations used in leader election)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: cloudwatch-agent-role
+  namespace: amazon-cloudwatch
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["create", "update"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: cloudwatch-agent-role-binding
+  namespace: amazon-cloudwatch
+roleRef:
+  kind: Role
+  name: cloudwatch-agent-role
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+  - kind: ServiceAccount
+    name: cloudwatch-agent
+    namespace: amazon-cloudwatch
 ---
 
 # create configmap for cwagent config
