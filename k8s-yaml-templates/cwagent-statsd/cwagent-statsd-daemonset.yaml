@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: cloudwatch-agent
-          image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300066.1
+          image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300066.1b1374
           imagePullPolicy: Always
           ports:
             # containerPort should be consistent with the listen port defined in configmap
