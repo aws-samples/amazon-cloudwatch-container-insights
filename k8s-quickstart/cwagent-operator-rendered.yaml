@@ -971,7 +971,7 @@ spec:
     rollingUpdate:
       maxUnavailable: 1
       maxSurge: 0
-  image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300066.1
+  image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300066.1b1374
   mode: daemonset
   replicas: 1
   nodeSelector:
@@ -1099,7 +1099,7 @@ spec:
       hostProcess: true
       runAsUserName: "NT AUTHORITY\\System"
   hostNetwork: true
-  image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300066.1
+  image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300066.1b1374
   workingDir: "%CONTAINER_SANDBOX_MOUNT_POINT%\\Program Files\\Amazon\\AmazonCloudWatchAgent"
   mode: daemonset
   serviceAccount: cloudwatch-agent
@@ -1146,7 +1146,7 @@ spec:
   podSecurityContext:
     windowsOptions:
       runAsUserName: "NT AUTHORITY\\System"
-  image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300066.1
+  image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300066.1b1374
   mode: daemonset
   serviceAccount: cloudwatch-agent
   priorityClassName: system-node-critical

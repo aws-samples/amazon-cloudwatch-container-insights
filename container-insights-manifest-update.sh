@@ -4,7 +4,7 @@ cd "$(dirname "$0")"
 
 # Version definitions
 newK8sVersion="k8s/1.3.43"
-agentVersion="public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300066.1"
+agentVersion="public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300066.1b1374"
 fluentdVersion="fluent/fluentd-kubernetes-daemonset:v1.10.3-debian-cloudwatch-1.0"
 fluentBitVersion="public.ecr.aws/aws-observability/aws-for-fluent-bit:3.0.1"
 fluentBitWindowsVersion="public.ecr.aws/aws-observability/aws-for-fluent-bit:windowsservercore-stable"
