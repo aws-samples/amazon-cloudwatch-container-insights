@@ -10,6 +10,10 @@
             "links": [
                 "cloudwatch-agent"
             ],
+	    "environment": [{
+		"name": "AWS_EMF_AGENT_ENDPOINT",
+		"value": "{{aws-emf-agent-endpoint}}"
+	    }],
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
