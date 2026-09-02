@@ -1,0 +1,146 @@
+{
+    "family": "fluent-bit-daemon-service",
+    "taskRoleArn": "{{task-role-arn}}",
+    "executionRoleArn": "{{execution-role-arn}}",
+    "containerDefinitions": [
+        {
+            "name": "fluent-bit-config-init",
+            "image": "public.ecr.aws/aws-cli/aws-cli:2.18.14",
+            "cpu": 0,
+            "essential": false,
+            "entryPoint": [
+                "/bin/sh",
+                "-c"
+            ],
+            "command": [
+                "set -ex && if [ -z $( ls -A '/run/log/journal' ) ]; then echo @SET SYSTEMD_PATH=/var/log/journal >> /fluent-bit/etc/fluent-bit.conf; else echo @SET SYSTEMD_PATH=/run/log/journal >> /fluent-bit/etc/fluent-bit.conf; fi && echo @SET INSTANCE_ID=$(cat /var/lib/cloud/data/instance-id) >> /fluent-bit/etc/fluent-bit.conf && if [ -z \"${FLUENT_BIT_CONFIG_FILE}\" ]; then echo 'W1NFUlZJQ0VdCiAgICBGbHVzaCAgICAgICAgICAgICAgICAgICAgIDUKICAgIEdyYWNlICAgICAgICAgICAgICAgICAgICAgMzAKICAgIExvZ19MZXZlbCAgICAgICAgICAgICAgICAgZXJyb3IKICAgIERhZW1vbiAgICAgICAgICAgICAgICAgICAgb2ZmCiAgICBQYXJzZXJzX0ZpbGUgICAgICAgICAgICAgIHBhcnNlcnMuY29uZgogICAgc3RvcmFnZS5wYXRoICAgICAgICAgICAgICAvdmFyL2ZsdWVudC1iaXQvc3RhdGUvZmxiLXN0b3JhZ2UvCiAgICBzdG9yYWdlLnN5bmMgICAgICAgICAgICAgIG5vcm1hbAogICAgc3RvcmFnZS5jaGVja3N1bSAgICAgICAgICBvZmYKICAgIHN0b3JhZ2UuYmFja2xvZy5tZW1fbGltaXQgNU0KCltJTlBVVF0KICAgIE5hbWUgICAgICAgICAgICAgICAgc3lzdGVtZAogICAgVGFnICAgICAgICAgICAgICAgICBzeXN0ZW1kLSoKICAgIFN5c3RlbWRfRmlsdGVyICAgICAgX1NZU1RFTURfVU5JVD1kb2NrZXIuc2VydmljZQogICAgU3lzdGVtZF9GaWx0ZXIgICAgICBfU1lTVEVNRF9VTklUPWNvbnRhaW5lcmQuc2VydmljZQogICAgREIgICAgICAgICAgICAgICAgICAvdmFyL2ZsdWVudC1iaXQvc3RhdGUvc3lzdGVtZC5kYgogICAgUGF0aCAgICAgICAgICAgICAgICAke1NZU1RFTURfUEFUSH0KCltJTlBVVF0KICAgIE5hbWUgICAgICAgICAgICAgICAgc3lzdGVtZAogICAgVGFnICAgICAgICAgICAgICAgICBzeXN0ZW1kLXN5c2xvZwogICAgREIgICAgICAgICAgICAgICAgICAvdmFyL2ZsdWVudC1iaXQvc3RhdGUvc3lzdGVtZC1zeXNsb2cuZGIKICAgIFBhdGggICAgICAgICAgICAgICAgJHtTWVNURU1EX1BBVEh9CiAgICAKW0lOUFVUXQogICAgTmFtZSAgICAgICAgICAgICAgICBzeXN0ZW1kCiAgICBUYWcgICAgICAgICAgICAgICAgIHN5c3RlbWQtZG1lc2cuKgogICAgU3lzdGVtZF9GaWx0ZXIgICAgICBfVFJBTlNQT1JUPWtlcm5lbAogICAgREIgICAgICAgICAgICAgICAgICAvdmFyL2ZsdWVudC1iaXQvc3RhdGUvZG1lc2cuZGIKICAgIFBhdGggICAgICAgICAgICAgICAgJHtTWVNURU1EX1BBVEh9CgpbSU5QVVRdCiAgICBOYW1lICAgICAgICAgICAgICAgIHRhaWwKICAgIFRhZyAgICAgICAgICAgICAgICAgc2VjdXJlCiAgICBQYXRoICAgICAgICAgICAgICAgIC92YXIvbG9nL3NlY3VyZQogICAgUGFyc2VyICAgICAgICAgICAgICBzeXNsb2cKICAgIERCICAgICAgICAgICAgICAgICAgL3Zhci9mbHVlbnQtYml0L3N0YXRlL2ZsYl9zZWN1cmUuZGIKICAgIE1lbV9CdWZfTGltaXQgICAgICAgNU1CCiAgICBTa2lwX0xvbmdfTGluZXMgICAgIE9uCiAgICBSZWZyZXNoX0ludGVydmFsICAgIDEwCiAgICBSZWFkX2Zyb21fSGVhZCAgICAgIE9uCgpbSU5QVVRdCiAgICBOYW1lICAgICAgICAgICAgICAgIHRhaWwKICAgIFRhZyAgICAgICAgICAgICAgICAgZWNzLWFnZW50LmxvZwogICAgUGF0aCAgICAgICAgICAgICAgICAvdmFyL2xvZy9lY3MvZWNzLWFnZW50LmxvZwogICAgREIgICAgICAgICAgICAgICAgICAvdmFyL2ZsdWVudC1iaXQvc3RhdGUvZmxiX2Vjc19hZ2VudC5kYgogICAgTWVtX0J1Zl9MaW1pdCAgICAgICA1TUIKICAgIFNraXBfTG9uZ19MaW5lcyAgICAgT24KICAgIFJlZnJlc2hfSW50ZXJ2YWwgICAgMTAKICAgIFJlYWRfZnJvbV9IZWFkICAgICAgT24KCltJTlBVVF0KICAgIE5hbWUgICAgICAgICAgICAgICAgdGFpbAogICAgVGFnICAgICAgICAgICAgICAgICBlY3MtaW5pdC5sb2cKICAgIFBhdGggICAgICAgICAgICAgICAgL3Zhci9sb2cvZWNzL2Vjcy1pbml0LmxvZwogICAgREIgICAgICAgICAgICAgICAgICAvdmFyL2ZsdWVudC1iaXQvc3RhdGUvZmxiX2Vjc19pbml0LmRiCiAgICBNZW1fQnVmX0xpbWl0ICAgICAgIDVNQgogICAgU2tpcF9Mb25nX0xpbmVzICAgICBPbgogICAgUmVmcmVzaF9JbnRlcnZhbCAgICAxMAogICAgUmVhZF9mcm9tX0hlYWQgICAgICBPbgoKW0lOUFVUXQogICAgTmFtZSAgICAgICAgICAgICAgICB0YWlsCiAgICBUYWcgICAgICAgICAgICAgICAgIGVjcy1hdWRpdC5sb2cKICAgIFBhdGggICAgICAgICAgICAgICAgL3Zhci9sb2cvZWNzL2F1ZGl0LmxvZwogICAgREIgICAgICAgICAgICAgICAgICAvdmFyL2ZsdWVudC1iaXQvc3RhdGUvZmxiX2Vjc19hdWRpdC5kYgogICAgTWVtX0J1Zl9MaW1pdCAgICAgICA1TUIKICAgIFNraXBfTG9uZ19MaW5lcyAgICAgT24KICAgIFJlZnJlc2hfSW50ZXJ2YWwgICAgMTAKICAgIFJlYWRfZnJvbV9IZWFkICAgICAgT24KCltJTlBVVF0KICAgIE5hbWUgICAgICAgICAgICAgICAgdGFpbAogICAgVGFnICAgICAgICAgICAgICAgICBlY3Mtdm9sdW1lLXBsdWdpbi5sb2cKICAgIFBhdGggICAgICAgICAgICAgICAgL3Zhci9sb2cvZWNzL2Vjcy12b2x1bWUtcGx1Z2luLmxvZwogICAgREIgICAgICAgICAgICAgICAgICAvdmFyL2ZsdWVudC1iaXQvc3RhdGUvZmxiX2Vjc192b2x1bWVfcGx1Z2luLmRiCiAgICBNZW1fQnVmX0xpbWl0ICAgICAgIDVNQgogICAgU2tpcF9Mb25nX0xpbmVzICAgICBPbgogICAgUmVmcmVzaF9JbnRlcnZhbCAgICAxMAogICAgUmVhZF9mcm9tX0hlYWQgICAgICBPbiAKCltGSUxURVJdCiAgICBOYW1lICAgICAgICAgICAgICAgIG1vZGlmeQogICAgTWF0Y2ggICAgICAgICAgICAgICBzeXN0ZW1kLSoKICAgIFJlbmFtZSAgICAgICAgICAgICAgX0hPU1ROQU1FICAgICAgICAgICAgICAgICAgIGhvc3RuYW1lCiAgICBSZW5hbWUgICAgICAgICAgICAgIF9TWVNURU1EX1VOSVQgICAgICAgICAgICAgICBzeXN0ZW1kX3VuaXQKICAgIFJlbmFtZSAgICAgICAgICAgICAgTUVTU0FHRSAgICAgICAgICAgICAgICAgICAgIG1lc3NhZ2UKICAgIFJlbW92ZV9yZWdleCAgICAgICAgXigoPyFob3N0bmFtZXxzeXN0ZW1kX3VuaXR8bWVzc2FnZSkuKSokCgpbRklMVEVSXQogICAgTmFtZSAgICAgICAgICAgICAgICBhd3MKICAgIE1hdGNoICAgICAgICAgICAgICAgKgogICAgaW1kc192ZXJzaW9uICAgICAgICB2MgoKW09VVFBVVF0KICAgIE5hbWUgICAgICAgICAgICAgICAgY2xvdWR3YXRjaF9sb2dzCiAgICBNYXRjaCAgICAgICAgICAgICAgICoKICAgIHJlZ2lvbiAgICAgICAgICAgICAgJHtBV1NfUkVHSU9OfQogICAgbG9nX2dyb3VwX25hbWUgICAgICAvYXdzL2Vjcy9jb250YWluZXJpbnNpZ2h0cy8ke0NMVVNURVJfTkFNRX0vaW5zdGFuY2UtbG9ncwogICAgbG9nX3N0cmVhbV9wcmVmaXggICAke0lOU1RBTkNFX0lEfS0KICAgIGF1dG9fY3JlYXRlX2dyb3VwICAgdHJ1ZQ==' | base64 -d >> /fluent-bit/etc/fluent-bit.conf; else aws s3 cp $FLUENT_BIT_CONFIG_FILE /tmp/fluent-bit-temp.conf && cat /tmp/fluent-bit-temp.conf >> /fluent-bit/etc/fluent-bit.conf; fi && if [ -z \"${FLUENT_BIT_PARSERS_FILE}\" ]; then echo 'W1BBUlNFUl0KICAgIE5hbWUgICAgICAgICAgICAgICAgc3lzbG9nCiAgICBGb3JtYXQgICAgICAgICAgICAgIHJlZ2V4CiAgICBSZWdleCAgICAgICAgICAgICAgIF4oPzx0aW1lPlteIF0qIHsxLDJ9W14gXSogW14gXSopICg/PGhvc3Q+W14gXSopICg/PGlkZW50PlthLXpBLVowLTlfXC9cLlwtXSopKD86XFsoPzxwaWQ+WzAtOV0rKVxdKT8oPzpbXlw6XSpcOik/ICooPzxtZXNzYWdlPi4qKSQKICAgIFRpbWVfS2V5ICAgICAgICAgICAgdGltZQogICAgVGltZV9Gb3JtYXQgICAgICAgICAlYiAlZCAlSDolTTolUw==' | base64 -d >>  /fluent-bit/etc/parsers.conf; else aws s3 cp $FLUENT_BIT_PARSERS_FILE  /tmp/parsers-temp.conf && cat /tmp/parsers-temp.conf >> /fluent-bit/etc/parsers.conf; fi\n"
+            ],
+            "mountPoints": [
+                {
+                    "sourceVolume": "fluent-bit-config",
+                    "containerPath": "/fluent-bit/etc/"
+                },
+                {
+                    "sourceVolume": "instance-id",
+                    "containerPath": "/var/lib/cloud/data/instance-id",
+                    "readOnly": true
+                },
+                {
+                    "sourceVolume": "systemd-journal",
+                    "containerPath": "/run/log/journal",
+                    "readOnly": true
+                }
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/ecs-fluent-bit-daemon-service",
+                    "awslogs-create-group": "True",
+                    "awslogs-region": "{{aws-region}}",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            }
+        },
+        {
+            "name": "fluent-bit",
+            "image": "fluent/fluent-bit:3.1.4",
+            "cpu": 0,
+            "essential": true,
+            "environment": [
+                {
+                    "name": "AWS_REGION",
+                    "value": "{{aws-region}}"
+                },
+                {
+                    "name": "CLUSTER_NAME",
+                    "value": "{{ecs-cluster-name}}"
+                }
+            ],
+            "mountPoints": [
+                {
+                    "sourceVolume": "fluent-bit-config",
+                    "containerPath": "/fluent-bit/etc/"
+                },
+                {
+                    "sourceVolume": "fluent-bit-state",
+                    "containerPath": "/var/fluent-bit/state"
+                },
+                {
+                    "sourceVolume": "instance-logs",
+                    "containerPath": "/var/log",
+                    "readOnly": true
+                },
+                {
+                    "sourceVolume": "systemd-journal",
+                    "containerPath": "/run/log/journal",
+                    "readOnly": true
+                },
+                {
+                    "sourceVolume": "machine-id",
+                    "containerPath": "/etc/machine-id",
+                    "readOnly": true
+                }
+            ],
+            "dependsOn": [
+                {
+                    "containerName": "fluent-bit-config-init",
+                    "condition": "COMPLETE"
+                }
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/ecs-fluent-bit-daemon-service",
+                    "awslogs-create-group": "True",
+                    "awslogs-region": "{{aws-region}}",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            }
+        }
+    ],
+    "networkMode": "bridge",
+    "volumes": [
+        {
+            "name": "fluent-bit-state",
+            "host": {
+                "sourcePath": "/var/fluent-bit/state"
+            }
+        },
+        {
+            "name": "instance-logs",
+            "host": {
+                "sourcePath": "/var/log"
+            }
+        },
+        {
+            "name": "instance-id",
+            "host": {
+                "sourcePath": "/var/lib/cloud/data/instance-id"
+            }
+        },
+        {
+            "name": "systemd-journal",
+            "host": {
+                "sourcePath": "/run/log/journal"
+            }
+        },
+        {
+            "name": "machine-id",
+            "host": {
+                "sourcePath": "/etc/machine-id"
+            }
+        },
+        {
+            "name": "fluent-bit-config",
+            "dockerVolumeConfiguration": {
+                "scope": "task",
+                "driver": "local"
+            }
+        }
+    ],
+    "requiresCompatibilities": [
+        "EC2"
+    ],
+    "cpu": "512",
+    "memory": "256"
+}
