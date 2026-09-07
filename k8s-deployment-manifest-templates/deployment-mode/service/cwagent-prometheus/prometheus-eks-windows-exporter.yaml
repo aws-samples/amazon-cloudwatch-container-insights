@@ -145,7 +145,7 @@ spec:
     spec:
       containers:
         - name: cloudwatch-agent
-          image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300071.0
+          image: public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300072.0b1766
           imagePullPolicy: Always
           resources:
             limits:
