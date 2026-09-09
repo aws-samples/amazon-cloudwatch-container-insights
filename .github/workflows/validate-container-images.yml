@@ -1,0 +1,49 @@
+name: Validate container images
+
+# When container-insights-manifest-update.sh changes, confirm every image it pins (agent, fluentd, fluent-bit,
+# fluent-bit-windows) is a valid, pullable image on its registry before the PR merges. Guards against typo'd or
+# nonexistent tags.
+
+on:
+  pull_request:
+    paths:
+      - container-insights-manifest-update.sh
+
+permissions:
+  contents: read
+
+jobs:
+  validate-images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify pinned images exist
+        run: |
+          script="container-insights-manifest-update.sh"
+          # Every *Version="..." assignment whose value carries a ":tag" is a container image reference.
+          # Values without a tag (such as the k8s manifest version) are excluded.
+          images="$(grep -oP '^\s*\w+Version="\K[^"]+' "$script" | grep ':')"
+          if [ -z "$images" ]; then
+            echo "No image references found in $script" >&2
+            exit 1
+          fi
+
+          failed=0
+          while IFS= read -r image; do
+            # Anonymous manifest inspect: confirms the tag exists and resolves to a valid image manifest
+            # without pulling the full image. Only the exit code matters, so discard the manifest output.
+            if docker buildx imagetools inspect "$image" >/dev/null 2>&1; then
+              echo "OK: $image"
+            else
+              echo "::error::Image not found or not a valid manifest: $image"
+              failed=1
+            fi
+          done <<< "$images"
+
+          if [ "$failed" -ne 0 ]; then
+            echo "One or more images failed validation." >&2
+            exit 1
+          fi
+          echo "All pinned images validated successfully."
