@@ -6,6 +6,8 @@ name: Validate container images
 
 on:
   pull_request:
+    branches:
+      - main
     paths:
       - container-insights-manifest-update.sh
 
