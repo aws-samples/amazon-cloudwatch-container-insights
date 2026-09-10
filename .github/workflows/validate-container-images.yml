@@ -24,7 +24,6 @@ jobs:
       - name: Check whether the manifest script changed
         id: changed
         run: |
-          # No trigger path filter: this job must run on every PR so it can be a required status check.
           # Detect whether the manifest script changed and only validate images when it did.
           if git diff --name-only "origin/${{ github.base_ref }}...HEAD" \
               | grep -qx 'container-insights-manifest-update.sh'; then
