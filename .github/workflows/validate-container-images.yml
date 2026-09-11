@@ -1,0 +1,55 @@
+name: Validate container images
+
+# When a PR changes an image version in container-insights-manifest-update.sh, confirm the new image is a
+# valid, pullable image on its registry before merge. Guards against typo'd or nonexistent tags.
+# Only the changed images are checked, so unrelated PRs never hit the pinned registries.
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate-images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          fetch-depth: 0
+
+      - name: Verify changed images exist
+        run: |
+          script="container-insights-manifest-update.sh"
+
+          # Collect image refs (values with a ":tag") from version lines added in this PR. Tagless values
+          # like the k8s manifest version are skipped. git diff is kept in its own assignment so a diff
+          # error fails the step under 'set -e' instead of silently validating nothing.
+          patch="$(git diff "origin/${{ github.base_ref }}...HEAD" -- "$script")"
+          images="$(awk -F'"' '/^\+[[:space:]]*[A-Za-z_]+Version=/ && $2 ~ /:/ {print $2}' <<< "$patch")"
+
+          if [ -z "$images" ]; then
+            echo "No image version lines changed in $script. Nothing to validate."
+            exit 0
+          fi
+
+          failed=0
+          while IFS= read -r image; do
+            # Anonymous manifest inspect confirms the tag resolves without pulling the image. Capture the
+            # output so a transient failure (rate limit, DNS, 5xx) is reported instead of looking like a bad tag.
+            if out="$(docker buildx imagetools inspect "$image" 2>&1)"; then
+              echo "OK: $image"
+            else
+              echo "::error::Failed to resolve $image: $out"
+              failed=1
+            fi
+          done <<< "$images"
+
+          if [ "$failed" -ne 0 ]; then
+            echo "One or more images failed validation." >&2
+            exit 1
+          fi
+          echo "All changed images validated successfully."
