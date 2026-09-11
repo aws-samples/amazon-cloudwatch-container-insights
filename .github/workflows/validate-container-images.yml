@@ -1,8 +1,8 @@
 name: Validate container images
 
-# When container-insights-manifest-update.sh changes, confirm every image it pins (agent, fluentd, fluent-bit,
-# fluent-bit-windows) is a valid, pullable image on its registry before the PR merges. Guards against typo'd or
-# nonexistent tags.
+# When a PR changes an image version in container-insights-manifest-update.sh, confirm the new image is a
+# valid, pullable image on its registry before merge. Guards against typo'd or nonexistent tags.
+# Only the changed images are checked, so unrelated PRs never hit the pinned registries.
 
 on:
   pull_request:
@@ -17,42 +17,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           fetch-depth: 0
 
-      - name: Check whether the manifest script changed
-        id: changed
-        run: |
-          # Detect whether the manifest script changed and only validate images when it did.
-          if git diff --name-only "origin/${{ github.base_ref }}...HEAD" \
-              | grep -qx 'container-insights-manifest-update.sh'; then
-            echo "changed=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "Manifest script not changed; nothing to validate."
-          fi
-
-      - name: Verify pinned images exist
-        if: steps.changed.outputs.changed == 'true'
+      - name: Verify changed images exist
         run: |
           script="container-insights-manifest-update.sh"
-          # Every *Version="..." assignment whose value carries a ":tag" is a container image reference.
-          # Values without a tag (such as the k8s manifest version) are excluded.
-          images="$(grep -oP '^\s*\w+Version="\K[^"]+' "$script" | grep ':')"
+
+          # Collect image refs (values with a ":tag") from version lines added in this PR. Tagless values
+          # like the k8s manifest version are skipped. git diff is kept in its own assignment so a diff
+          # error fails the step under 'set -e' instead of silently validating nothing.
+          patch="$(git diff "origin/${{ github.base_ref }}...HEAD" -- "$script")"
+          images="$(awk -F'"' '/^\+[[:space:]]*[A-Za-z_]+Version=/ && $2 ~ /:/ {print $2}' <<< "$patch")"
+
           if [ -z "$images" ]; then
-            echo "No image references found in $script" >&2
-            exit 1
+            echo "No image version lines changed in $script. Nothing to validate."
+            exit 0
           fi
 
           failed=0
           while IFS= read -r image; do
-            # Anonymous manifest inspect: confirms the tag exists and resolves to a valid image manifest
-            # without pulling the full image. Only the exit code matters, so discard the manifest output.
-            if docker buildx imagetools inspect "$image" >/dev/null 2>&1; then
+            # Anonymous manifest inspect confirms the tag resolves without pulling the image. Capture the
+            # output so a transient failure (rate limit, DNS, 5xx) is reported instead of looking like a bad tag.
+            if out="$(docker buildx imagetools inspect "$image" 2>&1)"; then
               echo "OK: $image"
             else
-              echo "::error::Image not found or not a valid manifest: $image"
+              echo "::error::Failed to resolve $image: $out"
               failed=1
             fi
           done <<< "$images"
@@ -61,4 +52,4 @@ jobs:
             echo "One or more images failed validation." >&2
             exit 1
           fi
-          echo "All pinned images validated successfully."
+          echo "All changed images validated successfully."
