@@ -23,6 +23,7 @@
         {
             "name": "cloudwatch-agent",
             "image": "public.ecr.aws/cloudwatch-agent/cloudwatch-agent:1.300072.0b1766",
+            "essential": false,
             "secrets": [
                 {
                     "name": "CW_CONFIG_CONTENT",
