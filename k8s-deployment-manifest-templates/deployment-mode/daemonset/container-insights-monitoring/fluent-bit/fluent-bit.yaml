@@ -70,7 +70,6 @@ data:
         Path                /var/log/containers/*.log
         multiline.parser    docker, cri
         DB                  /var/fluent-bit/state/flb_container.db
-        Mem_Buf_Limit       50MB
         Skip_Long_Lines     On
         Refresh_Interval    10
         Rotate_Wait         30
@@ -140,7 +139,6 @@ data:
         Path                /var/log/containers/aws-node*, /var/log/containers/kube-proxy*
         multiline.parser    docker, cri
         DB                  /var/fluent-bit/state/flb_dataplane_tail.db
-        Mem_Buf_Limit       50MB
         Skip_Long_Lines     On
         Refresh_Interval    10
         Rotate_Wait         30
