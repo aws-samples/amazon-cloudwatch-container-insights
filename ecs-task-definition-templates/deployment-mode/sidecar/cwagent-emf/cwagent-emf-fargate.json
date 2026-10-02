@@ -7,6 +7,10 @@
         {
             "name": "demo-app",
             "image": "{{demo-app-image}}",
+            "environment": [{
+                "name": "AWS_EMF_AGENT_ENDPOINT",
+                "value": "{{aws-emf-agent-endpoint}}"
+            }],
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
