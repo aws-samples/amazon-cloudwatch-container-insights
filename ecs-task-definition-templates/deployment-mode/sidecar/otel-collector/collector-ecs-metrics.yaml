@@ -1,0 +1,70 @@
+# OpenTelemetry Collector configuration: Amazon ECS task and container metrics to Amazon CloudWatch.
+# Runs as a sidecar container in each ECS task. Pass it to the collector with:
+#   --config env:OTEL_CONFIG
+# Required environment: AWS_REGION. The ECS agent sets ECS_CONTAINER_METADATA_URI_V4 automatically.
+
+extensions:
+  # Signs requests to the CloudWatch OTLP metrics endpoint with the task role's credentials.
+  sigv4auth/cloudwatch:
+    region: ${env:AWS_REGION}
+    service: monitoring
+
+receivers:
+  # Reads Task Metadata Endpoint v4 and container stats for the task it runs in.
+  awsecscontainermetrics:
+    collection_interval: 60s
+
+processors:
+  # First in the pipeline: refuses data before the collector runs out of memory.
+  memory_limiter:
+    check_interval: 1s
+    limit_percentage: 80
+    spike_limit_percentage: 20
+
+  # Required for CloudWatch: the receiver emits cumulative sums without a start time,
+  # and CloudWatch rejects those datapoints ("StartTimeUnixNano is required").
+  metric_start_time:
+    strategy: true_reset_point
+
+  # Removes resource attributes that cost ingestion bytes on every datapoint but are
+  # rarely queried. CloudWatch adds @aws.account and @aws.region labels itself.
+  # Adjust to your needs; see "Choosing resource attributes" in the guide.
+  resource/trim:
+    attributes:
+      - {key: cloud.account.id,              action: delete}
+      - {key: cloud.region,                  action: delete}
+      - {key: aws.ecs.task.arn,              action: delete}
+      - {key: aws.ecs.task.version,          action: delete}   # duplicate of aws.ecs.task.revision
+      - {key: aws.ecs.task.pull_started_at,  action: delete}
+      - {key: aws.ecs.task.pull_stopped_at,  action: delete}
+      - {key: aws.ecs.task.known_status,     action: delete}
+      - {key: aws.ecs.docker.name,           action: delete}
+      - {key: aws.ecs.container.created_at,  action: delete}
+      - {key: aws.ecs.container.started_at,  action: delete}
+      - {key: aws.ecs.container.finished_at, action: delete}
+      - {key: aws.ecs.container.know_status, action: delete}
+      - {key: aws.ecs.container.image.id,    action: delete}
+      - {key: container.id,                  action: delete}
+
+  batch:
+    send_batch_size: 512
+    timeout: 10s
+
+exporters:
+  otlp_http/cloudwatch:
+    metrics_endpoint: https://monitoring.${env:AWS_REGION}.amazonaws.com/v1/metrics
+    auth:
+      authenticator: sigv4auth/cloudwatch
+
+service:
+  extensions: [sigv4auth/cloudwatch]
+  telemetry:
+    logs:
+      level: warn
+    metrics:
+      level: none        # no self-telemetry endpoint; the sidecar opens no listening ports
+  pipelines:
+    metrics:
+      receivers: [awsecscontainermetrics]
+      processors: [memory_limiter, metric_start_time, resource/trim, batch]
+      exporters: [otlp_http/cloudwatch]

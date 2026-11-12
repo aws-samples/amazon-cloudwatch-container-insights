@@ -1,0 +1,59 @@
+{
+    "family": "ecs-otel-collector-sidecar-fargate",
+    "taskRoleArn": "{{task-role-arn}}",
+    "executionRoleArn": "{{execution-role-arn}}",
+    "networkMode": "awsvpc",
+    "containerDefinitions": [
+        {
+            "name": "demo-app",
+            "image": "{{demo-app-image}}",
+            "essential": true,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-create-group": "True",
+                    "awslogs-group": "/ecs/ecs-otel-collector-sidecar-fargate",
+                    "awslogs-region": "{{awslogs-region}}",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            }
+        },
+        {
+            "name": "otel-collector",
+            "image": "otel/opentelemetry-collector-contrib:0.165.0",
+            "essential": false,
+            "cpu": 128,
+            "memory": 256,
+            "command": [
+                "--config",
+                "env:OTEL_CONFIG"
+            ],
+            "environment": [
+                {
+                    "name": "AWS_REGION",
+                    "value": "{{awslogs-region}}"
+                }
+            ],
+            "secrets": [
+                {
+                    "name": "OTEL_CONFIG",
+                    "valueFrom": "ecs-otel-collector-sidecar-fargate"
+                }
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-create-group": "True",
+                    "awslogs-group": "/ecs/ecs-otel-collector-sidecar-fargate",
+                    "awslogs-region": "{{awslogs-region}}",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            }
+        }
+    ],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "512",
+    "memory": "1024"
+}

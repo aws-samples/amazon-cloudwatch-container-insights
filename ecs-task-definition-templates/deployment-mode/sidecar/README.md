@@ -12,3 +12,5 @@ This folder provides the functionality that enables you to deploy the CloudWatch
 
 ### [cwagent-sdkmetrics](cwagent-sdkmetrics)
 This folder provides the functionality that enables you to deploy the CloudWatch Agent to utilize AWS SDK Metrics.
+### [otel-collector](otel-collector)
+This folder provides sample task definitions that deploy the upstream OpenTelemetry Collector as a sidecar to send task-level and container-level metrics to Amazon CloudWatch over OTLP, with a CloudWatch PromQL dashboard.
