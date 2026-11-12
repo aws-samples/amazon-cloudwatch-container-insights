@@ -1,0 +1,1471 @@
+{
+  "start": "-PT3H",
+  "periodOverride": "inherit",
+  "widgets": [
+    {
+      "type": "text",
+      "properties": {
+        "markdown": "# Amazon ECS metrics (PromQL)\nMetrics from the `awsecscontainermetrics` receiver (`collector-ecs-metrics.yaml`, 60s collection). **Filters are regexes** (default `.*`; e.g. `checkout|payments`). Container name applies to container panels only. CPU shown in vCPU (ECS CPU units / 1024)."
+      },
+      "x": 0,
+      "y": 0,
+      "width": 24,
+      "height": 2
+    },
+    {
+      "type": "text",
+      "properties": {
+        "markdown": "## Cluster overview",
+        "background": "transparent"
+      },
+      "x": 0,
+      "y": 2,
+      "width": 24,
+      "height": 1
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "number",
+        "title": "Running tasks (RunningTaskCount)",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "a",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "count(count by (\"@resource.aws.ecs.task.id\") ({\"ecs.task.memory.utilized\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"}))",
+              "step": 60
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": false
+          },
+          "style": {
+            "numberOptions": {
+              "sparkline": true,
+              "truncate": true
+            }
+          }
+        }
+      },
+      "x": 0,
+      "y": 3,
+      "width": 4,
+      "height": 4
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "number",
+        "title": "Services (ServiceCount)",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "a",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "count(count by (\"@resource.aws.ecs.service.name\") ({\"ecs.task.memory.utilized\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"}))",
+              "step": 60
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": false
+          },
+          "style": {
+            "numberOptions": {
+              "sparkline": true,
+              "truncate": true
+            }
+          }
+        }
+      },
+      "x": 4,
+      "y": 3,
+      "width": 4,
+      "height": 4
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "number",
+        "title": "Running containers",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "a",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "count(count by (\"@resource.aws.ecs.task.id\", \"@resource.container.name\") ({\"container.memory.utilized\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\", \"@resource.container.name\"=~\"VAR_CONTAINER\"}))",
+              "step": 60
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": false
+          },
+          "style": {
+            "numberOptions": {
+              "sparkline": true,
+              "truncate": true
+            }
+          }
+        }
+      },
+      "x": 8,
+      "y": 3,
+      "width": 4,
+      "height": 4
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "number",
+        "title": "Task families",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "a",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "count(count by (\"@resource.aws.ecs.task.family\") ({\"ecs.task.memory.utilized\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"}))",
+              "step": 60
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": false
+          },
+          "style": {
+            "numberOptions": {
+              "sparkline": true,
+              "truncate": true
+            }
+          }
+        }
+      },
+      "x": 12,
+      "y": 3,
+      "width": 4,
+      "height": 4
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "solidgauge",
+        "title": "CPU utilization %",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "a",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "100 * sum({\"ecs.task.cpu.utilized\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"}) / sum({\"ecs.task.cpu.reserved\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"} > 0)",
+              "step": 60
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": false
+          },
+          "style": {
+            "gaugeOptions": {
+              "min": 0,
+              "max": 100
+            }
+          }
+        }
+      },
+      "x": 16,
+      "y": 3,
+      "width": 4,
+      "height": 4
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "solidgauge",
+        "title": "Memory utilization %",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "a",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "100 * sum({\"ecs.task.memory.utilized\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"}) / sum({\"ecs.task.memory.reserved\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"} > 0)",
+              "step": 60
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": false
+          },
+          "style": {
+            "gaugeOptions": {
+              "min": 0,
+              "max": 100
+            }
+          }
+        }
+      },
+      "x": 20,
+      "y": 3,
+      "width": 4,
+      "height": 4
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "line",
+        "title": "CPU utilized vs reserved (vCPU)",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "u",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "sum by (\"@resource.aws.ecs.cluster.name\") ({\"ecs.task.cpu.utilized\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"}) / 1024",
+              "step": 60,
+              "label": "ecs.task.cpu.utilized"
+            },
+            {
+              "id": "r",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "sum by (\"@resource.aws.ecs.cluster.name\") ({\"ecs.task.cpu.reserved\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"}) / 1024",
+              "step": 60,
+              "label": "ecs.task.cpu.reserved"
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": true
+          },
+          "yAxis": [
+            {
+              "min": 0,
+              "title": "vCPU",
+              "showUnits": true
+            }
+          ],
+          "style": {
+            "lineOptions": {
+              "width": 2,
+              "pattern": "solid",
+              "spline": false,
+              "filled": false,
+              "stacked": false
+            }
+          }
+        }
+      },
+      "x": 0,
+      "y": 7,
+      "width": 8,
+      "height": 6
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "line",
+        "title": "Memory utilized vs reserved (MiB)",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "u",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "sum by (\"@resource.aws.ecs.cluster.name\") ({\"ecs.task.memory.utilized\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"})",
+              "step": 60,
+              "label": "ecs.task.memory.utilized"
+            },
+            {
+              "id": "r",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "sum by (\"@resource.aws.ecs.cluster.name\") ({\"ecs.task.memory.reserved\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"})",
+              "step": 60,
+              "label": "ecs.task.memory.reserved"
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": true
+          },
+          "yAxis": [
+            {
+              "min": 0,
+              "title": "MiB",
+              "showUnits": true
+            }
+          ],
+          "style": {
+            "lineOptions": {
+              "width": 2,
+              "pattern": "solid",
+              "spline": false,
+              "filled": false,
+              "stacked": false
+            }
+          }
+        }
+      },
+      "x": 8,
+      "y": 7,
+      "width": 8,
+      "height": 6
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "line",
+        "title": "Running tasks by cluster",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "a",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "count by (\"@resource.aws.ecs.cluster.name\") (count by (\"@resource.aws.ecs.cluster.name\", \"@resource.aws.ecs.task.id\") ({\"ecs.task.memory.utilized\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"}))",
+              "step": 60
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": true
+          },
+          "yAxis": [
+            {
+              "min": 0,
+              "title": "tasks",
+              "showUnits": true
+            }
+          ],
+          "style": {
+            "lineOptions": {
+              "width": 2,
+              "pattern": "solid",
+              "spline": false,
+              "filled": false,
+              "stacked": false
+            }
+          }
+        }
+      },
+      "x": 16,
+      "y": 7,
+      "width": 8,
+      "height": 6
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "line",
+        "title": "Network Rx / Tx (bytes/s)",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "rx",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "sum by (\"@resource.aws.ecs.cluster.name\") ({\"ecs.task.network.rate.rx\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"})",
+              "step": 60,
+              "label": "NetworkRxBytes"
+            },
+            {
+              "id": "tx",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "sum by (\"@resource.aws.ecs.cluster.name\") ({\"ecs.task.network.rate.tx\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"})",
+              "step": 60,
+              "label": "NetworkTxBytes"
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": true
+          },
+          "yAxis": [
+            {
+              "min": 0,
+              "title": "B/s",
+              "showUnits": true
+            }
+          ],
+          "style": {
+            "lineOptions": {
+              "width": 2,
+              "pattern": "solid",
+              "spline": false,
+              "filled": false,
+              "stacked": false
+            }
+          }
+        }
+      },
+      "x": 0,
+      "y": 13,
+      "width": 12,
+      "height": 6
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "line",
+        "title": "Storage read / write (bytes/s)",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "r",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "sum by (\"@resource.aws.ecs.cluster.name\") (rate({\"ecs.task.storage.read_bytes\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"}[5m]))",
+              "step": 60,
+              "label": "StorageReadBytes"
+            },
+            {
+              "id": "w",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "sum by (\"@resource.aws.ecs.cluster.name\") (rate({\"ecs.task.storage.write_bytes\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"}[5m]))",
+              "step": 60,
+              "label": "StorageWriteBytes"
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": true
+          },
+          "yAxis": [
+            {
+              "min": 0,
+              "title": "B/s",
+              "showUnits": true
+            }
+          ],
+          "style": {
+            "lineOptions": {
+              "width": 2,
+              "pattern": "solid",
+              "spline": false,
+              "filled": false,
+              "stacked": false
+            }
+          }
+        }
+      },
+      "x": 12,
+      "y": 13,
+      "width": 12,
+      "height": 6
+    },
+    {
+      "type": "text",
+      "properties": {
+        "markdown": "## Services",
+        "background": "transparent"
+      },
+      "x": 0,
+      "y": 19,
+      "width": 24,
+      "height": 1
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "line",
+        "title": "CPU utilization % by service",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "a",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "100 * sum by (\"@resource.aws.ecs.cluster.name\", \"@resource.aws.ecs.service.name\") ({\"ecs.task.cpu.utilized\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"}) / sum by (\"@resource.aws.ecs.cluster.name\", \"@resource.aws.ecs.service.name\") ({\"ecs.task.cpu.reserved\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"} > 0)",
+              "step": 60
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": true
+          },
+          "yAxis": [
+            {
+              "min": 0,
+              "title": "%",
+              "showUnits": false
+            }
+          ],
+          "annotations": {
+            "horizontal": [
+              {
+                "type": "static",
+                "label": "80%",
+                "value": 80,
+                "color": "#d62728"
+              }
+            ]
+          },
+          "style": {
+            "lineOptions": {
+              "width": 2,
+              "pattern": "solid",
+              "spline": false,
+              "filled": false,
+              "stacked": false
+            }
+          }
+        }
+      },
+      "x": 0,
+      "y": 20,
+      "width": 12,
+      "height": 6
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "line",
+        "title": "Memory utilization % by service",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "a",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "100 * sum by (\"@resource.aws.ecs.cluster.name\", \"@resource.aws.ecs.service.name\") ({\"ecs.task.memory.utilized\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"}) / sum by (\"@resource.aws.ecs.cluster.name\", \"@resource.aws.ecs.service.name\") ({\"ecs.task.memory.reserved\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"} > 0)",
+              "step": 60
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": true
+          },
+          "yAxis": [
+            {
+              "min": 0,
+              "title": "%",
+              "showUnits": false
+            }
+          ],
+          "annotations": {
+            "horizontal": [
+              {
+                "type": "static",
+                "label": "80%",
+                "value": 80,
+                "color": "#d62728"
+              }
+            ]
+          },
+          "style": {
+            "lineOptions": {
+              "width": 2,
+              "pattern": "solid",
+              "spline": false,
+              "filled": false,
+              "stacked": false
+            }
+          }
+        }
+      },
+      "x": 12,
+      "y": 20,
+      "width": 12,
+      "height": 6
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "line",
+        "title": "Running tasks by service",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "a",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "count by (\"@resource.aws.ecs.cluster.name\", \"@resource.aws.ecs.service.name\") (count by (\"@resource.aws.ecs.cluster.name\", \"@resource.aws.ecs.service.name\", \"@resource.aws.ecs.task.id\") ({\"ecs.task.memory.utilized\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"}))",
+              "step": 60
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": true
+          },
+          "yAxis": [
+            {
+              "min": 0,
+              "title": "tasks",
+              "showUnits": true
+            }
+          ],
+          "style": {
+            "lineOptions": {
+              "width": 2,
+              "pattern": "solid",
+              "spline": false,
+              "filled": false,
+              "stacked": false
+            }
+          }
+        }
+      },
+      "x": 0,
+      "y": 26,
+      "width": 8,
+      "height": 6
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "line",
+        "title": "Network Rx by service (bytes/s)",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "a",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "sum by (\"@resource.aws.ecs.service.name\") ({\"ecs.task.network.rate.rx\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"})",
+              "step": 60
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": true
+          },
+          "yAxis": [
+            {
+              "min": 0,
+              "title": "B/s",
+              "showUnits": true
+            }
+          ],
+          "style": {
+            "lineOptions": {
+              "width": 2,
+              "pattern": "solid",
+              "spline": false,
+              "filled": false,
+              "stacked": false
+            }
+          }
+        }
+      },
+      "x": 8,
+      "y": 26,
+      "width": 8,
+      "height": 6
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "line",
+        "title": "Network Tx by service (bytes/s)",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "a",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "sum by (\"@resource.aws.ecs.service.name\") ({\"ecs.task.network.rate.tx\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"})",
+              "step": 60
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": true
+          },
+          "yAxis": [
+            {
+              "min": 0,
+              "title": "B/s",
+              "showUnits": true
+            }
+          ],
+          "style": {
+            "lineOptions": {
+              "width": 2,
+              "pattern": "solid",
+              "spline": false,
+              "filled": false,
+              "stacked": false
+            }
+          }
+        }
+      },
+      "x": 16,
+      "y": 26,
+      "width": 8,
+      "height": 6
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "pie",
+        "title": "Tasks by task family",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "a",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "count by (\"@resource.aws.ecs.task.family\") (count by (\"@resource.aws.ecs.task.family\", \"@resource.aws.ecs.task.id\") ({\"ecs.task.memory.utilized\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"}))",
+              "step": 60
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": true
+          },
+          "style": {
+            "pieOptions": {
+              "innerSize": "50%"
+            }
+          }
+        }
+      },
+      "x": 0,
+      "y": 32,
+      "width": 12,
+      "height": 6
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "pie",
+        "title": "Tasks by launch type",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "a",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "count by (\"@resource.aws.ecs.task.launch_type\") (count by (\"@resource.aws.ecs.task.launch_type\", \"@resource.aws.ecs.task.id\") ({\"ecs.task.memory.utilized\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"}))",
+              "step": 60
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": true
+          },
+          "style": {
+            "pieOptions": {
+              "innerSize": "50%"
+            }
+          }
+        }
+      },
+      "x": 12,
+      "y": 32,
+      "width": 12,
+      "height": 6
+    },
+    {
+      "type": "text",
+      "properties": {
+        "markdown": "## Tasks\nTop 10 tasks. Utilization = utilized / reserved, computed in PromQL.",
+        "background": "transparent"
+      },
+      "x": 0,
+      "y": 38,
+      "width": 24,
+      "height": 2
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "line",
+        "title": "Top tasks by CPU utilization % ",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "a",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "topk(10, 100 * sum by (\"@resource.aws.ecs.service.name\", \"@resource.aws.ecs.task.id\") ({\"ecs.task.cpu.utilized\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"}) / sum by (\"@resource.aws.ecs.service.name\", \"@resource.aws.ecs.task.id\") ({\"ecs.task.cpu.reserved\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"} > 0))",
+              "step": 60
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": true
+          },
+          "yAxis": [
+            {
+              "min": 0,
+              "title": "%",
+              "showUnits": false
+            }
+          ],
+          "annotations": {
+            "horizontal": [
+              {
+                "type": "static",
+                "label": "80%",
+                "value": 80,
+                "color": "#d62728"
+              }
+            ]
+          },
+          "style": {
+            "lineOptions": {
+              "width": 2,
+              "pattern": "solid",
+              "spline": false,
+              "filled": false,
+              "stacked": false
+            }
+          }
+        }
+      },
+      "x": 0,
+      "y": 40,
+      "width": 12,
+      "height": 6
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "line",
+        "title": "Top tasks by memory utilization % ",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "a",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "topk(10, 100 * sum by (\"@resource.aws.ecs.service.name\", \"@resource.aws.ecs.task.id\") ({\"ecs.task.memory.utilized\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"}) / sum by (\"@resource.aws.ecs.service.name\", \"@resource.aws.ecs.task.id\") ({\"ecs.task.memory.reserved\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"} > 0))",
+              "step": 60
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": true
+          },
+          "yAxis": [
+            {
+              "min": 0,
+              "title": "%",
+              "showUnits": false
+            }
+          ],
+          "annotations": {
+            "horizontal": [
+              {
+                "type": "static",
+                "label": "80%",
+                "value": 80,
+                "color": "#d62728"
+              }
+            ]
+          },
+          "style": {
+            "lineOptions": {
+              "width": 2,
+              "pattern": "solid",
+              "spline": false,
+              "filled": false,
+              "stacked": false
+            }
+          }
+        }
+      },
+      "x": 12,
+      "y": 40,
+      "width": 12,
+      "height": 6
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "line",
+        "title": "Top tasks by network Rx (bytes/s)",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "a",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "topk(10, sum by (\"@resource.aws.ecs.service.name\", \"@resource.aws.ecs.task.id\") ({\"ecs.task.network.rate.rx\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"}))",
+              "step": 60
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": true
+          },
+          "yAxis": [
+            {
+              "min": 0,
+              "title": "B/s",
+              "showUnits": true
+            }
+          ],
+          "style": {
+            "lineOptions": {
+              "width": 2,
+              "pattern": "solid",
+              "spline": false,
+              "filled": false,
+              "stacked": false
+            }
+          }
+        }
+      },
+      "x": 0,
+      "y": 46,
+      "width": 12,
+      "height": 6
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "line",
+        "title": "Top tasks by memory utilized (MiB)",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "a",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "topk(10, sum by (\"@resource.aws.ecs.service.name\", \"@resource.aws.ecs.task.id\") ({\"ecs.task.memory.utilized\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\"}))",
+              "step": 60
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": true
+          },
+          "yAxis": [
+            {
+              "min": 0,
+              "title": "MiB",
+              "showUnits": true
+            }
+          ],
+          "style": {
+            "lineOptions": {
+              "width": 2,
+              "pattern": "solid",
+              "spline": false,
+              "filled": false,
+              "stacked": false
+            }
+          }
+        }
+      },
+      "x": 12,
+      "y": 46,
+      "width": 12,
+      "height": 6
+    },
+    {
+      "type": "text",
+      "properties": {
+        "markdown": "## Containers\nContainer name filter applies here. Container network is the task's shared namespace, so it is shown per container, not summed.",
+        "background": "transparent"
+      },
+      "x": 0,
+      "y": 52,
+      "width": 24,
+      "height": 2
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "line",
+        "title": "Top containers by CPU utilization % ",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "a",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "topk(10, 100 * sum by (\"@resource.aws.ecs.service.name\", \"@resource.container.name\", \"@resource.aws.ecs.task.id\") ({\"container.cpu.utilized\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\", \"@resource.container.name\"=~\"VAR_CONTAINER\"}) / sum by (\"@resource.aws.ecs.service.name\", \"@resource.container.name\", \"@resource.aws.ecs.task.id\") ({\"container.cpu.reserved\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\", \"@resource.container.name\"=~\"VAR_CONTAINER\"} > 0))",
+              "step": 60
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": true
+          },
+          "yAxis": [
+            {
+              "min": 0,
+              "title": "%",
+              "showUnits": false
+            }
+          ],
+          "annotations": {
+            "horizontal": [
+              {
+                "type": "static",
+                "label": "80%",
+                "value": 80,
+                "color": "#d62728"
+              }
+            ]
+          },
+          "style": {
+            "lineOptions": {
+              "width": 2,
+              "pattern": "solid",
+              "spline": false,
+              "filled": false,
+              "stacked": false
+            }
+          }
+        }
+      },
+      "x": 0,
+      "y": 54,
+      "width": 12,
+      "height": 6
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "line",
+        "title": "Top containers by memory utilization % ",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "a",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "topk(10, 100 * sum by (\"@resource.aws.ecs.service.name\", \"@resource.container.name\", \"@resource.aws.ecs.task.id\") ({\"container.memory.utilized\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\", \"@resource.container.name\"=~\"VAR_CONTAINER\"}) / sum by (\"@resource.aws.ecs.service.name\", \"@resource.container.name\", \"@resource.aws.ecs.task.id\") ({\"container.memory.reserved\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\", \"@resource.container.name\"=~\"VAR_CONTAINER\"} > 0))",
+              "step": 60
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": true
+          },
+          "yAxis": [
+            {
+              "min": 0,
+              "title": "%",
+              "showUnits": false
+            }
+          ],
+          "annotations": {
+            "horizontal": [
+              {
+                "type": "static",
+                "label": "80%",
+                "value": 80,
+                "color": "#d62728"
+              }
+            ]
+          },
+          "style": {
+            "lineOptions": {
+              "width": 2,
+              "pattern": "solid",
+              "spline": false,
+              "filled": false,
+              "stacked": false
+            }
+          }
+        }
+      },
+      "x": 12,
+      "y": 54,
+      "width": 12,
+      "height": 6
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "line",
+        "title": "Container CPU utilized by container name (vCPU)",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "a",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "sum by (\"@resource.container.name\") ({\"container.cpu.utilized\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\", \"@resource.container.name\"=~\"VAR_CONTAINER\"}) / 1024",
+              "step": 60
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": true
+          },
+          "yAxis": [
+            {
+              "min": 0,
+              "title": "vCPU",
+              "showUnits": true
+            }
+          ],
+          "style": {
+            "lineOptions": {
+              "width": 2,
+              "pattern": "solid",
+              "spline": false,
+              "filled": false,
+              "stacked": false
+            }
+          }
+        }
+      },
+      "x": 0,
+      "y": 60,
+      "width": 8,
+      "height": 6
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "line",
+        "title": "Container memory utilized by container name (MiB)",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "a",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "sum by (\"@resource.container.name\") ({\"container.memory.utilized\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\", \"@resource.container.name\"=~\"VAR_CONTAINER\"})",
+              "step": 60
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": true
+          },
+          "yAxis": [
+            {
+              "min": 0,
+              "title": "MiB",
+              "showUnits": true
+            }
+          ],
+          "style": {
+            "lineOptions": {
+              "width": 2,
+              "pattern": "solid",
+              "spline": false,
+              "filled": false,
+              "stacked": false
+            }
+          }
+        }
+      },
+      "x": 8,
+      "y": 60,
+      "width": 8,
+      "height": 6
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "line",
+        "title": "Container memory reserved by container name (MiB)",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "a",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "sum by (\"@resource.container.name\") ({\"container.memory.reserved\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\", \"@resource.container.name\"=~\"VAR_CONTAINER\"})",
+              "step": 60
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": true
+          },
+          "yAxis": [
+            {
+              "min": 0,
+              "title": "MiB",
+              "showUnits": true
+            }
+          ],
+          "style": {
+            "lineOptions": {
+              "width": 2,
+              "pattern": "solid",
+              "spline": false,
+              "filled": false,
+              "stacked": false
+            }
+          }
+        }
+      },
+      "x": 16,
+      "y": 60,
+      "width": 8,
+      "height": 6
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "line",
+        "title": "Container network Rx / Tx (bytes/s, per task namespace)",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "rx",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "max by (\"@resource.aws.ecs.service.name\", \"@resource.container.name\") ({\"container.network.rate.rx\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\", \"@resource.container.name\"=~\"VAR_CONTAINER\"})",
+              "step": 60,
+              "label": "rx"
+            },
+            {
+              "id": "tx",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "max by (\"@resource.aws.ecs.service.name\", \"@resource.container.name\") ({\"container.network.rate.tx\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\", \"@resource.container.name\"=~\"VAR_CONTAINER\"})",
+              "step": 60,
+              "label": "tx"
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": true
+          },
+          "yAxis": [
+            {
+              "min": 0,
+              "title": "B/s",
+              "showUnits": true
+            }
+          ],
+          "style": {
+            "lineOptions": {
+              "width": 2,
+              "pattern": "solid",
+              "spline": false,
+              "filled": false,
+              "stacked": false
+            }
+          }
+        }
+      },
+      "x": 0,
+      "y": 66,
+      "width": 12,
+      "height": 6
+    },
+    {
+      "type": "chart",
+      "properties": {
+        "view": "line",
+        "title": "Container storage read / write (bytes/s)",
+        "region": "us-west-2",
+        "data": {
+          "queries": [
+            {
+              "id": "r",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "sum by (\"@resource.container.name\") (rate({\"container.storage.read_bytes\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\", \"@resource.container.name\"=~\"VAR_CONTAINER\"}[5m]))",
+              "step": 60,
+              "label": "read"
+            },
+            {
+              "id": "w",
+              "type": "cloudwatch-metrics",
+              "language": "PromQL",
+              "query": "sum by (\"@resource.container.name\") (rate({\"container.storage.write_bytes\", \"@resource.aws.ecs.cluster.name\"=~\"VAR_CLUSTER\", \"@resource.aws.ecs.service.name\"=~\"VAR_SERVICE\", \"@resource.aws.ecs.task.family\"=~\"VAR_FAMILY\", \"@resource.aws.ecs.task.launch_type\"=~\"VAR_LAUNCH\", \"@resource.container.name\"=~\"VAR_CONTAINER\"}[5m]))",
+              "step": 60,
+              "label": "write"
+            }
+          ]
+        },
+        "plotOptions": {
+          "legend": {
+            "position": "bottom",
+            "show": true
+          },
+          "yAxis": [
+            {
+              "min": 0,
+              "title": "B/s",
+              "showUnits": true
+            }
+          ],
+          "style": {
+            "lineOptions": {
+              "width": 2,
+              "pattern": "solid",
+              "spline": false,
+              "filled": false,
+              "stacked": false
+            }
+          }
+        }
+      },
+      "x": 12,
+      "y": 66,
+      "width": 12,
+      "height": 6
+    }
+  ],
+  "variables": [
+    {
+      "type": "property",
+      "property": "region",
+      "inputType": "input",
+      "id": "region",
+      "label": "Region",
+      "defaultValue": "us-west-2",
+      "visible": true
+    },
+    {
+      "type": "pattern",
+      "pattern": "VAR_CLUSTER",
+      "inputType": "input",
+      "id": "cluster",
+      "label": "Cluster",
+      "defaultValue": ".*",
+      "visible": true
+    },
+    {
+      "type": "pattern",
+      "pattern": "VAR_SERVICE",
+      "inputType": "input",
+      "id": "service",
+      "label": "Service",
+      "defaultValue": ".*",
+      "visible": true
+    },
+    {
+      "type": "pattern",
+      "pattern": "VAR_FAMILY",
+      "inputType": "input",
+      "id": "family",
+      "label": "Task family",
+      "defaultValue": ".*",
+      "visible": true
+    },
+    {
+      "type": "pattern",
+      "pattern": "VAR_LAUNCH",
+      "inputType": "radio",
+      "id": "launch",
+      "label": "Launch type",
+      "defaultValue": ".*",
+      "visible": true,
+      "values": [
+        {
+          "label": "All",
+          "value": ".*"
+        },
+        {
+          "label": "Fargate",
+          "value": "FARGATE"
+        },
+        {
+          "label": "EC2",
+          "value": "EC2"
+        },
+        {
+          "label": "Managed instances",
+          "value": "MANAGED_INSTANCES"
+        }
+      ]
+    },
+    {
+      "type": "pattern",
+      "pattern": "VAR_CONTAINER",
+      "inputType": "input",
+      "id": "container",
+      "label": "Container name",
+      "defaultValue": ".*",
+      "visible": true
+    }
+  ]
+}
